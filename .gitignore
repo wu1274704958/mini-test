@@ -1,0 +1,9 @@
+.vscode/
+build/
+CMakeFiles/
+Testing/
+*.cmake
+*.tcl
+CMakeCache.txt
+Makefile
+*.exe
