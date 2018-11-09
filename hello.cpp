@@ -6,6 +6,7 @@
 #include <utility>
 #include "TestFunc.hpp"
 #include "TypeList.hpp"
+#include <functional>
 
 int test(int argc,char **argv)
 {
@@ -21,14 +22,33 @@ int test(int argc,char **argv)
 	}
 	std::cout << arr.data() << std::endl;
 }
-
+// struct Test{
+// 	Test(){
+// 		std::cout << "Test()" <<std::endl;
+// 	}
+// 	Test(const Test&){
+// 		std::cout << "Test(Test&)" <<std::endl;
+// 	}
+// 	Test(Test &&){
+// 		std::cout << "Test(Test &&)" <<std::endl;
+// 	}
+// 	~Test(){
+// 		std::cout << "~Test()" <<std::endl;
+// 	}
+// };
+// void test4(Test&& t)
+// {
+// 	std::cout << "test4()" <<std::endl;
+// }
 void test1()
 {
-	std::cout << "test1()" <<std::endl;
+	std::cout << std::is_same< wws::TypeAdd< wws::TypeList<int,char> , int >::type , wws::TypeList<int,int,char> >::value << "\n";
+	std::cout << std::is_same< wws::TypeList<int,char>::BaseType::BaseType , wws::TypeList<> >::value << "\n";
+	std::cout << std::is_same< wws::TypeSub< wws::TypeList<int,char> >::type , wws::TypeList<char> >::value << "\n";
 }
 void test2()
 {
-	std::cout << "test2()" <<std::endl;
+
 }
 void test3()
 {
@@ -37,14 +57,9 @@ void test3()
 
 int main(int argc,char **argv)
 {
-	using type = wws::FuncInfo<decltype(test)>::FuncType;
-	type f = test;
-	f(argc,argv);
 	
-	std::cout << std::is_same< wws::TypeAdd< wws::TypeList<int,char> , int >::type , wws::TypeList<int,int,char> >::value << "\n";
-	std::cout << std::is_same< wws::TypeList<int,char>::BaseType::BaseType , wws::TypeList<> >::value << "\n";
-	std::cout << std::is_same< wws::TypeSub< wws::TypeList<int,char> >::type , wws::TypeList<char> >::value << "\n";
-
+	wws::FuncInfo<decltype(test)> f(test);
+	f(argc,argv);
 	auto tup = wws::CreateTFArray(CREATE_TEST_FUNC(test1),CREATE_TEST_FUNC(test2));
 	wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup),tup);
 	int a;

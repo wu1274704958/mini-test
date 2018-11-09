@@ -34,6 +34,13 @@ namespace wws
         using RetType = Ret;
         using AgrsType = TypeList<Args...>;
         using FuncType = Ret(*)(Args...);
+        FuncType mFunc;
+        FuncInfo(FuncType func):mFunc(func){}
+        template<typename ..._Args>
+        RetType operator()(_Args&&...args)
+        {
+            mFunc(std::forward<Args>(args)...);
+        }
     };
     
     template<typename Tup,size_t ...Idx>
