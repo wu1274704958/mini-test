@@ -59,9 +59,9 @@ namespace wws
     };
     
     template<typename Tup,size_t ...Idx>
-    constexpr bool IsTestFuncTuple(Tup &tup,std::index_sequence<Idx...> is)
+    constexpr bool IsTestFuncTuple()
     {
-        bool res = (wws::Hasname< std::remove_reference_t<  decltype( std::get<Idx>(tup) ) > >::value && ...);
+        bool res = (wws::Hasname< std::remove_reference_t<  decltype( std::get<Idx>( std::declval<Tup>() ) ) > >::value && ...);
         return res;
     }
 
@@ -80,7 +80,7 @@ namespace wws
     template<typename TUP,size_t ...Idx>
     void PrintFuncName(std::index_sequence<Idx...> is,TUP &tup)
     {
-        static_assert( IsTestFuncTuple(std::forward<TUP&>(tup), is) ,"The elements in this tuple do not meet the requirements!");
+        static_assert( IsTestFuncTuple<TUP,Idx...>() ,"The elements in this tuple do not meet the requirements!");
     	((printf("%d: %s\n",Idx,std::get<Idx>(tup).name),...));
     }
 

@@ -5,6 +5,7 @@
 #include <array>
 #include "TypeList.hpp"
 #include "TestFunc.hpp"
+#include <string_view>
 
 namespace test1{
 	
