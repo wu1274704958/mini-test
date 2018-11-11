@@ -21,6 +21,7 @@ int test(int argc,char **argv)
 		snprintf(arr.data(),arr.size() - 1,"HelloWorld %s\n",sv.data());
 	}
 	std::cout << arr.data() << std::endl;
+	return 0;
 }
 struct Test{
 	Test(){
