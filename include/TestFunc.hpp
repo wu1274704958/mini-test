@@ -84,20 +84,6 @@ namespace wws
     	((printf("%d: %s\n",Idx,std::get<Idx>(tup).name),...));
     }
 
-    // template<typename T,typename TUP,size_t First,size_t ...Idx>
-    // FuncInfo<T> RunFuncIndex(std::index_sequence<First,Idx...> is,TUP &tup,int index)
-    // {
-    //     //static_assert( IsTestFuncTuple(std::forward<TUP&>(tup), is) ,"The elements in this tuple do not meet the requirements!");
-    //     printf(" _%d_ ",First);
-    //     if(index == First)
-    //     {
-    //         auto res = std::get<First>(tup).func;
-    //         return FuncInfo<decltype(res)>(res);
-    //     }else{
-    //         return RunFuncIndex(std::index_sequence<Idx...>(),tup,index);
-    //     }
-    // }
-
     template<size_t I,typename TUP>
     auto GetFuncIndex(TUP &tup) -> FuncInfo< decltype(std::get<I>(tup).func) > 
     {
