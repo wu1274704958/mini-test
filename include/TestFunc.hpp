@@ -36,8 +36,8 @@ namespace wws
         using FuncType = Ret(*)(Args...);
         FuncType mFunc;
         FuncInfo(FuncType func):mFunc(func){}
-        template<typename ..._Args>
-        RetType operator()(_Args&&...args)
+//        template<typename ..._Args>
+        RetType operator()(Args...args)
         {
             mFunc(std::forward<Args>(args)...);
         }

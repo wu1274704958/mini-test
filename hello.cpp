@@ -14,7 +14,7 @@ int main(int argc,char **argv)
 	// wws::FuncInfo<decltype(test)> f(test);
 	// f(argc,argv);
 	auto tup = wws::CatTFArray(test1::init(),test2::init());
-	wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup),tup);
+	
 	// auto f2 = wws::GetFuncIndex<0>(tup);
 	// f2();
 	// wws::RunFuncIndex<1>(tup);
@@ -22,14 +22,21 @@ int main(int argc,char **argv)
 	int a = 0;
 	while(a > -1)
 	{
+		wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup),tup);
 		std::cin >> a;
 		switch(a)
 		{
 			case 0: wws::RunFuncIndex<0>(tup); break;
 			case 1: wws::RunFuncIndex<1>(tup); break;
 			case 2: wws::RunFuncIndex<2>(tup,argc,argv); break;
-			case 3: wws::RunFuncIndex<3>(tup); break;
+			case 3: wws::RunFuncIndex<3>(tup,test1::Test()); break;
+			case 4: {
+				test1::Test t;
+				wws::RunFuncIndex<4>(tup,t); break;
+			}
+			case 5: wws::RunFuncIndex<5>(tup); break;
 		}
+		std::cout << "\n\n" ;
 	}
 	return 0;
 }

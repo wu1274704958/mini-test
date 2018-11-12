@@ -39,7 +39,7 @@ struct Test{
 };
 void test4(Test&& t)
 {
-	std::cout << "test4()" <<std::endl;
+	Test t2 = std::move(t);
 }
 void test1()
 {
@@ -47,13 +47,24 @@ void test1()
 	std::cout << std::is_same< wws::TypeList<int,char>::BaseType::BaseType , wws::TypeList<> >::value << "\n";
 	std::cout << std::is_same< wws::TypeSub< wws::TypeList<int,char> >::type , wws::TypeList<char> >::value << "\n";
 }
-void test2()
+
+void t2_2(Test &&t)
 {
-	std::cout << "test2()" <<std::endl;
+	Test newt = std::move(t);
 }
-void test3()
+void t2_1(Test &&t)
 {
-	std::cout << "test3()" <<std::endl;
+	t2_2(std::move(t));
+}
+
+void test2()
+{   
+	Test t;
+	t2_1(std::move(t));
+}
+void test3(Test& t)
+{
+	Test t2 = t;
 }
 
 
@@ -62,7 +73,9 @@ decltype(auto) init()
 	return  wws::CreateTFArray( 
 									CREATE_TEST_FUNC(test1),
 									CREATE_TEST_FUNC(test2),
-									CREATE_TEST_FUNC(test)
+									CREATE_TEST_FUNC(test),
+									CREATE_TEST_FUNC(test4),
+									CREATE_TEST_FUNC(test3)
 	);
 }
 
