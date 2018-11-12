@@ -5,10 +5,13 @@ include(CTest)
 
 
 include_directories(./include)
-add_definitions(-std=c++17)
+if(MSVC)
+    add_definitions(/std:c++17)
+else()
+    add_definitions(-std=c++17)
+endif()
+
 add_executable(hello hello.cpp src/tool.cpp)
-
-
 add_subdirectory(test)
 enable_testing()
 add_test(NAME my_test COMMAND Test)
