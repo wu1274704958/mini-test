@@ -54,7 +54,7 @@ namespace wws
         template<typename ..._Args>
         RetType operator()(_Args&&...args)
         {
-            mFunc(std::forward<Args>(args)...);
+            return mFunc(std::forward<Args>(args)...);
         }
     };
     
