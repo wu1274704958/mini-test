@@ -4,9 +4,11 @@
 #include <iostream>
 #include "TestFunc.hpp"
 #include <functional>
+#include <any>
 
 namespace test2{
-
+using std::cout;
+using std::endl;
 
 template<int N, int... Indexes>
 struct IndexTuple {
@@ -82,13 +84,27 @@ void test2_3()
     }
     f(Test());
 }
+using std::any;
+using std::any_cast;
+void test_any()
+{
+    any a = 1;
+    if(a.has_value())
+    {
+        printf("%s  %d\n",a.type().name(),any_cast<int>(a));
+    }
+
+    int *p = any_cast<int>(&a);
+    cout << *p << endl;
+}
 
 auto init()
 {
     return  wws::CreateTFArray( 
 									CREATE_TEST_FUNC(test2_1),
                                     CREATE_TEST_FUNC(test2_2),
-                                    CREATE_TEST_FUNC(test2_3)
+                                    CREATE_TEST_FUNC(test2_3),
+                                    CREATE_TEST_FUNC(test_any)
 	);
 }
 
