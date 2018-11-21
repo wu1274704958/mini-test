@@ -34,6 +34,8 @@ int main(int argc,char **argv)
 				wws::RunFuncIndex<4>(tup,t); break;
 			}
 			case 5: wws::RunFuncIndex<5>(tup); break;
+			case 6: wws::RunFuncIndex<6>(tup); break;
+			case 7: wws::RunFuncIndex<7>(tup); break;
 		}
 		std::cout << "\n\n" ;
 	}

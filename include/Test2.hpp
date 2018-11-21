@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "TestFunc.hpp"
+#include <functional>
+
 namespace test2{
 
 
@@ -33,10 +35,60 @@ void test2_1()
     print_index_tuple(type());
 }
 
+int add(int a,int b)
+{
+    std::cout << a + b <<std::endl;
+    return a + b;
+}
+
+void test2_2()
+{
+    int a = 9;
+    auto r = std::reference_wrapper<int>(a);
+    int& d = r;
+    int&& e = std::forward<int>(r);
+
+    d = 98;
+    e = 90;
+
+    std::cout << a << std::endl;
+
+    auto f = std::bind(add,a,a);
+    f();
+}
+
+class Test{
+public:
+    Test(){
+        printf("Test()\n");
+    }
+    ~Test(){
+        printf("~Test()\n");
+    }
+
+};
+
+void f(Test t){
+    
+}
+
+void test2_3()
+{
+    try{
+        throw std::runtime_error("sss");
+    }catch(...)
+    {
+        printf("exception!\n");
+    }
+    f(Test());
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
-									CREATE_TEST_FUNC(test2_1)
+									CREATE_TEST_FUNC(test2_1),
+                                    CREATE_TEST_FUNC(test2_2),
+                                    CREATE_TEST_FUNC(test2_3)
 	);
 }
 
