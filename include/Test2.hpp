@@ -4,9 +4,11 @@
 #include <iostream>
 #include "TestFunc.hpp"
 #include <functional>
+#include <any>
 
 namespace test2{
-
+using std::cout;
+using std::endl;
 
 template<int N, int... Indexes>
 struct IndexTuple {
@@ -35,28 +37,74 @@ void test2_1()
     print_index_tuple(type());
 }
 
-void t(test1::Test &t)
+int add(int a,int b)
 {
-	std::cout << " void t() func run" << std::endl;
-	test1::Test t2 = std::move(t);
+    std::cout << a + b <<std::endl;
+    return a + b;
 }
 
-void test_cv()
+void test2_2()
 {
-	using namespace std::placeholders;
-	int a;
-	auto r = std::reference_wrapper(a);
-	int &c = r;
-	test1::Test t3;
-	auto f = std::bind(t,std::ref(t3));
-	f();
+    int a = 9;
+    auto r = std::reference_wrapper<int>(a);
+    int& d = r;
+    int&& e = std::forward<int>(r);
+
+    d = 98;
+    e = 90;
+
+    std::cout << a << std::endl;
+
+    auto f = std::bind(add,a,a);
+    f();
+}
+
+class Test{
+public:
+    Test(){
+        printf("Test()\n");
+    }
+    ~Test(){
+        printf("~Test()\n");
+    }
+
+};
+
+void f(Test t){
+    
+}
+
+void test2_3()
+{
+    try{
+        throw std::runtime_error("sss");
+    }catch(...)
+    {
+        printf("exception!\n");
+    }
+    f(Test());
+}
+using std::any;
+using std::any_cast;
+void test_any()
+{
+    any a = 1;
+    if(a.has_value())
+    {
+        printf("%s  %d\n",a.type().name(),any_cast<int>(a));
+    }
+
+    int *p = any_cast<int>(&a);
+    cout << *p << endl;
 }
 
 auto init()
 {
     return  wws::CreateTFArray( 
 									CREATE_TEST_FUNC(test2_1),
-									CREATE_TEST_FUNC(test_cv)
+                                    CREATE_TEST_FUNC(test2_2),
+                                    CREATE_TEST_FUNC(test2_3),
+                                    CREATE_TEST_FUNC(test_any)
 	);
 }
 

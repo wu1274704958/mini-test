@@ -8,6 +8,7 @@
 #include "Test1.hpp"
 #include "Test2.hpp"
 
+
 int main(int argc,char **argv)
 {
 	// wws::FuncInfo<decltype(test)> f(test);
@@ -25,16 +26,20 @@ int main(int argc,char **argv)
 		std::cin >> a;
 		switch(a)
 		{
-			case 0: wws::RunFuncIndex<0>(tup); break;
-			case 1: wws::RunFuncIndex<1>(tup); break;
-			case 2: wws::RunFuncIndex<2>(tup,argc,argv); break;
-			case 3: wws::RunFuncIndex<3>(tup,test1::Test()); break;
-			case 4: {
+			RUN_TF_CASE(0,tup)
+			RUN_TF_CASE(1,tup)
+			RUN_TF_CASE(2,tup,argc,argv)
+			RUN_TF_CASE(3,tup,test1::Test())
+
+			RUN_TF_CASE_B(4)
 				test1::Test t;
-				wws::RunFuncIndex<4>(tup,t); break;
-			}
-			case 5: wws::RunFuncIndex<5>(tup); break;
-			case 6: wws::RunFuncIndex<6>(tup); break;
+
+			RUN_TF_CASE_E(4,tup,t)
+
+			RUN_TF_CASE(5,tup)
+			RUN_TF_CASE(6,tup)
+			RUN_TF_CASE(7,tup)
+			RUN_TF_CASE(8,tup)
 		}
 		std::cout << "\n\n" ;
 	}
