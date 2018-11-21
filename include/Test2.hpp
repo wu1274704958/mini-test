@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include "TestFunc.hpp"
+#include <functional>
+
 namespace test2{
 
 
@@ -33,10 +35,28 @@ void test2_1()
     print_index_tuple(type());
 }
 
+void t(test1::Test &t)
+{
+	std::cout << " void t() func run" << std::endl;
+	test1::Test t2 = std::move(t);
+}
+
+void test_cv()
+{
+	using namespace std::placeholders;
+	int a;
+	auto r = std::reference_wrapper(a);
+	int &c = r;
+	test1::Test t3;
+	auto f = std::bind(t,std::ref(t3));
+	f();
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
-									CREATE_TEST_FUNC(test2_1)
+									CREATE_TEST_FUNC(test2_1),
+									CREATE_TEST_FUNC(test_cv)
 	);
 }
 
