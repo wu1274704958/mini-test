@@ -6,7 +6,7 @@ include(CTest)
 
 include_directories(./include)
 if(MSVC)
-    add_definitions(/std:c++17)
+    add_definitions(/std:c++17 /permissive)
 else()
     add_definitions(-std=c++17)
 endif()

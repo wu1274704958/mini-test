@@ -61,10 +61,23 @@ void test2_2()
 
 class Test{
 public:
+	int *p;
     Test(){
+		p = new int(9);
         printf("Test()\n");
     }
+	Test(Test&& t) {
+		this->p = t.p;
+		t.p = nullptr;
+		printf("Test(Test&& )\n");
+	}
+	Test(const Test& t) {
+		this->p = t.p;
+		printf("Test(Test& )\n");
+	}
     ~Test(){
+		if (p)
+			delete p;
         printf("~Test()\n");
     }
 
@@ -77,7 +90,8 @@ void f(Test t){
 void test2_3()
 {
     try{
-        throw std::runtime_error("sss");
+		//int *p = reinterpret_cast<int*>(1);
+		//*p = 9;
     }catch(...)
     {
         printf("exception!\n");

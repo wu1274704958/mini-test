@@ -33,7 +33,6 @@ int main(int argc,char **argv)
 
 			RUN_TF_CASE_B(4)
 				test1::Test t;
-
 			RUN_TF_CASE_E(4,tup,t)
 
 			RUN_TF_CASE(5,tup)
