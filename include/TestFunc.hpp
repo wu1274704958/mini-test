@@ -8,9 +8,9 @@
 #define CREATE_TEST_FUNC(func_name) wws::TestFunc(#func_name ,func_name)
 #define MAEK_IS_TUPLE_SIZE(tup) std::make_index_sequence<std::tuple_size_v< std::remove_reference_t< decltype(tup) > >>()
 
-#define RUN_TF_CASE(i,...)  case i: wws::RunFuncIndex<i>(__VA_ARGS__); break;
+#define RUN_TF_CASE(i,tup,...)  case i: wws::RunFuncIndex<i>(tup,##__VA_ARGS__); break;
 #define RUN_TF_CASE_B(i)  case i: {  
-#define RUN_TF_CASE_E(i,...)  wws::RunFuncIndex<i>(__VA_ARGS__); break;}
+#define RUN_TF_CASE_E(i,tup,...)  wws::RunFuncIndex<i>(tup,##__VA_ARGS__); break;}
 
 HAS_MEMBER(name)
 HAS_MEMBER(func)

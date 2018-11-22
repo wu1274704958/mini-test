@@ -55,6 +55,7 @@ void t2_2(Test &&t)
 }
 void t2_1(Test &&t)
 {
+	printf("__func__ = %s\n",__func__);
 	t2_2(std::move(t));
 }
 
