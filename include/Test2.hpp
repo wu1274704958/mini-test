@@ -80,6 +80,15 @@ public:
 			delete p;
         printf("~Test()\n");
     }
+	int operator=(int a)
+	{
+		*p = a;
+		return a;
+	}
+	 operator int()
+	{
+		return *p;
+	}
 
 };
 
@@ -112,13 +121,28 @@ void test_any()
     cout << *p << endl;
 }
 
+
+Test&& retRr(Test &t)
+{
+	return std::move(t);
+}
+
+void test_rr()
+{
+	Test t;
+	t = 90;
+	Test t2 = retRr(t);
+	cout << "t2 = "<< t2 << endl;
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
 									CREATE_TEST_FUNC(test2_1),
                                     CREATE_TEST_FUNC(test2_2),
                                     CREATE_TEST_FUNC(test2_3),
-                                    CREATE_TEST_FUNC(test_any)
+                                    CREATE_TEST_FUNC(test_any),
+									CREATE_TEST_FUNC(test_rr)
 	);
 }
 
