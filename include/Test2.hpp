@@ -135,6 +135,11 @@ void test_rr()
 	cout << "t2 = "<< t2 << endl;
 }
 
+double findMedianSortedArrays(std::vector<int>& nums1, std::vector<int>& nums2)
+{
+	return 5.0;
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -142,7 +147,8 @@ auto init()
                                     CREATE_TEST_FUNC(test2_2),
                                     CREATE_TEST_FUNC(test2_3),
                                     CREATE_TEST_FUNC(test_any),
-									CREATE_TEST_FUNC(test_rr)
+									CREATE_TEST_FUNC(test_rr),
+									CREATE_TEST_FUNC(findMedianSortedArrays)
 	);
 }
 

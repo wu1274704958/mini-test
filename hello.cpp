@@ -40,6 +40,10 @@ int main(int argc,char **argv)
 			RUN_TF_CASE(7,tup)
 			RUN_TF_CASE(8,tup)
 			RUN_TF_CASE(9, tup)
+			RUN_TF_CASE_B(10)
+				std::vector<int> arr1 = { 1,3 };
+				std::vector<int> arr2 = { 2 };
+			RUN_TF_CASE_E(10, tup, arr1,arr2)
 		}
 		std::cout << "\n\n" ;
 	}
