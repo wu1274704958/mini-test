@@ -39,6 +39,7 @@ int main(int argc,char **argv)
 			RUN_TF_CASE(6,tup)
 			RUN_TF_CASE(7,tup)
 			RUN_TF_CASE(8,tup)
+			RUN_TF_CASE(9, tup)
 		}
 		std::cout << "\n\n" ;
 	}
