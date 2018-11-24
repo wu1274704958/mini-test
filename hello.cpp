@@ -45,6 +45,13 @@ int main(int argc,char **argv)
 				
 				std::vector<int> arr2 = { 3, 4, 67, 89, 100 };
 			RUN_TF_CASE_E(10, tup, arr1,arr2)
+
+			RUN_TF_CASE_B(11)
+				std::vector<int> arr2 = { 4, 5 };
+
+				std::vector<int> arr1 = { 2, 3};
+			RUN_TF_CASE_E(11, tup, arr1, arr2)
+
 		}
 		std::cout << "\n\n" ;
 	}
