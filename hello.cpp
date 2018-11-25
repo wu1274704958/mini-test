@@ -15,15 +15,29 @@ int main(int argc,char **argv)
 	// f(argc,argv);
 	auto tup = wws::CatTFArray(test1::init(),test2::init());
 	
+	
+	/*
+	//没有参数的示例
+	int a = 0;
+	wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup), tup);
+	while (a != -1)
+	{
+		std::cin >> a;
+		wws::RunFuncNoArgs(MAEK_IS_TUPLE_SIZE(tup), tup, a);
+		std::cout << "\r\n";
+	}*/
 	// auto f2 = wws::GetFuncIndex<0>(tup);
 	// f2();
 	// wws::RunFuncIndex<1>(tup);
 	// wws::RunFuncIndex<2>(tup,argc,argv);
+	//带有参数的示例
 	int a = 0;
 	while(a > -1)
 	{
+		std::cout << "---------------------------------------------------------------------------\n";
 		wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup),tup);
 		std::cin >> a;
+		std::cout << "---------------------------------------------------------------------------\n";
 		switch(a)
 		{
 			RUN_TF_CASE(0,tup)
@@ -53,7 +67,6 @@ int main(int argc,char **argv)
 			RUN_TF_CASE_E(11, tup, arr1, arr2)
 
 		}
-		std::cout << "\n\n" ;
 	}
 	return 0;
 }
