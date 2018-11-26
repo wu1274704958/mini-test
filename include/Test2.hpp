@@ -201,6 +201,45 @@ double findMedianSortedArrays2(std::vector<int>& nums1, std::vector<int>& nums2)
 	return 0.0;
 }
 
+std::tuple<int,int> get_plalindrome_len(std::string& str,int i, int j)
+{
+	int len = str.size();
+	while (i >= 0 && j < len && str[i] == str[j]) {
+		--i; ++j;
+	}
+	++i; --j;
+	return std::make_tuple(i ,j - i + 1);
+}
+
+std::string longestPalindrome(std::string& s) {
+	if (s.size() == 0 || (s.size() == 2 && s[0] == s[1])) {
+		return s;
+	}
+	int b = 0, max_len = 1;
+	int len = s.size() - 1;
+	for (int i = 0; i < len; ++i)
+	{
+		if (s[i] == s[i + 1])
+		{
+			std::tuple<int, int> res = get_plalindrome_len(s, i - 1, i + 2);
+			if (std::get<1>(res) > max_len) {
+				b = std::get<0>(res);
+				max_len = std::get<1>(res);
+			}
+		}
+		
+		if (i > 0 && s[i - 1] == s[i + 1])
+		{
+			std::tuple<int, int> res = get_plalindrome_len(s, i - 1, i + 1);
+			if (std::get<1>(res) > max_len) {
+				b = std::get<0>(res);
+				max_len = std::get<1>(res);
+			}
+		}
+	}
+	return s.substr(b, max_len);
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -210,7 +249,8 @@ auto init()
                                     CREATE_TEST_FUNC(test_any),
 									CREATE_TEST_FUNC(test_rr),
 									CREATE_TEST_FUNC(findMedianSortedArrays),
-									CREATE_TEST_FUNC(findMedianSortedArrays2)
+									CREATE_TEST_FUNC(findMedianSortedArrays2),
+									CREATE_TEST_FUNC(longestPalindrome)
 	);
 }
 

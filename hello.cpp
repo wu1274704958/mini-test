@@ -7,7 +7,7 @@
 #include "TypeList.hpp"
 #include "Test1.hpp"
 #include "Test2.hpp"
-
+#include <string>
 
 int main(int argc,char **argv)
 {
@@ -65,6 +65,11 @@ int main(int argc,char **argv)
 
 				std::vector<int> arr1 = { 2, 3};
 			RUN_TF_CASE_E(11, tup, arr1, arr2)
+
+			RUN_TF_CASE_B(12)
+
+					std::string s = "cca";
+			RUN_TF_CASE_E(12, tup, s)
 
 		}
 	}
