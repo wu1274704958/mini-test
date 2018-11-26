@@ -17,7 +17,7 @@ int main(int argc,char **argv)
 	
 	
 	/*
-	//Ã»ÓÐ²ÎÊýµÄÊ¾Àý
+	//Ã»ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½
 	int a = 0;
 	wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup), tup);
 	while (a != -1)
@@ -30,7 +30,7 @@ int main(int argc,char **argv)
 	// f2();
 	// wws::RunFuncIndex<1>(tup);
 	// wws::RunFuncIndex<2>(tup,argc,argv);
-	//´øÓÐ²ÎÊýµÄÊ¾Àý
+	//ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½
 	int a = 0;
 	while(a > -1)
 	{
@@ -65,6 +65,10 @@ int main(int argc,char **argv)
 
 				std::vector<int> arr1 = { 2, 3};
 			RUN_TF_CASE_E(11, tup, arr1, arr2)
+
+			RUN_TF_CASE_B(12)
+				std::string str = "abbdba";
+			RUN_TF_CASE_E(12, tup,str)
 
 		}
 	}

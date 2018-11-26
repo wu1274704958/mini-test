@@ -201,6 +201,78 @@ double findMedianSortedArrays2(std::vector<int>& nums1, std::vector<int>& nums2)
 	return 0.0;
 }
 
+void longestPalindrome(std::string s) {
+	int x = 0,y = 0,max_len = 0;
+	int m,n,len;
+	for(int i = 0;i < s.size();++i)
+	{
+		if(s[i] == s[i+1])
+		{
+			n = i+2;
+			m = i-1;
+			len = 2;
+			while(n >= x)
+			{
+				if(m >= s.size())
+				{
+					if(len > max_len)
+					{
+						max_len = len;
+						y = m - 1;
+					}
+					goto end;
+				}
+				if(s[m] == s[n])
+				{
+					len += 2;
+				}
+				--n;
+				++m;
+			}
+			if(len > max_len)
+			{
+				max_len = len;
+				y = m;
+			}
+		end:
+			++x;
+			i = x;
+		}else if(s[i] == s[i+2])
+		{
+			n = i+3;
+			m = i-1;
+			len = 3;
+			while(n >= x)
+			{
+				if(m >= s.size())
+				{
+					if(len > max_len)
+					{
+						max_len = len;
+						y = m - 1;
+					}
+					goto end2;
+				}
+				if(s[m] == s[n])
+				{
+					len += 2;
+				}
+				--n;
+				++m;
+			}
+			if(len > max_len)
+			{
+				max_len = len;
+				y = m;
+			}
+		end2:
+			++x;
+			i = x;
+		}
+	}
+	printf("%d  %d",x,y);
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -210,7 +282,8 @@ auto init()
                                     CREATE_TEST_FUNC(test_any),
 									CREATE_TEST_FUNC(test_rr),
 									CREATE_TEST_FUNC(findMedianSortedArrays),
-									CREATE_TEST_FUNC(findMedianSortedArrays2)
+									CREATE_TEST_FUNC(findMedianSortedArrays2),
+									CREATE_TEST_FUNC(longestPalindrome)
 	);
 }
 
