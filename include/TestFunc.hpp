@@ -8,9 +8,9 @@
 #define CREATE_TEST_FUNC(func_name) wws::TestFunc(#func_name ,func_name)
 #define MAEK_IS_TUPLE_SIZE(tup) std::make_index_sequence<std::tuple_size_v< std::remove_reference_t< decltype(tup) > >>()
 
-#define RUN_TF_CASE(i,tup,...)  case i: wws::RunFuncIndex<i>(tup,##__VA_ARGS__); break;
+#define RUN_TF_CASE(i,tup,...)  case i:{ wws::RunFuncIndexNoRet<i>(tup,##__VA_ARGS__); }break;																	
 #define RUN_TF_CASE_B(i)  case i: {  
-#define RUN_TF_CASE_E(i,tup,...)  wws::RunFuncIndex<i>(tup,##__VA_ARGS__); break;}
+#define RUN_TF_CASE_E(i,tup,...)  wws::RunFuncIndexNoRet<i>(tup,##__VA_ARGS__); break;}
 
 HAS_MEMBER(name)
 HAS_MEMBER(func)
@@ -65,7 +65,7 @@ namespace wws
     template<typename Tup,size_t ...Idx>
     constexpr bool IsTestFuncTuple()
     {
-        bool res = (wws::Hasname< std::remove_reference_t<  decltype( std::get<Idx>( std::declval<Tup>() ) ) > >::value && ...);
+        bool res = ((wws::Hasname< std::remove_reference_t<  decltype(std::get<Idx>(std::declval<Tup>())) > >::value && wws::Hasfunc< std::remove_reference_t<  decltype(std::get<Idx>(std::declval<Tup>())) > >::value )&& ...);
         return res;
     }
 
@@ -88,6 +88,13 @@ namespace wws
     	((printf("%d: %s\n",Idx,std::get<Idx>(tup).name),...));
     }
 
+	template<typename TUP, size_t ...Idx>
+	void RunFuncNoArgs(std::index_sequence<Idx...> is, TUP &tup,unsigned int index)
+	{
+		static_assert(IsTestFuncTuple<TUP, Idx...>(), "The elements in this tuple do not meet the requirements!");
+		((index == Idx && (RunFuncIndexNoRet<Idx>(tup),false)), ...);
+	}
+
     template<size_t I,typename TUP>
     auto GetFuncIndex(TUP &tup) -> FuncInfo< decltype(std::get<I>(tup).func) > 
     {
@@ -109,6 +116,21 @@ namespace wws
         FuncInfo<decltype(res)> f(res);
         return f(std::forward<Args>(args)...);
     }
+
+	template<size_t I, typename TUP, typename ...Args>
+	void RunFuncIndexNoRet(TUP &tup, Args&&...args) 
+	{
+		using type = std::remove_cv_t<decltype(wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...))>;
+		if constexpr (!std::is_same_v<type, void>)							
+		{																	
+			type val = wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
+			std::cout << "ret val = " << val << std::endl;
+		}																	
+		else {																
+			wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
+		}
+	}
+
 } // wws
 
 #endif //__WWS_TEST_FUNC_H__
