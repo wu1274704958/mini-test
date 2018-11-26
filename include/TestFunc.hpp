@@ -88,22 +88,6 @@ namespace wws
     	((printf("%d: %s\n",Idx,std::get<Idx>(tup).name),...));
     }
 
-	template<typename TUP, size_t ...Idx>
-	void RunFuncNoArgs(std::index_sequence<Idx...> is, TUP &tup,unsigned int index)
-	{
-		static_assert(IsTestFuncTuple<TUP, Idx...>(), "The elements in this tuple do not meet the requirements!");
-		((index == Idx && (RunFuncIndexNoRet<Idx>(tup),false)), ...);
-	}
-
-    template<size_t I,typename TUP>
-    auto GetFuncIndex(TUP &tup) -> FuncInfo< decltype(std::get<I>(tup).func) > 
-    {
-        static_assert( wws::Hasfunc< std::remove_reference_t<  decltype( std::get<I>(tup) ) > >::value ,"The element in this tuple do not meet the requirements!");
-        auto res = std::get<I>(tup).func;
-        return FuncInfo<decltype(res)>(res);
-    }
-
-
     template<size_t I,typename TUP,typename ...Args>
     auto RunFuncIndex(TUP &tup,Args&&...args) ->  typename FuncInfo< decltype(std::get<I>(tup).func) >::RetType
     {
@@ -130,6 +114,21 @@ namespace wws
 			wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
 		}
 	}
+
+	template<typename TUP, size_t ...Idx>
+	void RunFuncNoArgs(std::index_sequence<Idx...> is, TUP &tup,unsigned int index)
+	{
+		static_assert(IsTestFuncTuple<TUP, Idx...>(), "The elements in this tuple do not meet the requirements!");
+		((index == Idx && (wws::RunFuncIndexNoRet<Idx>(tup),false)), ...);
+	}
+
+    template<size_t I,typename TUP>
+    auto GetFuncIndex(TUP &tup) -> FuncInfo< decltype(std::get<I>(tup).func) > 
+    {
+        static_assert( wws::Hasfunc< std::remove_reference_t<  decltype( std::get<I>(tup) ) > >::value ,"The element in this tuple do not meet the requirements!");
+        auto res = std::get<I>(tup).func;
+        return FuncInfo<decltype(res)>(res);
+    }
 
 } // wws
 
