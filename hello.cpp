@@ -7,17 +7,18 @@
 #include "TypeList.hpp"
 #include "Test1.hpp"
 #include "Test2.hpp"
-
+#include <string>
 
 int main(int argc,char **argv)
 {
 	// wws::FuncInfo<decltype(test)> f(test);
 	// f(argc,argv);
-	auto tup = wws::CatTFArray(test1::init(),test2::init());
+	
 	
 	
 	/*
-	//û�в�����ʾ��
+	//没有参数的测试用例
+	auto tup = wws::CatTFArray(test1::init(),test2::init());
 	int a = 0;
 	wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup), tup);
 	while (a != -1)
@@ -30,7 +31,8 @@ int main(int argc,char **argv)
 	// f2();
 	// wws::RunFuncIndex<1>(tup);
 	// wws::RunFuncIndex<2>(tup,argc,argv);
-	//���в�����ʾ��
+	//有参数的测试用例
+	auto tup = wws::CatTFArray(test1::init(),test2::init());
 	int a = 0;
 	while(a > -1)
 	{
@@ -67,8 +69,9 @@ int main(int argc,char **argv)
 			RUN_TF_CASE_E(11, tup, arr1, arr2)
 
 			RUN_TF_CASE_B(12)
-				std::string str = "abbdba";
-			RUN_TF_CASE_E(12, tup,str)
+
+					std::string s = "cca";
+			RUN_TF_CASE_E(12, tup, s)
 
 		}
 	}
