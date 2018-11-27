@@ -240,6 +240,23 @@ std::string longestPalindrome(std::string& s) {
 	return s.substr(b, max_len);
 }
 
+std::string convert(std::string &s, int numRows) {
+	if (numRows == 1) return s;
+
+	std::string ret;
+	int n = s.size();
+	int cycleLen = 2 * numRows - 2;
+
+	for (int i = 0; i < numRows; i++) {
+		for (int j = 0; j + i < n; j += cycleLen) {
+			ret += s[j + i];
+			if (i != 0 && i != numRows - 1 && j + cycleLen - i < n)
+				ret += s[j + cycleLen - i];
+		}
+	}
+	return ret;
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -250,7 +267,8 @@ auto init()
 									CREATE_TEST_FUNC(test_rr),
 									CREATE_TEST_FUNC(findMedianSortedArrays),
 									CREATE_TEST_FUNC(findMedianSortedArrays2),
-									CREATE_TEST_FUNC(longestPalindrome)
+									CREATE_TEST_FUNC(longestPalindrome),
+									CREATE_TEST_FUNC(convert)
 	);
 }
 
