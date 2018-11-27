@@ -13,11 +13,12 @@ int main(int argc,char **argv)
 {
 	// wws::FuncInfo<decltype(test)> f(test);
 	// f(argc,argv);
-	auto tup = wws::CatTFArray(test1::init(),test2::init());
+	
 	
 	
 	/*
-	//Ã»ÓĞ²ÎÊıµÄÊ¾Àı
+	//æ²¡æœ‰å‚æ•°çš„æµ‹è¯•ç”¨ä¾‹
+	auto tup = wws::CatTFArray(test1::init(),test2::init());
 	int a = 0;
 	wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup), tup);
 	while (a != -1)
@@ -30,7 +31,8 @@ int main(int argc,char **argv)
 	// f2();
 	// wws::RunFuncIndex<1>(tup);
 	// wws::RunFuncIndex<2>(tup,argc,argv);
-	//´øÓĞ²ÎÊıµÄÊ¾Àı
+	//æœ‰å‚æ•°çš„æµ‹è¯•ç”¨ä¾‹
+	auto tup = wws::CatTFArray(test1::init(),test2::init());
 	int a = 0;
 	while(a > -1)
 	{
