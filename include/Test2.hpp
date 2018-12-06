@@ -271,8 +271,6 @@ void test_win_desktop_item()
 {
 #ifdef _MSC_VER
 
-	int mem_size = sizeof(RECT) * 10;
-
 	HWND progman = FindWindowA("Progman", "Program Manager");
 	HWND def_view = FindWindowExA(progman, NULL, "SHELLDLL_DefView", NULL);
 	HWND hwnd = FindWindowExA(def_view, NULL, "SysListView32", "FolderView");
@@ -280,30 +278,37 @@ void test_win_desktop_item()
 	DWORD dwProcessId;
 	GetWindowThreadProcessId(hwnd, &dwProcessId);
 
-	HANDLE hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_OPERATION, FALSE, dwProcessId);
-	PVOID pv = VirtualAllocEx(hProcess, NULL, mem_size, MEM_COMMIT, PAGE_READWRITE);
+	HANDLE hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_OPERATION | PROCESS_VM_WRITE , FALSE, dwProcessId);
+	PVOID pv = VirtualAllocEx(hProcess, NULL, sizeof(POINT), MEM_COMMIT, PAGE_READWRITE);
 
 	ListView_GetItemPosition(hwnd, 0, pv);
 
 	POINT  pt;
-	ReadProcessMemory(hProcess, pv, &pt, sizeof(POINT), NULL);
-	
+
+	size_t rw_size = 0;
+
+	ReadProcessMemory(hProcess, pv, &pt, sizeof(POINT), &rw_size);
+	printf("rw_size = %d\n", rw_size);
 	printf("%d %d %d\n", hwnd, pt.x, pt.y);
+	VirtualFreeEx(hProcess, pv, sizeof(POINT), MEM_RELEASE);
 	
-	//ListView_GetItemRect(hwnd, 8, pv, LVIR_BOUNDS);
+	RECT rect = {0};
+	rect.left = 0;
+	pv = VirtualAllocEx(hProcess, NULL, sizeof(RECT), MEM_COMMIT, PAGE_READWRITE);
+	rw_size = 0;
+	BOOL ret = WriteProcessMemory(hProcess, pv, &rect, sizeof(RECT), &rw_size);
+	printf("write res = %d, rw_size = %d\n", ret,rw_size);
+	SendMessageA(hwnd, LVM_GETITEMRECT, 0, (WPARAM)pv);
+	rw_size = 0;
+	ReadProcessMemory(hProcess, pv, &rect, sizeof(RECT), &rw_size);
+	printf("rw_size = %d\n", rw_size);
+	VirtualFreeEx(hProcess, pv, sizeof(RECT), MEM_RELEASE);
 	
-	
-	//RECT rect;
-
-	//ReadProcessMemory(hProcess, pv, &rect, sizeof(RECT), NULL);
-
-	//VirtualFreeEx(hProcess, pv, mem_size, MEM_RELEASE);
-
-	//printf("%d ,%d, %d, %d\n", rect.left, rect.top, rect.right, rect.bottom);
+	printf("%d ,%d, %d, %d\n", rect.left, rect.top, rect.right, rect.bottom);
 
 	CloseHandle(hProcess);
 
-	ListView_SetItemPosition(hwnd, 0, 200, 200);
+	//ListView_SetItemPosition(hwnd, 0, 200, 200);
 
 #endif //_MSC_VER
 }
