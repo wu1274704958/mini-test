@@ -271,18 +271,37 @@ void test_win_desktop_item()
 {
 #ifdef _MSC_VER
 
+	int mem_size = sizeof(RECT) * 10;
+
 	HWND progman = FindWindowA("Progman", "Program Manager");
 	HWND def_view = FindWindowExA(progman, NULL, "SHELLDLL_DefView", NULL);
 	HWND hwnd = FindWindowExA(def_view, NULL, "SysListView32", "FolderView");
 
-	POINT p{ 1,1 };
-	int res = SendMessageA(hwnd, LVM_GETITEMPOSITION, (WPARAM)(int)(8), (LPARAM)(POINT *)(&p));
-	printf("%d %d %d\n", hwnd, p.x, p.y);
-	
-	RECT rect;
-	ListView_GetItemRect(hwnd, 8, &rect, LVIR_BOUNDS);
+	DWORD dwProcessId;
+	GetWindowThreadProcessId(hwnd, &dwProcessId);
 
-	printf("%d ,%d, %d, %d\n", rect.left, rect.top, rect.right, rect.bottom);
+	HANDLE hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_OPERATION, FALSE, dwProcessId);
+	PVOID pv = VirtualAllocEx(hProcess, NULL, mem_size, MEM_COMMIT, PAGE_READWRITE);
+
+	ListView_GetItemPosition(hwnd, 0, pv);
+
+	POINT  pt;
+	ReadProcessMemory(hProcess, pv, &pt, sizeof(POINT), NULL);
+	
+	printf("%d %d %d\n", hwnd, pt.x, pt.y);
+	
+	//ListView_GetItemRect(hwnd, 8, pv, LVIR_BOUNDS);
+	
+	
+	//RECT rect;
+
+	//ReadProcessMemory(hProcess, pv, &rect, sizeof(RECT), NULL);
+
+	//VirtualFreeEx(hProcess, pv, mem_size, MEM_RELEASE);
+
+	//printf("%d ,%d, %d, %d\n", rect.left, rect.top, rect.right, rect.bottom);
+
+	CloseHandle(hProcess);
 
 	ListView_SetItemPosition(hwnd, 0, 200, 200);
 
