@@ -76,7 +76,9 @@ int main(int argc,char **argv)
 			RUN_TF_CASE_B(13)
 
 				std::string s = "PAYPALISHIRING";
-			RUN_TF_CASE_E(13, tup, s, 3);
+			RUN_TF_CASE_E(13, tup, s, 3)
+
+			RUN_TF_CASE(14, tup)
 
 		}
 	}

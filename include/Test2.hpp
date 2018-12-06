@@ -7,6 +7,16 @@
 #include <any>
 #include <vector>
 
+#ifdef _MSC_VER
+#include <windows.h>
+#include <stdio.h>
+#include <Commctrl.h>
+
+#undef max
+#undef min
+
+#endif // _MSC_VER
+
 namespace test2{
 using std::cout;
 using std::endl;
@@ -164,7 +174,6 @@ double findMedianSortedArrays(std::vector<int>& nums1, std::vector<int>& nums2)
 	else
 		return (((double)arr3[len - 1]) + ((double)arr3[len - 2])) / 2.0;
 }
-
 double findMedianSortedArrays2(std::vector<int>& nums1, std::vector<int>& nums2)
 {
 	int m = nums1.size();
@@ -257,6 +266,29 @@ std::string convert(std::string &s, int numRows) {
 	return ret;
 }
 
+
+void test_win_desktop_item()
+{
+#ifdef _MSC_VER
+
+	HWND progman = FindWindowA("Progman", "Program Manager");
+	HWND def_view = FindWindowExA(progman, NULL, "SHELLDLL_DefView", NULL);
+	HWND hwnd = FindWindowExA(def_view, NULL, "SysListView32", "FolderView");
+
+	POINT p{ 1,1 };
+	int res = SendMessageA(hwnd, LVM_GETITEMPOSITION, (WPARAM)(int)(8), (LPARAM)(POINT *)(&p));
+	printf("%d %d %d\n", hwnd, p.x, p.y);
+	
+	RECT rect;
+	ListView_GetItemRect(hwnd, 8, &rect, LVIR_BOUNDS);
+
+	printf("%d ,%d, %d, %d\n", rect.left, rect.top, rect.right, rect.bottom);
+
+	ListView_SetItemPosition(hwnd, 0, 200, 200);
+
+#endif //_MSC_VER
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -268,7 +300,8 @@ auto init()
 									CREATE_TEST_FUNC(findMedianSortedArrays),
 									CREATE_TEST_FUNC(findMedianSortedArrays2),
 									CREATE_TEST_FUNC(longestPalindrome),
-									CREATE_TEST_FUNC(convert)
+									CREATE_TEST_FUNC(convert),
+									CREATE_TEST_FUNC(test_win_desktop_item)
 	);
 }
 
