@@ -324,6 +324,34 @@ void test_win_desktop_item()
 #endif //_MSC_VER
 }
 
+class A {
+public:
+	virtual void f(int a) {
+		std::cout << "f(" << a << ")" << std::endl;
+	}
+};
+
+class B : public A{
+public:
+	virtual void f(int a) override {
+		std::cout << "son f(" << a << ")" << std::endl;
+	}
+	void f(int a,int b) {
+		std::cout << "son f(" << a << "," << b << ")" << std::endl;
+	}
+};
+
+void test_override_overwrite()
+{
+	B b;
+	A& a = b;
+	a.f(8);
+	b.f(7, 8);
+	A a2;
+	a2.f(10);
+}
+
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -336,7 +364,8 @@ auto init()
 									CREATE_TEST_FUNC(findMedianSortedArrays2),
 									CREATE_TEST_FUNC(longestPalindrome),
 									CREATE_TEST_FUNC(convert),
-									CREATE_TEST_FUNC(test_win_desktop_item)
+									CREATE_TEST_FUNC(test_win_desktop_item),
+									CREATE_TEST_FUNC(test_override_overwrite)
 	);
 }
 
