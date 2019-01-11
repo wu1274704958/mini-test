@@ -350,7 +350,14 @@ void test_override_overwrite()
 	A a2;
 	a2.f(10);
 }
+template<typename T> std::vector<T> template_var;
+void test_template_var()
+{
+	void * p1 = &template_var<int>;
+	void * p2 = &template_var<float>;
 
+	printf("%p %p\n", p1, p2);
+}
 
 auto init()
 {
@@ -365,7 +372,8 @@ auto init()
 									CREATE_TEST_FUNC(longestPalindrome),
 									CREATE_TEST_FUNC(convert),
 									CREATE_TEST_FUNC(test_win_desktop_item),
-									CREATE_TEST_FUNC(test_override_overwrite)
+									CREATE_TEST_FUNC(test_override_overwrite),
+									CREATE_TEST_FUNC(test_template_var)
 	);
 }
 
