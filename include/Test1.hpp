@@ -5,7 +5,7 @@
 #include <array>
 #include "TypeList.hpp"
 #include "TestFunc.hpp"
-#include <string_view>
+//#include <string_view>
 
 namespace test1{
 	
@@ -13,13 +13,14 @@ int test(int argc,char **argv)
 {
 	std::array<char,100> arr;
 	arr.fill(0);
-	std::string_view sv("2018 10 31",4);
+	//std::string_view sv("2018 10 31",4);
+	const char *sv = "2018 10 31";
 
 	if(argc > 1)
 	{
-		snprintf(arr.data(),arr.size() - 1,"HelloWorld %s %s\n",sv.data(),argv[1]);
+		snprintf(arr.data(),arr.size() - 1,"HelloWorld %s %s\n",sv,argv[1]);
 	}else if(argc == 1){
-		snprintf(arr.data(),arr.size() - 1,"HelloWorld %s\n",sv.data());
+		snprintf(arr.data(),arr.size() - 1,"HelloWorld %s\n",sv);
 	}
 	std::cout << arr.data() << std::endl;
 	return 0;

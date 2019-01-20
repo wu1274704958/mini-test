@@ -4,7 +4,7 @@
 #include <iostream>
 #include "TestFunc.hpp"
 #include <functional>
-#include <any>
+//#include <any>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -118,18 +118,18 @@ void test2_3()
     }
     f(Test());
 }
-using std::any;
-using std::any_cast;
+//using std::any;
+//using std::any_cast;
 void test_any()
 {
-    any a = 1;
+    /*any a = 1;
     if(a.has_value())
     {
         printf("%s  %d\n",a.type().name(),any_cast<int>(a));
     }
 
     int *p = any_cast<int>(&a);
-    cout << *p << endl;
+    cout << *p << endl;*/
 }
 
 

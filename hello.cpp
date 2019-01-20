@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string_view>
+//#include <string_view>
 #include <array>
 #include <tuple>
 #include <utility>
@@ -36,10 +36,10 @@ int main(int argc,char **argv)
 	int a = 0;
 	while(a > -1)
 	{
-		std::cout << "\n---------------------------------------------------------------------------\n";
+		std::cout << "\n------------------------------------------------\n";
 		wws::PrintFuncName(MAEK_IS_TUPLE_SIZE(tup),tup);
 		std::cin >> a;
-		std::cout << "---------------------------------------------------------------------------\n";
+		std::cout <<   "------------------------------------------------\n";
 		switch(a)
 		{
 			RUN_TF_CASE(0,tup)

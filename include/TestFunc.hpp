@@ -6,7 +6,7 @@
 #include "TypeList.hpp"
 
 #define CREATE_TEST_FUNC(func_name) wws::TestFunc(#func_name ,func_name)
-#define MAEK_IS_TUPLE_SIZE(tup) std::make_index_sequence<std::tuple_size_v< std::remove_reference_t< decltype(tup) > >>()
+#define MAEK_IS_TUPLE_SIZE(tup) std::make_index_sequence<std::tuple_size< std::remove_reference_t< decltype(tup) > >::value>()
 
 #define RUN_TF_CASE(i,tup,...)  case i:{ wws::RunFuncIndexNoRet<i>(tup,##__VA_ARGS__); }break;																	
 #define RUN_TF_CASE_B(i)  case i: {  
@@ -105,7 +105,7 @@ namespace wws
 	void RunFuncIndexNoRet(TUP &tup, Args&&...args) 
 	{
 		using type = std::remove_cv_t<decltype(wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...))>;
-		if constexpr (!std::is_same_v<type, void>)							
+		if constexpr (!std::is_same<type, void>::value)							
 		{																	
 			type val = wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
 			std::cout << "ret val = " << val << std::endl;
