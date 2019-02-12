@@ -81,6 +81,10 @@ int main(int argc,char **argv)
 			RUN_TF_CASE(14, tup)
 			RUN_TF_CASE(15, tup)
 			RUN_TF_CASE(16, tup)
+
+			RUN_TF_CASE(17, tup, "MCMXCIV")
+
+			
 		}
 	}
 	return 0;

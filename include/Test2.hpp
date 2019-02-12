@@ -359,6 +359,58 @@ void test_template_var()
 	printf("%p %p\n", p1, p2);
 }
 
+int romanToInt(std::string s) {
+	std::tuple<const char *, int> as_arr[] = {	std::make_tuple("M" ,	1000),
+													std::make_tuple("CM",	900),
+													std::make_tuple("D",	500),
+													std::make_tuple("CD",	400),
+													std::make_tuple("C",	100),
+													std::make_tuple("XC",	90),
+													std::make_tuple("L",	50),
+													std::make_tuple("XL",	40),
+													std::make_tuple("X",	10),
+													std::make_tuple("IX",	9),
+													std::make_tuple("V",	5),
+													std::make_tuple("IV",	4),
+													std::make_tuple("I",	1) };
+
+	/*for(auto a : as_arr) {
+		cout << std::get<0>(a)  << "  " << std::get<0>(a).size() << "  " << std::get<1>(a) << "\n";
+	}*/
+
+
+	int j = 0;
+	int res = 0;
+	for (int i = 0; i < s.size();)
+	{
+		const char *ps = std::get<0>(as_arr[j]);
+		int &pn = std::get<1>(as_arr[j]);
+		int ps_size = j % 2 == 0 ? 1 : 2;
+		if (ps_size == 1) {
+			if (ps[0] == s[i])
+			{
+				res += pn;
+				i += 1;
+			}
+			else {
+				j++;
+			}
+		}
+		else {
+			if (ps[0] == s[i] && ps[1] == s[i + 1])
+			{
+				res += pn;
+				i += 2;
+			}
+			else {
+				j++;
+			}
+		}
+	}
+
+	return res;
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -373,7 +425,8 @@ auto init()
 									CREATE_TEST_FUNC(convert),
 									CREATE_TEST_FUNC(test_win_desktop_item),
 									CREATE_TEST_FUNC(test_override_overwrite),
-									CREATE_TEST_FUNC(test_template_var)
+									CREATE_TEST_FUNC(test_template_var),
+									CREATE_TEST_FUNC(romanToInt)
 	);
 }
 
