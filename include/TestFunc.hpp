@@ -85,7 +85,7 @@ namespace wws
     void PrintFuncName(std::index_sequence<Idx...> is,TUP &tup)
     {
         static_assert( IsTestFuncTuple<TUP,Idx...>() ,"The elements in this tuple do not meet the requirements!");
-    	((printf("%d: %s\n",Idx,std::get<Idx>(tup).name),...));
+    	((printf("%lu: %s\n",Idx,std::get<Idx>(tup).name),...));
     }
 
     template<size_t I,typename TUP,typename ...Args>

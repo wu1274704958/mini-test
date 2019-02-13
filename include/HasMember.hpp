@@ -10,7 +10,7 @@ namespace wws{                                                                  
         template<typename U>                                                                                \
         static constexpr auto func(int) -> decltype( std::declval<U>().n,std::true_type() ) {}              \
         template<typename U>                                                                                \
-        static constexpr auto func(...) -> std::false_type {}                                               \
+        static constexpr auto func(...) -> std::false_type{ return std::false_type(); }                                               \
         enum {value = decltype(func<T>(0))::value };                                             \
     };                                                                                                      \
 }                                                                                                           \

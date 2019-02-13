@@ -12,9 +12,9 @@ else()
 endif()
 
 add_executable(hello hello.cpp src/tool.cpp)
-add_subdirectory(test)
-enable_testing()
-add_test(NAME my_test COMMAND Test)
+#add_subdirectory(test)
+#enable_testing()
+#add_test(NAME my_test COMMAND Test)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
