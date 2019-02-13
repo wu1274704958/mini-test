@@ -4,6 +4,7 @@
 #include <iostream>
 #include "HasMember.hpp"
 #include "TypeList.hpp"
+#include <chrono>
 
 #define CREATE_TEST_FUNC(func_name) wws::TestFunc(#func_name ,func_name)
 #define MAEK_IS_TUPLE_SIZE(tup) std::make_index_sequence<std::tuple_size_v< std::remove_reference_t< decltype(tup) > >>()
@@ -106,12 +107,18 @@ namespace wws
 	{
 		using type = std::remove_cv_t<decltype(wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...))>;
 		if constexpr (!std::is_same_v<type, void>)							
-		{																	
+		{		
+			auto start = std::chrono::system_clock::now();
 			type val = wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
+			auto end = std::chrono::system_clock::now();
 			std::cout << "ret val = " << val << std::endl;
+			std::cout << "time = " << (end - start).count() << std::endl;
 		}																	
-		else {																
+		else {		
+			auto start = std::chrono::system_clock::now();
 			wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
+			auto end = std::chrono::system_clock::now();
+			std::cout << "time = " << (end - start).count() << std::endl;
 		}
 	}
 

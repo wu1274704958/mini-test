@@ -8,7 +8,10 @@ include_directories(./include)
 if(MSVC)
     add_definitions(/std:c++17 /permissive)
 else()
-    add_definitions(-std=c++17)
+	add_definitions(-std=c++17)
+	SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+	SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+    
 endif()
 
 add_executable(hello hello.cpp src/tool.cpp)

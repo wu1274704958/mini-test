@@ -360,7 +360,8 @@ void test_template_var()
 }
 
 int romanToInt(std::string s) {
-	std::tuple<const char *, int> as_arr[] = {	std::make_tuple("M" ,	1000),
+
+	std::tuple<const char *, int> as_arr[] = {		std::make_tuple("M" ,	1000),
 													std::make_tuple("CM",	900),
 													std::make_tuple("D",	500),
 													std::make_tuple("CD",	400),
@@ -384,7 +385,7 @@ int romanToInt(std::string s) {
 	for (int i = 0; i < s.size();)
 	{
 		const char *ps = std::get<0>(as_arr[j]);
-		int &pn = std::get<1>(as_arr[j]);
+		int pn = std::get<1>(as_arr[j]);
 		int ps_size = j % 2 == 0 ? 1 : 2;
 		if (ps_size == 1) {
 			if (ps[0] == s[i])
@@ -397,7 +398,10 @@ int romanToInt(std::string s) {
 			}
 		}
 		else {
-			if (ps[0] == s[i] && ps[1] == s[i + 1])
+			if(i + 1 >= s.size())
+			{
+				j++;
+			}else if (ps[0] == s[i] && ps[1] == s[i + 1])
 			{
 				res += pn;
 				i += 2;
@@ -407,7 +411,6 @@ int romanToInt(std::string s) {
 			}
 		}
 	}
-
 	return res;
 }
 
