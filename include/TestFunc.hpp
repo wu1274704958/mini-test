@@ -108,17 +108,17 @@ namespace wws
 		using type = std::remove_cv_t<decltype(wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...))>;
 		if constexpr (!std::is_same_v<type, void>)							
 		{		
-			auto start = std::chrono::system_clock::now();
+			auto start = std::chrono::high_resolution_clock::now();
 			type val = wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
-			auto end = std::chrono::system_clock::now();
+			auto end = std::chrono::high_resolution_clock::now();
 			std::cout << "ret val = " << val << std::endl;
-			std::cout << "time = " << (end - start).count() << std::endl;
+			std::cout << "time = " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << "¦Ìs" <<  std::endl;
 		}																	
 		else {		
-			auto start = std::chrono::system_clock::now();
+			auto start = std::chrono::high_resolution_clock::now();
 			wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
-			auto end = std::chrono::system_clock::now();
-			std::cout << "time = " << (end - start).count() << std::endl;
+			auto end = std::chrono::high_resolution_clock::now();
+			std::cout << "time = " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() <<  "¦Ìs" << std::endl;
 		}
 	}
 
