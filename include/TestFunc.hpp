@@ -112,13 +112,13 @@ namespace wws
 			type val = wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
 			auto end = std::chrono::high_resolution_clock::now();
 			std::cout << "ret val = " << val << std::endl;
-			std::cout << "time = " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << "¦Ìs" <<  std::endl;
+			std::cout << "time = " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << " microseconds" <<  std::endl;
 		}																	
 		else {		
 			auto start = std::chrono::high_resolution_clock::now();
 			wws::RunFuncIndex<I>(tup,std::forward<Args>(args)...);
 			auto end = std::chrono::high_resolution_clock::now();
-			std::cout << "time = " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() <<  "¦Ìs" << std::endl;
+			std::cout << "time = " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() <<  " microseconds" << std::endl;
 		}
 	}
 
