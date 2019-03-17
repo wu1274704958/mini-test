@@ -106,7 +106,12 @@ public:
 
 };
 
-
+struct test_sub{
+	char operator-(test_sub ts)
+	{
+		return 'A';
+	}
+};
 
 
 int main()
@@ -122,6 +127,9 @@ int main()
 
     cout << can_sub< vec2<double > >::val << endl;
     cout << is_same< vec2<double > , can_sub< vec2<double > >::type >::value << endl;
+	cout << "test_sub: \n";
+	cout << can_sub< test_sub >::val << endl;
+	cout << is_same< char , can_sub< test_sub >::type >::value << endl;
 
 	cout << sub(6,7) << endl;
 	vec2 v1(2.0f,3.0f);
