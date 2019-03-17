@@ -4,27 +4,65 @@
 
 using namespace std;
 
+template <bool B,typename T>
+struct has_type;
+
+template <typename T>
+struct has_type<true,T>{
+    using type = T;
+    static const bool val = true;
+};
+
+template <>
+struct has_type<false,void>{
+    using type = void;
+    static const bool val = false;
+};
+
 template<typename T>
 struct can_sub_op1{
 	template<typename U>
-	static auto func(char) -> decltype( std::declval<U>().operator-(std::declval<U>()) , std::true_type() ) { return std::true_type(); }
+	static auto func(char)
+	-> has_type<true, decltype( std::declval<U>().operator-(std::declval<U>()) ) >
+	{
+	    return has_type< true, decltype( std::declval<U>().operator-(std::declval<U>()) )> {};
+	}
 	template<typename U> 
-	static auto func(...) ->	std::false_type { return std::false_type(); }
-	static const bool val = decltype( func<T>(0) )::value;
+	static auto func(...) ->has_type<false,void> { return has_type<false,void>{}; }
+	static const bool val = decltype( func<T>(0) )::val;
+	using type = typename decltype( func<T>(0) )::type;
 };
 
 template<typename T>
 struct can_sub_op2{
     template<typename U>
-    static auto func(int) -> decltype( std::declval<U>() - std::declval<U>() , std::true_type() ) { return std::true_type(); }
+    static auto func(int)
+    -> has_type< true, decltype( std::declval<U>() - std::declval<U>() )>
+    {
+        return has_type< true,  decltype( std::declval<U>() - std::declval<U>()) > {};
+    }
     template<typename U>
-    static auto func(...) ->    std::false_type { return std::false_type(); }
-    static const bool val = decltype( func<T>(0) )::value;
+    static auto func(...) -> has_type<false,void> { return has_type<false,void>{}; }
+    static const bool val = decltype( func<T>(0) )::val;
+    using type = typename decltype( func<T>(0) )::type;
+};
+
+template <bool B,typename T1,typename T2>
+struct choose_if{
+    using type = T2;
+};
+
+template <typename T1,typename T2>
+struct choose_if<true,T1,T2>
+{
+    using type = T1;
 };
 
 template<typename T>
 struct can_sub{
     static const bool val = can_sub_op1<T>::val || can_sub_op2<T>::val;
+    using type = typename choose_if< can_sub_op1<T>::val , typename can_sub_op1<T>::type ,
+                    typename choose_if< can_sub_op2<T>::val , typename can_sub_op2<T>::type , void >::type >::type;
 };
 
 template<typename T >
@@ -73,8 +111,18 @@ public:
 
 int main()
 {
-	
+	cout << can_sub_op1<vec2<float >>::val << endl;
+	cout << is_same<can_sub_op1<vec2<float >>::type,vec2<float >>::value <<endl;
+
+    cout << can_sub_op1<int>::val << endl;
+    cout << is_same<can_sub_op1<int>::type,int>::value <<endl;
+
 	cout << can_sub<int>::val << endl;
+	cout << is_same< int, can_sub<int>::type >::value << endl;
+
+    cout << can_sub< vec2<double > >::val << endl;
+    cout << is_same< vec2<double > , can_sub< vec2<double > >::type >::value << endl;
+
 	cout << sub(6,7) << endl;
 	vec2 v1(2.0f,3.0f);
     vec2 v2(3.0f,4.0f);
