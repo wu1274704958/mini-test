@@ -15,6 +15,7 @@ else()
 endif()
 
 add_executable(hello hello.cpp src/tool.cpp)
+add_executable(t2 src/t2.cpp)
 #add_subdirectory(test)
 #enable_testing()
 #add_test(NAME my_test COMMAND Test)
