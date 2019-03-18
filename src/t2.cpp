@@ -115,14 +115,15 @@ struct test_sub{
 
 void pause()
 {
-	if constexpr (WIN32) {
+#if defined(WIN32)
 		system("pause");
-	}
+#endif
 }
 
 
 int main()
 {
+	cout << std::boolalpha;
 	cout << can_sub_op1<vec2<float >>::val << endl;
 	cout << is_same<can_sub_op1<vec2<float >>::type,vec2<float >>::value <<endl;
 
