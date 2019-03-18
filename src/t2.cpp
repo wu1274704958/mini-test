@@ -121,26 +121,42 @@ void pause()
 }
 
 
+template <typename T>
+struct Tv{
+    using type = T;
+    static const bool val = true;
+    T t;
+    Tv(T t_) : t(t_)
+    {
+
+    }
+};
+
+template <>
+struct Tv<void>{
+    using type = void;
+    static const bool val = false;
+
+    Tv(void )
+    {
+
+    }
+};
+
 template<typename T>
-auto dbg_func(const char *expr,T&& t) -> T
+auto dbg_func(const char *expr,Tv<T>&& tv) -> T
 {
-	if constexpr(std::is_same<void,typename std::remove_cv<T>::type>::value)
-	{
-		std::cout << expr << " = void" << std::endl;
-	}else{
-		std::cout << expr << " = "<< t << std::endl;
-	}
-	return std::forward<T>(t);
+    if constexpr( Tv<T>::val )
+    {
+        std::cout << expr << " = "<< tv.t << std::endl;
+        return std::forward<T>(tv.t);
+    }else{
+        std::cout << expr << " = void" << std::endl;
+    }
 }
 
 
-template<typename T = void>
-void dbg_func(const char *expr)
-{
-	std::cout << expr << " = void" << std::endl;
-}
-
-#define dbg(expr) dbg_func(#expr,expr)
+#define dbg(expr)  dbg_func(#expr, Tv<decltype(expr)>( expr ) )
 	
 
 void f()
@@ -151,8 +167,11 @@ void f()
 int main()
 {
 	cout << std::boolalpha;
-	//dbg( can_sub_op1<vec2<float >>::val );
-	dbg_func<void>("aaa");
+	if ( dbg( can_sub_op1<vec2<float >>::val ) )
+    {
+	    cout << "is true \n";
+    }
+
 	cout << is_same<can_sub_op1<vec2<float >>::type,vec2<float >>::value <<endl;
 
     cout << can_sub_op1<int>::val << endl;
