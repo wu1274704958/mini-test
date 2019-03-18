@@ -101,8 +101,8 @@ public:
     {
         return vec2(x - v.x,y - v.y);
     }
-	friend std::ostream& operator<<<>(std::ostream& ,vec2<T>&& );
-    friend std::ostream& operator<<<>(std::ostream& ,vec2<T>& );
+	friend std::ostream& operator<<<T>(std::ostream& ,vec2<T>&& );
+    friend std::ostream& operator<<<T>(std::ostream& ,vec2<T>& );
 
 };
 
@@ -112,6 +112,13 @@ struct test_sub{
 		return 'A';
 	}
 };
+
+void pause()
+{
+	if constexpr (WIN32) {
+		system("pause");
+	}
+}
 
 
 int main()
@@ -137,5 +144,6 @@ int main()
     cout << v1 - v2 << endl;
     cout << sub(v2,v1) << endl;
 	cout << v1 <<endl;
+	pause();
 	return 0;
 }
