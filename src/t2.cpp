@@ -121,10 +121,38 @@ void pause()
 }
 
 
+template<typename T>
+auto dbg_func(const char *expr,T&& t) -> T
+{
+	if constexpr(std::is_same<void,typename std::remove_cv<T>::type>::value)
+	{
+		std::cout << expr << " = void" << std::endl;
+	}else{
+		std::cout << expr << " = "<< t << std::endl;
+	}
+	return std::forward<T>(t);
+}
+
+
+template<typename T = void>
+void dbg_func(const char *expr)
+{
+	std::cout << expr << " = void" << std::endl;
+}
+
+#define dbg(expr) dbg_func(#expr,expr)
+	
+
+void f()
+{
+
+}
+
 int main()
 {
 	cout << std::boolalpha;
-	cout << can_sub_op1<vec2<float >>::val << endl;
+	//dbg( can_sub_op1<vec2<float >>::val );
+	dbg_func<void>("aaa");
 	cout << is_same<can_sub_op1<vec2<float >>::type,vec2<float >>::value <<endl;
 
     cout << can_sub_op1<int>::val << endl;
