@@ -240,7 +240,8 @@ int main()
 	dbg(sub(6, 7));
 	vec2 v1(2.0f,3.0f);
     vec2 v2(3.0f,4.0f);
-    dbg( v1 - v2 );
+    auto temp = dbg( v1 - v2 );
+	dbg(temp);
     dbg( sub(v2,v1) );
 	dbg( v1 );
 
