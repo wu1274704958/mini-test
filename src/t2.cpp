@@ -10,13 +10,13 @@ struct has_type;
 template <typename T>
 struct has_type<true,T>{
     using type = T;
-    static const bool val = true;
+    static constexpr bool val = true;
 };
 
 template <>
 struct has_type<false,void>{
     using type = void;
-    static const bool val = false;
+    static constexpr bool val = false;
 };
 
 template<typename T>
@@ -29,7 +29,7 @@ struct can_sub_op1{
 	}
 	template<typename U> 
 	static auto func(...) ->has_type<false,void> { return has_type<false,void>{}; }
-	static const bool val = decltype( func<T>(0) )::val;
+	static constexpr bool val = decltype( func<T>(0) )::val;
 	using type = typename decltype( func<T>(0) )::type;
 };
 
@@ -43,7 +43,7 @@ struct can_sub_op2{
     }
     template<typename U>
     static auto func(...) -> has_type<false,void> { return has_type<false,void>{}; }
-    static const bool val = decltype( func<T>(0) )::val;
+    static constexpr bool val = decltype( func<T>(0) )::val;
     using type = typename decltype( func<T>(0) )::type;
 };
 
@@ -60,7 +60,7 @@ struct can_cout
 	{
 		return std::false_type();
 	}
-	static const bool val = decltype(func<T>(0))::value;
+	static constexpr bool val = decltype(func<T>(0))::value;
 };
 
 template <bool B,typename T1,typename T2>
@@ -76,7 +76,7 @@ struct choose_if<true,T1,T2>
 
 template<typename T>
 struct can_sub{
-    static const bool val = can_sub_op1<T>::val || can_sub_op2<T>::val;
+    static constexpr bool val = can_sub_op1<T>::val || can_sub_op2<T>::val;
     using type = typename choose_if< can_sub_op1<T>::val , typename can_sub_op1<T>::type ,
                     typename choose_if< can_sub_op2<T>::val , typename can_sub_op2<T>::type , void >::type >::type;
 };
@@ -140,7 +140,7 @@ void pause()
 template <typename T>
 struct Tv{
     using type = T;
-    static const bool val = true;
+    static constexpr bool val = true;
     T t;
     Tv(T t_) : t(t_)
     {
@@ -151,7 +151,7 @@ struct Tv{
 template <>
 struct Tv<void>{
     using type = void;
-    static const bool val = false;
+    static constexpr bool val = false;
     Tv(int i)
     {
 
@@ -203,7 +203,7 @@ auto dbg_choose(const char *p, V&& ... t) -> typename FirstArge<V...>::type::typ
 	}
 }
 
-#define dbg(expr,...)  dbg_choose< Tv<decltype(expr)>::val >(#expr, Tv<decltype(expr)>( (expr,__VA_ARGS__) ) )
+#define dbg(expr,...)  dbg_choose< Tv<decltype(expr)>::val >(#expr, Tv<decltype(expr)>( (expr,##__VA_ARGS__) ) )
 	
 
 void f()
