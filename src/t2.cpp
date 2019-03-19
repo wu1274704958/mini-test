@@ -47,6 +47,22 @@ struct can_sub_op2{
     using type = typename decltype( func<T>(0) )::type;
 };
 
+template<typename T>
+struct can_cout
+{
+	template<typename U>
+	static auto func(int) -> decltype((std::declval<std::ostream&>() << std::declval<U>()), std::true_type())
+	{
+		return std::true_type();
+	}
+	template<typename U>
+	static auto func(...)->std::false_type
+	{
+		return std::false_type();
+	}
+	static const bool val = decltype(func<T>(0))::value;
+};
+
 template <bool B,typename T1,typename T2>
 struct choose_if{
     using type = T2;
@@ -147,7 +163,13 @@ auto dbg_func(const char *expr,Tv<T>&& tv) -> T
 {
     if constexpr( Tv<T>::val )
     {
-        std::cout << expr << " = "<< tv.t << std::endl;
+		if constexpr (can_cout<T>::val)
+		{
+			std::cout << expr << " = "<< tv.t << std::endl;
+		}
+		else {
+			std::cout << expr << " = " << "This type can not print!!!" << std::endl;
+		}
         return std::forward<T>(tv.t);
     }else{
         std::cout << expr << " = void" << std::endl;
@@ -221,6 +243,15 @@ int main()
     dbg( v1 - v2 );
     dbg( sub(v2,v1) );
 	dbg( v1 );
+
+	dbg(can_cout<vec2<float>>::val);
+	dbg(can_cout<char>::val);
+	dbg(can_cout<vec2<int>>::val);
+	dbg(can_cout<const char *>::val);
+	dbg(can_cout<test_sub>::val);
+	dbg(test_sub()); //error : This type can not print!!!
+
+
 	pause();
 	return 0;
 }
