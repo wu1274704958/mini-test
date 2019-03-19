@@ -16,7 +16,7 @@ struct can_sub_op1{
 	    return wws::has_type< true, decltype( std::declval<U>().operator-(std::declval<U>()) )> {};
 	}
 	template<typename U> 
-	static auto func(...) ->wws::has_type<false,void> { return has_type<false,void>{}; }
+	static auto func(...) ->wws::has_type<false,void> { return wws::has_type<false,void>{}; }
 	static constexpr bool val = decltype( func<T>(0) )::val;
 	using type = typename decltype( func<T>(0) )::type;
 };
@@ -30,7 +30,7 @@ struct can_sub_op2{
         return wws::has_type< true,  decltype( std::declval<U>() - std::declval<U>()) > {};
     }
     template<typename U>
-    static auto func(...) -> wws::has_type<false,void> { return has_type<false,void>{}; }
+    static auto func(...) -> wws::has_type<false,void> { return wws::has_type<false,void>{}; }
     static constexpr bool val = decltype( func<T>(0) )::val;
     using type = typename decltype( func<T>(0) )::type;
 };
