@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+#include <utility>
+
 namespace wws{
 	template <bool B, typename T>
 	struct has_type;
