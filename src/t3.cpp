@@ -38,6 +38,12 @@ int main()
 	dbg( (ms.*p_of_f)() );
 	dbg(p_of_f2());
 
+	for (int i = 0; dbg(dbg(i) < 5); ++i)
+	{
+		std::cout << "in loop .....\n";
+	}
+
+
 #ifdef  WIN32
 	system("pause");
 #endif //  WIN32
