@@ -136,8 +136,7 @@ template <>
 struct Tv<void>{
     using type = void;
     static const bool val = false;
-
-    Tv(void )
+    Tv(int i)
     {
 
     }
@@ -155,13 +154,39 @@ auto dbg_func(const char *expr,Tv<T>&& tv) -> T
     }
 }
 
+template<typename ...T>
+struct FirstArge;
 
-#define dbg(expr)  dbg_func(#expr, Tv<decltype(expr)>( expr ) )
+template<typename T>
+struct FirstArge<T>
+{
+	using type = T;
+};
+
+template<>
+struct FirstArge<>
+{
+	using type = Tv<void>;
+};
+
+template<bool B,typename... V>
+auto dbg_choose(const char *p, V&& ... t) -> typename FirstArge<V...>::type::type
+{
+	if constexpr (B)
+	{
+		return dbg_func(p, std::forward<V>(t) ...);
+	}
+	else {
+		dbg_func(p, Tv<void>(1));
+	}
+}
+
+#define dbg(expr,...)  dbg_choose< Tv<decltype(expr)>::val >(#expr, Tv<decltype(expr)>( (expr,__VA_ARGS__) ) )
 	
 
 void f()
 {
-
+	
 }
 
 int main()
@@ -172,26 +197,30 @@ int main()
 	    cout << "is true \n";
     }
 
-	cout << is_same<can_sub_op1<vec2<float >>::type,vec2<float >>::value <<endl;
+	dbg(f(),1);
+	//dbg_choose< !std::is_same_v<void, decltype(can_sub_op1<vec2<float >>::val)> ,Tv<const bool> >(" ssss", Tv<decltype(can_sub_op1<vec2<float >>::val)>(can_sub_op1<vec2<float >>::val));
 
-    cout << can_sub_op1<int>::val << endl;
-    cout << is_same<can_sub_op1<int>::type,int>::value <<endl;
+	//dbg_choose< false >(" ssss");
+	dbg( (std::is_same<can_sub_op1<vec2<float >>::type,vec2<float> >::value) );
 
-	cout << can_sub<int>::val << endl;
-	cout << is_same< int, can_sub<int>::type >::value << endl;
+	dbg((can_sub_op1<int>::val));
+	dbg((is_same<can_sub_op1<int>::type,int>::value ));
 
-    cout << can_sub< vec2<double > >::val << endl;
-    cout << is_same< vec2<double > , can_sub< vec2<double > >::type >::value << endl;
+	dbg((can_sub<int>::val));
+	dbg((is_same< int, can_sub<int>::type >::value));
+
+	dbg((can_sub< vec2<double > >::val));
+	dbg((is_same< vec2<double >, can_sub< vec2<double > >::type >::value));
 	cout << "test_sub: \n";
-	cout << can_sub< test_sub >::val << endl;
-	cout << is_same< char , can_sub< test_sub >::type >::value << endl;
+	dbg(( can_sub< test_sub >::val ));
+	dbg(( is_same< char , can_sub< test_sub >::type >::value ));
 
-	cout << sub(6,7) << endl;
+	dbg(sub(6, 7));
 	vec2 v1(2.0f,3.0f);
     vec2 v2(3.0f,4.0f);
-    cout << v1 - v2 << endl;
-    cout << sub(v2,v1) << endl;
-	cout << v1 <<endl;
+    dbg( v1 - v2 );
+    dbg( sub(v2,v1) );
+	dbg( v1 );
 	pause();
 	return 0;
 }
