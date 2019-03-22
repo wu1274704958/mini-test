@@ -113,7 +113,7 @@ int main()
 	    cout << "is true \n";
     }
 
-	dbg(f(),wws::V());
+	dbgv(f());
 	//dbg_choose< !std::is_same_v<void, decltype(can_sub_op1<vec2<float >>::val)> ,Tv<const bool> >(" ssss", Tv<decltype(can_sub_op1<vec2<float >>::val)>(can_sub_op1<vec2<float >>::val));
 
 	//dbg_choose< false >(" ssss");

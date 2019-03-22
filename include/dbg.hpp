@@ -73,3 +73,4 @@ namespace wws{
 }
 
 #define dbg(expr,...)  wws::dbg_func(#expr,(expr,##__VA_ARGS__))
+#define dbgv(expr)  dbg(expr,wws::V())
