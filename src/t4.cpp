@@ -49,13 +49,13 @@ void play()
 {
 	Str s;
 	//Str s2 = std::move(s);
-	dbg(sizeof(wws::Tv<std::string&>));
-	dbg(sizeof(wws::Tv<std::string>));
+
 	auto f = [s_ = std::forward<Str&&>(s)]() {
 		dbg(s_);
-		//std::cout << s;	
+		std::cout << s_ <<std::endl;
 	};
 	dbg(getchar());
+	f();
 	f();
 }
 
