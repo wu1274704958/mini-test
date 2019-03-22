@@ -9,3 +9,4 @@ Makefile
 *.exe
 .vs/
 .idea/
+cmake-build-debug/
