@@ -117,19 +117,19 @@ int main()
 	//dbg_choose< !std::is_same_v<void, decltype(can_sub_op1<vec2<float >>::val)> ,Tv<const bool> >(" ssss", Tv<decltype(can_sub_op1<vec2<float >>::val)>(can_sub_op1<vec2<float >>::val));
 
 	//dbg_choose< false >(" ssss");
-	dbg( (std::is_same<can_sub_op1<vec2<float >>::type,vec2<float> >::value) );
+	dbg( std::is_same<can_sub_op1<vec2<float >>::type,vec2<float> >::value);
 
 	dbg(can_sub_op1<int>::val);
-	dbg((is_same<can_sub_op1<int>::type,int>::value) );
+	dbg(is_same<can_sub_op1<int>::type,int>::value) ;
 
 	dbg(can_sub<int>::val);
-	dbg((is_same< int, can_sub<int>::type >::value));
+	dbg(is_same< int, can_sub<int>::type >::value);
 
 	dbg(can_sub< vec2<double > >::val);
-	dbg((is_same< vec2<double >, can_sub< vec2<double > >::type >::value));
+	dbg(is_same< vec2<double >, can_sub< vec2<double > >::type >::value);
 	cout << "test_sub: \n";
 	dbg( can_sub< test_sub >::val );
-	dbg(( is_same< char , can_sub< test_sub >::type >::value ));
+	dbg( is_same< char , can_sub< test_sub >::type >::value );
 
 	dbg(sub(6, 7));
 	vec2 v1(2.0f,3.0f);
