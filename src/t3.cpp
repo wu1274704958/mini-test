@@ -17,8 +17,8 @@ int MyStruct::b = 2;
 
 int main()
 {
-	using type = decltype(&MyStruct::a);
-	using type2 = decltype(&MyStruct::b);
+	//using type = decltype(&MyStruct::a);
+	//using type2 = decltype(&MyStruct::b);
 	std::cout << std::boolalpha;
 	dbg(std::is_same_v< int (MyStruct::*)(), decltype(&MyStruct::f)> );
 	dbg(std::is_same_v< int(*)(), decltype(&MyStruct::f2)>);
