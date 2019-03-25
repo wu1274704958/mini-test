@@ -20,8 +20,8 @@ int main()
 	//using type = decltype(&MyStruct::a);
 	//using type2 = decltype(&MyStruct::b);
 	std::cout << std::boolalpha;
-	dbg(std::is_same_v< int (MyStruct::*)(), decltype(&MyStruct::f)> );
-	dbg(std::is_same_v< int(*)(), decltype(&MyStruct::f2)>);
+	dbg((std::is_same_v< int (MyStruct::*)(), decltype(&MyStruct::f)> ));
+	dbg((std::is_same_v< int(*)(), decltype(&MyStruct::f2)>));
 	auto p_of_a = dbg(&MyStruct::a);
 	auto p_of_b = dbg(&MyStruct::b);
 	auto p_of_c = dbg(&MyStruct::c);
