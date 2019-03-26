@@ -64,6 +64,7 @@ void play()
 		std::cout << s_ <<std::endl;
 	};
 	dbg(getchar());
+	dbg(1, 2, 1, 8, 5, 7);
 	f();
 }
 

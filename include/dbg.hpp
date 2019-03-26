@@ -72,5 +72,5 @@ namespace wws{
     }
 }
 
-#define dbg(...)  wws::dbg_func(#__VA_ARGS__,__FILE__,__LINE__,__VA_ARGS__)
+#define dbg(...)  wws::dbg_func(#__VA_ARGS__,__FILE__,__LINE__,(__VA_ARGS__))
 #define dbgv(...) wws::dbg_func(#__VA_ARGS__,__FILE__,__LINE__,wws::V())
