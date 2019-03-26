@@ -84,6 +84,12 @@ int main(int argc,char **argv)
 
 			RUN_TF_CASE(17, tup, "MCMXCIV")
 
+			RUN_TF_CASE_B(18)
+				std::vector<std::string> strs = {
+					"flower","flow","flight"
+				};
+			RUN_TF_CASE_E(18, tup, strs)
+
 			
 		}
 	}

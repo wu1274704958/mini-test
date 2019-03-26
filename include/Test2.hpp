@@ -414,6 +414,40 @@ int romanToInt(std::string s) {
 	return res;
 }
 
+std::string longestCommonPrefix(std::vector<std::string> &strs) {
+	if (strs.size() == 1)
+		return strs[0];
+	std::string res;
+	int min_len = 0x7fffffff;
+	for (auto &s : strs)
+	{
+		if (s.size() < min_len)
+		{
+			min_len = s.size();
+		}
+	}
+	if (min_len == 0x7fffffff)
+		return "";
+	int n = strs.size() - 1;
+	for (int i = 0; i < min_len; ++i)
+	{
+		char last = strs[0][i];
+		for (int j = 1;j < strs.size(); j++)
+		{
+			if (last != strs[j][i])
+			{
+				return res;
+			}
+			if (j == n)
+			{
+				res += strs[j][i];
+			}
+			last = strs[j][i];
+		}
+	}
+	return res;
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -429,7 +463,8 @@ auto init()
 									CREATE_TEST_FUNC(test_win_desktop_item),
 									CREATE_TEST_FUNC(test_override_overwrite),
 									CREATE_TEST_FUNC(test_template_var),
-									CREATE_TEST_FUNC(romanToInt)
+									CREATE_TEST_FUNC(romanToInt),
+									CREATE_TEST_FUNC(longestCommonPrefix)
 	);
 }
 
