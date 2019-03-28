@@ -74,11 +74,16 @@ void play()
 }
 
 
- template<> int Y::a<int> = 6;
+template<> int Y::a<int> = 6;
+template<> char Y::a<char> = 'b';
+template<> test::Str Y::a<test::Str> = test::Str();
+
 
 int main()
 {
+	dbg(sizeof(Y::a<char>));
     dbg(Y::a<int>);
+	dbg(Y::a<test::Str>);
 	play();
 #ifdef WIN32
 	system("pause");
