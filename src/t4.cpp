@@ -52,6 +52,11 @@ namespace test {
 	}
 }
 
+struct Y{
+    template<typename T>
+    static T a;
+}; 
+
 void play()
 {
 	test::Str s;
@@ -68,8 +73,12 @@ void play()
 	f();
 }
 
+
+ template<> int Y::a<int> = 6;
+
 int main()
 {
+    dbg(Y::a<int>);
 	play();
 #ifdef WIN32
 	system("pause");
