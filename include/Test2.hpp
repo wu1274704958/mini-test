@@ -6,6 +6,7 @@
 #include <functional>
 #include <any>
 #include <vector>
+#include <set>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -448,6 +449,41 @@ std::string longestCommonPrefix(std::vector<std::string> &strs) {
 	return res;
 }
 
+int hash(int a, int b, int c)
+{
+	int res = 0;
+	return res;
+}
+
+std::vector<std::vector<int>> threeSum(std::vector<int>& nums)
+{
+	std::set<int> s;
+	std::vector<std::vector<int>> res;
+	int len = static_cast<int>(nums.size());
+	for (int i = 0; i < len; ++i)
+	{
+		for (int j = i + 1; j < len; ++j)
+		{
+			for (int x = j + 1; x < len; ++x)
+			{
+				std::cout << i << "  " << j << " " << x << std::endl;
+
+				if (nums[i] + nums[j] + nums[x] == 0)
+				{
+					int k = hash(nums[i], nums[j], nums[x]);
+
+					if (s.find(k) == s.end())
+					{
+						s.insert(k);
+						res.push_back(std::vector<int>({ nums[i],nums[j],nums[x] }));
+					}
+				}
+			}
+		}
+	}
+	return res;
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -464,7 +500,8 @@ auto init()
 									CREATE_TEST_FUNC(test_override_overwrite),
 									CREATE_TEST_FUNC(test_template_var),
 									CREATE_TEST_FUNC(romanToInt),
-									CREATE_TEST_FUNC(longestCommonPrefix)
+									CREATE_TEST_FUNC(longestCommonPrefix),
+									CREATE_TEST_FUNC(threeSum)
 	);
 }
 

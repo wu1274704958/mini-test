@@ -9,6 +9,38 @@
 #include "Test2.hpp"
 #include <string>
 
+std::ostream& operator<<(std::ostream& out, std::vector<int>& v)
+{
+	out << "[ ";
+	int i = 0;
+	for (auto n : v)
+	{
+		if (i == (v.size() - 1))
+			out << n;
+		else
+			out << n << ',';
+		++i;
+	}
+	out << " ]";
+	return out;
+}
+
+std::ostream& operator<<(std::ostream& out, std::vector<std::vector<int>>& v)
+{
+	out << "{ ";
+	int i = 0;
+	for (auto &n : v)
+	{
+		if (i == (v.size() - 1))
+			out << n;
+		else
+			out << n << ',';
+		++i;
+	}
+	out << " }";
+	return out;
+}
+
 int main(int argc,char **argv)
 {
 	// wws::FuncInfo<decltype(test)> f(test);
@@ -89,6 +121,10 @@ int main(int argc,char **argv)
 					"flower","flow","flight"
 				};
 			RUN_TF_CASE_E(18, tup, strs)
+
+			RUN_TF_CASE_B(19)
+				std::vector<int> in = { 3,0,-2,-1,1,2 };
+			RUN_TF_CASE_E(19, tup, in)
 
 			
 		}
