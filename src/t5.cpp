@@ -27,6 +27,19 @@ def_with_const_str(Test3,struct Test3{
 	char d = 4;
 };)
 
+int hhhh()
+{
+	return 3;
+}
+
+struct Go{
+	using go = int(*)();
+	operator go()
+	{
+		return hhhh;
+	}
+};
+
 int main()
 {
 	dbg(defined_const_str::Test);
@@ -60,6 +73,8 @@ int main()
 	p = reinterpret_cast<int *>(&t3);
 	printBin(*p);
 	printBin(*(p + 1));
+	Go g;
+	dbg(g.operator Go::go()());
 #ifdef WIN32
 	system("pause");
 #endif
