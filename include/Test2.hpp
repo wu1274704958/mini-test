@@ -449,35 +449,38 @@ std::string longestCommonPrefix(std::vector<std::string> &strs) {
 	return res;
 }
 
-int hash(int a, int b, int c)
-{
-	int res = 0;
-	return res;
-}
-
 std::vector<std::vector<int>> threeSum(std::vector<int>& nums)
 {
-	std::set<int> s;
 	std::vector<std::vector<int>> res;
-	int len = static_cast<int>(nums.size());
-	for (int i = 0; i < len; ++i)
+	std::sort(nums.begin(), nums.end());
+	int last = static_cast<int>(nums.size()) - 1;
+	for (int i = 0; i < static_cast<int>(nums.size()); ++i)
 	{
-		for (int j = i + 1; j < len; ++j)
+		if (nums[i] > 0)
+			break;
+		if (i > 0 && nums[i] == nums[i - 1])
+			continue;
+		int b = i + 1;
+		int e = last;
+		int t = 0 - nums[i];
+		while (b < e)
 		{
-			for (int x = j + 1; x < len; ++x)
+			if (nums[b] + nums[e] == t)
 			{
-				std::cout << i << "  " << j << " " << x << std::endl;
-
-				if (nums[i] + nums[j] + nums[x] == 0)
-				{
-					int k = hash(nums[i], nums[j], nums[x]);
-
-					if (s.find(k) == s.end())
-					{
-						s.insert(k);
-						res.push_back(std::vector<int>({ nums[i],nums[j],nums[x] }));
-					}
-				}
+				res.push_back(std::vector<int>({ nums[i],nums[b],nums[e] }));
+				while (b < e && nums[b] == nums[b + 1])
+					++b;
+				while (b < e && nums[e] == nums[e - 1])
+					--e;
+				++b; --e;
+			}
+			else if (nums[b] + nums[e] > t)
+			{
+				--e;
+			}
+			else
+			{
+				++b;
 			}
 		}
 	}
