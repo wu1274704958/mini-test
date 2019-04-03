@@ -1,3 +1,4 @@
+#include "print_stl.hpp"
 #include <iostream>
 #include <string_view>
 #include <array>
@@ -9,37 +10,6 @@
 #include "Test2.hpp"
 #include <string>
 
-std::ostream& operator<<(std::ostream& out, std::vector<int>& v)
-{
-	out << "[ ";
-	int i = 0;
-	for (auto n : v)
-	{
-		if (i == (v.size() - 1))
-			out << n;
-		else
-			out << n << ',';
-		++i;
-	}
-	out << " ]";
-	return out;
-}
-
-std::ostream& operator<<(std::ostream& out, std::vector<std::vector<int>>& v)
-{
-	out << "{ ";
-	int i = 0;
-	for (auto &n : v)
-	{
-		if (i == (v.size() - 1))
-			out << n;
-		else
-			out << n << ',';
-		++i;
-	}
-	out << " }";
-	return out;
-}
 
 int main(int argc,char **argv)
 {
