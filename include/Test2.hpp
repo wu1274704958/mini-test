@@ -487,6 +487,62 @@ std::vector<std::vector<int>> threeSum(std::vector<int>& nums)
 	return res;
 }
 
+std::vector<std::string> letterCombinations(std::string&& digits_) {
+	std::string digits = std::move(digits_);
+
+	std::vector<std::string> res;
+	if (digits.empty())
+	{
+		return res;
+	}
+	int map_nums[] = { 3,3,3,3,3,4,3,4 };
+	std::vector<std::vector<int>> map_v = { {0,1,2},{3,4,5},{6,7,8},{9,10,11},{12,13,14},{15,16,17,18},{19,20,21},{22,23,24,25} };
+	int len = 8;
+	int offset = -2;
+	char offset_ = -48;
+	char a = 'a';
+	
+	std::vector<int>indexs;
+	for (int i = 0; i < digits.size(); ++i)
+	{
+		indexs.push_back(0);
+	}
+	std::vector<int> digits__;
+	for (int i = 0; i < digits.size(); ++i)
+	{
+		digits__.push_back(static_cast<int>(digits[i] + offset_) + offset);
+	}
+
+	for (;;)
+	{
+		std::string temp;
+		for (int i = 0;i < indexs.size();++i)
+		{	
+			temp += (a + (char)map_v[ digits__[i] ][indexs[i]]);
+		}
+		res.push_back(temp);
+
+
+		for (int i = indexs.size() - 1;i >= 0 ; --i)
+		{
+			if (indexs[i] < map_nums[digits__[i]] - 1)
+			{
+				indexs[i] += 1;
+				for (int j = i + 1; j < indexs.size(); ++j)
+				{
+					indexs[j] = 0;
+				}
+				break;
+			}
+			if (i == 0)
+				goto END;
+		}
+	}
+
+END:
+	return res;
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -504,7 +560,8 @@ auto init()
 									CREATE_TEST_FUNC(test_template_var),
 									CREATE_TEST_FUNC(romanToInt),
 									CREATE_TEST_FUNC(longestCommonPrefix),
-									CREATE_TEST_FUNC(threeSum)
+									CREATE_TEST_FUNC(threeSum),
+									CREATE_TEST_FUNC(letterCombinations)
 	);
 }
 

@@ -96,6 +96,7 @@ int main(int argc,char **argv)
 				std::vector<int> in = { 3,0,-2,-1,1,2 };
 			RUN_TF_CASE_E(19, tup, in)
 
+			RUN_TF_CASE(20, tup, "23");
 			
 		}
 	}
