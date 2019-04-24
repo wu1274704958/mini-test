@@ -499,7 +499,7 @@ std::vector<std::string> letterCombinations(std::string&& digits_) {
 	std::vector<std::vector<int>> map_v = { {0,1,2},{3,4,5},{6,7,8},{9,10,11},{12,13,14},{15,16,17,18},{19,20,21},{22,23,24,25} };
 	int len = 8;
 	int offset = -2;
-	char offset_ = -48;
+	int offset_ = -48;
 	char a = 'a';
 	
 	std::vector<int>indexs;
@@ -510,7 +510,7 @@ std::vector<std::string> letterCombinations(std::string&& digits_) {
 	std::vector<int> digits__;
 	for (int i = 0; i < digits.size(); ++i)
 	{
-		digits__.push_back(static_cast<int>(digits[i] + offset_) + offset);
+		digits__.push_back(static_cast<int>(digits[i]) +offset_ + offset);
 	}
 
 	for (;;)
