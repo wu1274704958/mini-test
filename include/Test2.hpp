@@ -543,6 +543,48 @@ END:
 	return res;
 }
 
+std::vector<std::vector<int>> fourSum(std::vector<int>& nums, int target) {
+	std::vector<std::vector<int>> res;
+
+	if (nums.size() < 4)
+		return res;
+
+	std::sort(nums.begin(), nums.end());
+
+	for (int i = 0; i < nums.size() - 3; ++i)
+	{
+		if (i > 0 && nums[i] == nums[i - 1]) continue;
+		for (int j = i + 1; j < nums.size() - 2; ++j)
+		{
+			if (j > (i + 1) && nums[j] == nums[j - 1]) continue;
+			int b = j + 1;
+			int e = nums.size() - 1;
+			while (b < e)
+			{
+				int sum = nums[i] + nums[j] + nums[b] + nums[e];
+				if (sum == target)
+				{
+					res.push_back(std::vector<int>({ nums[i] , nums[j] , nums[b] , nums[e] }));
+
+					while (b < e && nums[b] == nums[b + 1])
+						++b;
+					while(b < e && nums[e] == nums[e - 1])
+						--e;
+					--e; ++b;
+				}
+				else if(sum > target) {
+					--e;
+				}
+				else {
+					++b;
+				}
+			}
+		}
+	}
+
+	return res;
+}
+
 auto init()
 {
     return  wws::CreateTFArray( 
@@ -561,7 +603,8 @@ auto init()
 									CREATE_TEST_FUNC(romanToInt),
 									CREATE_TEST_FUNC(longestCommonPrefix),
 									CREATE_TEST_FUNC(threeSum),
-									CREATE_TEST_FUNC(letterCombinations)
+									CREATE_TEST_FUNC(letterCombinations),
+									CREATE_TEST_FUNC(fourSum)
 	);
 }
 
