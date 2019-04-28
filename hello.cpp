@@ -8,6 +8,7 @@
 #include "TypeList.hpp"
 #include "Test1.hpp"
 #include "Test2.hpp"
+#include "Test3.hpp"
 #include <string>
 
 
@@ -34,7 +35,7 @@ int main(int argc,char **argv)
 	// wws::RunFuncIndex<1>(tup);
 	// wws::RunFuncIndex<2>(tup,argc,argv);
 	//有参数的测试用例
-	auto tup = wws::CatTFArray(test1::init(),test2::init());
+	auto tup = wws::CatTFArray(test1::init(),test2::init(),test3::init());
 	int a = 0;
 	while(a > -1)
 	{
@@ -97,7 +98,7 @@ int main(int argc,char **argv)
 			RUN_TF_CASE_E(19, tup, in)
 
 			RUN_TF_CASE(20, tup, "23");
-			
+			RUN_TF_CASE(21, tup);
 		}
 	}
 	return 0;
