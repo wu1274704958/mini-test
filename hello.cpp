@@ -98,7 +98,12 @@ int main(int argc,char **argv)
 			RUN_TF_CASE_E(19, tup, in)
 
 			RUN_TF_CASE(20, tup, "23");
-			RUN_TF_CASE(21, tup);
+
+			RUN_TF_CASE_B(21)
+				std::vector<int> in = { -3,-2,-1,0,0,1,2,3 };
+			RUN_TF_CASE_E(21, tup, in,0)
+			
+			RUN_TF_CASE(22, tup);
 		}
 	}
 	return 0;
