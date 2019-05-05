@@ -20,6 +20,8 @@ add_executable(t3 src/t3.cpp)
 add_executable(t4 src/t4.cpp)
 add_executable(t5 src/t5.cpp)
 add_executable(t_matrix src/matrix.cpp)
+add_subdirectory(test_atomic)
+
 #add_subdirectory(test)
 #enable_testing()
 #add_test(NAME my_test COMMAND Test)
