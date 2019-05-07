@@ -180,6 +180,13 @@ namespace gm{
 			return vec3(m11 * v.x + m12 * v.y + m13 * v.z, m21 * v.x + m22 * v.y + m23 * v.z, m31 * v.x + m32 * v.y + m33 * v.z);
 		}
 
+		mat3 operator*(mat3 v)
+		{
+			return mat3(m11 * v.m11 + m12 * v.m21 + m13 * v.m31, m11 * v.m21 + m12 * v.m22 + m13 * v.m23, m11 * v.m31 + m12 * v.m32 + m13 * v.m33,
+						m21 * v.m11 + m22 * v.m21 + m23 * v.m31, m21 * v.m21 + m22 * v.m22 + m23 * v.m23, m21 * v.m31 + m22 * v.m32 + m23 * v.m33,
+						m31 * v.m11 + m32 * v.m21 + m33 * v.m31, m31 * v.m21 + m32 * v.m22 + m33 * v.m23, m31 * v.m31 + m32 * v.m32 + m33 * v.m33);
+		}
+
 		static mat3 form_rotate_x(float angle)
 		{
 			return mat3(1.0f,0.0f,0.0f,
@@ -199,6 +206,16 @@ namespace gm{
 				cos(angle), sin(angle),0.0f ,
 				-sin(angle), cos(angle),0.0f ,
 				0.0f, 0.0f, 1.0f);
+		}
+
+		static mat3 form_rotate(vec3 n, float angle)
+		{
+			float cos_a = cos(angle);
+			float sin_a = sin(angle);
+
+			return mat3( pow(n.x,2.0f) * (1.0f - cos_a) + cos_a, n.x * n.y * (1.0f - cos_a) + n.z * sin_a,  n.x * n.z *(1.0f - cos_a) - n.y * sin_a,
+						 n.x * n.y * (1.0f - cos_a) - n.z * sin_a, pow(n.y,2.0f) * (1.0f - cos_a) + cos_a , n.y * n.z * (1.0f - cos_a) + n.x * sin_a,
+						 n.x * n.z * (1.0f - cos_a) + n.y * sin_a,	n.y * n.z * (1.0f - cos_a) - n.x * sin_a, pow(n.z,2.0f) * (1.0f - cos_a) + cos_a  );
 		}
 	};
 
@@ -240,6 +257,11 @@ int main()
 	dbg(m4 * vec3(1,1,1));
 
 	dbg(vec3(1.0f, 2.0f, 1.0f).normal());
+
+	vec3 v_123 = vec3(1.0f, 0.0f, 0.0f);
+	dbg(mat3::form_rotate_z(angle(45.0f)) * mat3::form_rotate_y(angle(45.0f)) * v_123);
+
+	dbg(mat3::form_rotate(v_123, angle(90.0f)) * vec3(1.0f, 1.0f, 1.0f));
 
 #if defined(WIN32)
 	system("pause");
