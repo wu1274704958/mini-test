@@ -21,12 +21,6 @@ template<char C1,char C2>
 	constexpr static unsigned char val = get<C1>() * 16 + get<C2>();
 };
 
-template <typename T>
-struct rgba
-{
-	constexpr static char val = 0;
-};
-
 template<char ...CS>
 struct string {
 	template<std::size_t I>
@@ -81,21 +75,23 @@ constexpr string<S::get()[N]...>
 	return {};
 }
 
-template <typename T>
-struct AL;
-
-template <typename T, size_t L>
-struct AL<T[L]>
-{
-	using type = T;
-	constexpr static size_t val = L;
-};
-
 template <typename S>
 constexpr decltype(auto) prepare(S s) {
 	return prepare_impl(s,
 		std::make_index_sequence< sizeof(S::get()) - 1>{});
 }
+
+template<typename T>
+struct rgba;
+
+template<char ... Cs>
+struct rgba<string<Cs...>>
+{
+	float value[4];
+	rgba() {
+
+	}
+};
 
 }
 
