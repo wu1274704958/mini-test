@@ -1,3 +1,4 @@
+#include "print_stl.hpp"
 #include <iostream>
 #include <string_view>
 #include <array>
@@ -9,7 +10,6 @@
 #include "Test2.hpp"
 #include "Test3.hpp"
 #include <string>
-#include "print_stl.hpp"
 
 
 int main(int argc,char **argv)
