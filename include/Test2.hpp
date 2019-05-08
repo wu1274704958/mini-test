@@ -7,6 +7,7 @@
 #include <any>
 #include <vector>
 #include <set>
+#include <dbg.hpp>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -581,7 +582,7 @@ std::vector<std::vector<int>> fourSum(std::vector<int>& nums, int target) {
 			}
 		}
 	}
-
+	dbg(res);
 	return res;
 }
 
