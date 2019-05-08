@@ -259,7 +259,7 @@ int main()
 	dbg(vec3(1.0f, 2.0f, 1.0f).normal());
 
 	vec3 v_123 = vec3(1.0f, 0.0f, 0.0f);
-	dbg(mat3::form_rotate_z(angle(45.0f)) * mat3::form_rotate_y(angle(45.0f)) * v_123);
+	dbg(mat3::form_rotate_y(angle(-45.0f)) * mat3::form_rotate_z(angle(-45.0f)) * v_123);
 
 	dbg(mat3::form_rotate(v_123, angle(90.0f)) * vec3(1.0f, 1.0f, 1.0f));
 
