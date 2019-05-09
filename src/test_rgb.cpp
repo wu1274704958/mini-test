@@ -89,18 +89,17 @@ constexpr decltype(auto) prepare(S s) {
 
 template<typename T>
 struct rgba;
-//以下部分只有 MSVC 可以编译通过
-//#if defined(_MSC_VER)
+
 template<char ... Cs>
 struct rgba<string<Cs...>>
 {
 	using type = string<Cs...>;
 	static_assert(type::len() == 8);
 	static constexpr float value[4] = { 
-		(float)(form_hex<type::get<0>(),type::get<1>()>()) / 255.0f  ,
-		(float)(form_hex<type::get<2>(),type::get<3>()>()) / 255.0f  ,
-		(float)(form_hex<type::get<4>(),type::get<5>()>()) / 255.0f  ,
-		(float)(form_hex<type::get<6>(),type::get<7>()>()) / 255.0f
+		(float)(form_hex<type::template get<0>(),type::template get<1>()>()) / 255.0f  ,
+		(float)(form_hex<type::template get<2>(),type::template get<3>()>()) / 255.0f  ,
+		(float)(form_hex<type::template get<4>(),type::template get<5>()>()) / 255.0f  ,
+		(float)(form_hex<type::template get<6>(),type::template get<7>()>()) / 255.0f
 	};
 
 	template<typename T>
@@ -115,7 +114,7 @@ struct rgba<string<Cs...>>
 	}
 };
 
-//#endif
+
 
 template<char ...Cs>
 auto make_rgba(string<Cs...> str) -> rgba<string<Cs...>>
@@ -153,10 +152,10 @@ int main()
 	dbg(str.get<100>());
 	dbg(str.len());
 
-//#if defined(_MSC_VER)
+
 	Color c = wws::make_rgba(PREPARE_STRING("1200ffff")).make<Color>();
 	dbg(std::make_tuple(c.r, c.g, c.b, c.a));
-//#endif
+
 #ifdef WIN32
 	system("pause");
 #endif // WIN32

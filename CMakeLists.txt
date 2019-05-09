@@ -6,7 +6,7 @@ include(CTest)
 
 include_directories(./include)
 if(MSVC)
-    add_definitions(/std:c++17 /permissive)
+    add_definitions(/std:c++17 /permissive-)
 else()
 	add_definitions(-std=c++17)
 	SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
