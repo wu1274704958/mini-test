@@ -21,10 +21,16 @@ template<char C1,char C2>
 	constexpr static unsigned char val = get<C1>() * 16 + get<C2>();
 };
 
+template <char C1,char C2>
+constexpr unsigned char form_hex()
+{
+	return FormHex<C1, C2>::val;
+}
+
 template<char ...CS>
-struct string {
+struct string{
 	template<std::size_t I>
-	constexpr char get()
+	constexpr static char get()
 	{
 		if constexpr(I < 0 || I > len_impl<1, CS...>())
 			return 0;
@@ -50,7 +56,7 @@ struct string {
 		return 0;
 	}
 
-	constexpr size_t len()
+	constexpr static size_t len()
 	{
 		return len_impl<1, CS...>();
 	}
@@ -83,15 +89,39 @@ constexpr decltype(auto) prepare(S s) {
 
 template<typename T>
 struct rgba;
-
+//以下部分只有 MSVC 可以编译通过
+//#if defined(_MSC_VER)
 template<char ... Cs>
 struct rgba<string<Cs...>>
 {
-	float value[4];
-	rgba() {
+	using type = string<Cs...>;
+	static_assert(type::len() == 8);
+	static constexpr float value[4] = { 
+		(float)(form_hex<type::get<0>(),type::get<1>()>()) / 255.0f  ,
+		(float)(form_hex<type::get<2>(),type::get<3>()>()) / 255.0f  ,
+		(float)(form_hex<type::get<4>(),type::get<5>()>()) / 255.0f  ,
+		(float)(form_hex<type::get<6>(),type::get<7>()>()) / 255.0f
+	};
 
+	template<typename T>
+	T make()
+	{
+		T t;
+		t.r = value[0];
+		t.g = value[1];
+		t.b = value[2];
+		t.a = value[3];
+		return t;
 	}
 };
+
+//#endif
+
+template<char ...Cs>
+auto make_rgba(string<Cs...> str) -> rgba<string<Cs...>>
+{
+	return {};
+}
 
 }
 
@@ -103,6 +133,13 @@ struct rgba<string<Cs...>>
         };                                                                  \
         return tmp{};                                                       \
     }())) 
+
+struct Color {
+	float r;
+	float g;
+	float b;
+	float a;
+};
 
 int main()
 {
@@ -116,6 +153,10 @@ int main()
 	dbg(str.get<100>());
 	dbg(str.len());
 
+//#if defined(_MSC_VER)
+	Color c = wws::make_rgba(PREPARE_STRING("1200ffff")).make<Color>();
+	dbg(std::make_tuple(c.r, c.g, c.b, c.a));
+//#endif
 #ifdef WIN32
 	system("pause");
 #endif // WIN32
