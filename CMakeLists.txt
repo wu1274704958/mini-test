@@ -22,6 +22,7 @@ add_executable(t5 src/t5.cpp)
 add_executable(t_matrix src/matrix.cpp)
 add_subdirectory(test_atomic)
 add_executable(test_rgba src/test_rgb.cpp)
+add_executable(test_comm src/test_comm.cpp)
 
 #add_subdirectory(test)
 #enable_testing()
