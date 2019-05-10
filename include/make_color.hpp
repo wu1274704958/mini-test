@@ -113,12 +113,14 @@ using has_##feild##_vt = wws::is_detected<has_##feild##_t,T>;
 	struct rgba<string<Cs...>>
 	{
 		using type = string<Cs...>;
-		static_assert(type::len() == 8);
+		static constexpr size_t ALLOW_LEN = type::template get<0>() == '#' ? 9 : 8;
+		static_assert(type::len() == ALLOW_LEN);
+		static constexpr size_t BEGIN_I = type::template get<0>() == '#' ? 1 : 0;
 		static constexpr float value[4] = {
-			(float)(form_hex<type::template get<0>(),type::template get<1>()>()) / 255.0f  ,
-			(float)(form_hex<type::template get<2>(),type::template get<3>()>()) / 255.0f  ,
-			(float)(form_hex<type::template get<4>(),type::template get<5>()>()) / 255.0f  ,
-			(float)(form_hex<type::template get<6>(),type::template get<7>()>()) / 255.0f
+			(float)(form_hex<type::template get<BEGIN_I + 0>(),type::template get<BEGIN_I + 1>()>()) / 255.0f  ,
+			(float)(form_hex<type::template get<BEGIN_I + 2>(),type::template get<BEGIN_I + 3>()>()) / 255.0f  ,
+			(float)(form_hex<type::template get<BEGIN_I + 4>(),type::template get<BEGIN_I + 5>()>()) / 255.0f  ,
+			(float)(form_hex<type::template get<BEGIN_I + 6>(),type::template get<BEGIN_I + 7>()>()) / 255.0f
 		};
 
 		template<typename T>
@@ -137,10 +139,46 @@ using has_##feild##_vt = wws::is_detected<has_##feild##_t,T>;
 		}
 	};
 
+	template<typename T>
+	struct rgb;
+
+	template<char ... Cs>
+	struct rgb<string<Cs...>>
+	{
+		using type = string<Cs...>;
+		static constexpr size_t ALLOW_LEN = type::template get<0>() == '#' ? 7 : 6;
+		static_assert(type::len() == ALLOW_LEN);
+		static constexpr size_t BEGIN_I = type::template get<0>() == '#' ? 1 : 0;
+		static constexpr float value[3] = {
+			(float)(form_hex<type::template get<BEGIN_I + 0>(),type::template get<BEGIN_I + 1>()>()) / 255.0f  ,
+			(float)(form_hex<type::template get<BEGIN_I + 2>(),type::template get<BEGIN_I + 3>()>()) / 255.0f  ,
+			(float)(form_hex<type::template get<BEGIN_I + 4>(),type::template get<BEGIN_I + 5>()>()) / 255.0f
+		};
+
+		template<typename T>
+		T make()
+		{
+			static_assert(has_r_vt<T>::value &&
+				has_g_vt<T>::value &&
+				has_b_vt<T>::value, "This type must has member named r,g,b,a!!!");
+			T t;
+			t.r = value[0];
+			t.g = value[1];
+			t.b = value[2];
+			return t;
+		}
+	};
+
 
 
 	template<char ...Cs>
 	auto make_rgba(string<Cs...> str) -> rgba<string<Cs...>>
+	{
+		return {};
+	}
+
+	template<char ...Cs>
+	auto make_rgb(string<Cs...> str) -> rgb<string<Cs...>>
 	{
 		return {};
 	}
