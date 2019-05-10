@@ -217,6 +217,23 @@ namespace gm{
 						 n.x * n.y * (1.0f - cos_a) - n.z * sin_a, pow(n.y,2.0f) * (1.0f - cos_a) + cos_a , n.y * n.z * (1.0f - cos_a) + n.x * sin_a,
 						 n.x * n.z * (1.0f - cos_a) + n.y * sin_a,	n.y * n.z * (1.0f - cos_a) - n.x * sin_a, pow(n.z,2.0f) * (1.0f - cos_a) + cos_a  );
 		}
+
+		static mat3 form_scale(vec3 &v)
+		{
+			return mat3(
+				v.x, 0.0f, 0.0f,
+				0.0f, v.y, 0.0f,
+				0.0f, 0.0f,v.z );
+		}
+
+		static mat3 form_scale(vec3 &n,float k)
+		{
+			float k_sub_1 = k - 1;
+			return mat3(
+				1 + k_sub_1 * pow(n.x,2.0f)	, k_sub_1 * n.x * n.y			, k_sub_1 * n.x * n.z,
+				k_sub_1 * n.x * n.y			, 1 + k_sub_1 * pow(n.y, 2.0f)	, k_sub_1 * n.y * n.z, 
+				k_sub_1 * n.x * n.z			, k_sub_1 * n.z * n.y			, 1 + k_sub_1 * pow(n.z, 2.0f));
+		}
 	};
 
 	std::ostream& operator<<(std::ostream& out, mat3 &m)
