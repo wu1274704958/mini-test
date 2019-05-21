@@ -124,11 +124,49 @@ namespace test3{
 		delete res;
 	}
 
+	bool isValid(std::string s) {
+		std::stack<char> sta;
+		for (char c : s)
+		{
+			if (c == '(' || c == '[' || c == '{')
+			{
+				sta.push(c);
+			}
+			else {
+				if (sta.empty()) return false;
+				char ls = sta.top();
+				sta.pop();
+				switch (c)
+				{
+				case ')':
+					if (ls != '(')
+						return false;
+					break;
+				case ']':
+					if (ls != '[')
+						return false;
+					break;
+				case '}':
+					if (ls != '{')
+						return false;
+					break;
+				default:
+					return false;
+				}
+			}
+		}
+		if (sta.empty())
+			return true;
+		else
+			return false;
+	}
+
 
 	auto init()
 	{
 		return  wws::CreateTFArray(
-			CREATE_TEST_FUNC(test_removeNthFromEnd)
+			CREATE_TEST_FUNC(test_removeNthFromEnd),
+			CREATE_TEST_FUNC(isValid)
 		);
 	}
 }// test3
