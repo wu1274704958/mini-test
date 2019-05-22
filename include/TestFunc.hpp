@@ -62,6 +62,21 @@ namespace wws
             return mFunc(std::forward<Args>(args)...);
         }
     };
+
+	template<typename T,typename Ret,typename ...Args>
+	struct FuncInfo<Ret T::*(Args...)>
+	{
+		using RetType = Ret;
+		using AgrsType = TypeList<Args...>;
+		using FuncType = Ret(T::*)(Args...);
+		FuncType mFunc;
+		FuncInfo(FuncType func) :mFunc(func) {}
+		template<typename T_,typename ..._Args>
+		RetType operator()(T_&& t,_Args&& ...args)
+		{
+			return (std::forward<T>(t).*mFunc)(std::forward<Args>(args)...);
+		}
+	};
     
     template<typename Tup,size_t ...Idx>
     constexpr bool IsTestFuncTuple()

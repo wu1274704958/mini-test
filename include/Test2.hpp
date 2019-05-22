@@ -98,6 +98,10 @@ public:
 		*p = a;
 		return a;
 	}
+	void set(int a)
+	{
+		*this = a;
+	}
 	 operator int()
 	{
 		return *p;
@@ -139,6 +143,16 @@ void test_any()
 		using type = wws::FuncInfo<decltype(test2_3)>::FuncType;
 		type p = any_cast<type>(a);
 		p();
+	}
+	a = wws::FuncInfo<int Test::*(int)>(&Test::operator=);
+	if (a.has_value())
+	{
+		printf("%s \n", a.type().name());
+		using type = wws::FuncInfo<int Test::* (int)>;
+		type p = any_cast<type>(a);
+		Test t;
+		p(t, 4);
+		dbg((int)t);
 	}
 }
 
