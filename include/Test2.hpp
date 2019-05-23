@@ -124,6 +124,7 @@ void test2_3()
     }
     f(Test());
 }
+
 using std::any;
 using std::any_cast;
 void test_any()
@@ -144,6 +145,7 @@ void test_any()
 		type p = any_cast<type>(a);
 		p();
 	}
+
 	a = wws::FuncInfo<int Test::*(int)>(&Test::operator=);
 	if (a.has_value())
 	{
@@ -154,7 +156,18 @@ void test_any()
 		p(t, 4);
 		dbg((int)t);
 	}
+	a = wws::make_fi(&Test::set);
+	if (a.has_value())
+	{
+		printf("%s \n", a.type().name());
+		using type = decltype(wws::make_fi(&Test::set));
+		type p = any_cast<type>(a);
+		Test t;
+		p(t, 7);
+		dbg((int)t);
+	}
 }
+
 
 
 Test&& retRr(Test &t)
