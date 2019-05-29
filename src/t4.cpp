@@ -94,6 +94,8 @@ int main()
 	play();
 #ifdef WIN32
 	system("pause");
+#else
+    printf("after.play()\n");
 #endif 
 	return 0;
 }
