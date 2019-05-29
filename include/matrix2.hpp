@@ -3,8 +3,25 @@
 namespace wws {
 
 
+    template<typename T,size_t N>
+    struct vec;
+
+    template <typename T,size_t N>
+    std::ostream &operator<<(std::ostream& out,vec<T,N>& v)
+    {
+        out << '[';
+        for (int i = 0; i < N; ++i) {
+            out << v.data[i];
+            if(i != N - 1)
+                out << ',';
+        }
+        out << ']';
+        return out;
+    }
+
 	template<typename T,size_t N>
 	struct vec {
+        static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,"T must be floating point or integral!");
 	public:
 		vec()
 		{
@@ -44,24 +61,74 @@ namespace wws {
 		{
 			return get<4>();
 		}
+        T& r()
+        {
+            return get<1>();
+        }
+        T& g()
+        {
+            return get<2>();
+        }
+        T& b()
+        {
+            return get<3>();
+        }
+        T& a()
+        {
+            return get<4>();
+        }
 		static constexpr size_t bits()
 		{
 			return sizeof(T) * N;
 		}
-		template<size_t I>
+		template<size_t I,typename = std::enable_if_t<(I > 0 && I <= N)> >
 		void set(int i,T t)
 		{
-			if constexpr(I <= N)
+			if constexpr(I > 0 && I < N)
 			{
 				if (i == I)
 					data[I - 1] = t;
 				else
 					set<I + 1>(i, t);
+			}else if constexpr (I == N){
+                if (i == I)
+                    data[I - 1] = t;
 			}
 		}
+
+		vec<T,N> operator+(vec<T,N> v)
+        {
+		    vec<T,N> res;
+		    for(int i = 0;i < N;++i)
+            {
+		        res.data[i] = data[i] + v.data[i];
+            }
+            return res;
+        }
+        vec<T,N> operator-(vec<T,N> v)
+        {
+            vec<T,N> res;
+            for(int i = 0;i < N;++i)
+            {
+                res.data[i] = data[i] - v.data[i];
+            }
+            return res;
+        }
+        vec<T,N> operator-()
+        {
+            vec<T,N> res;
+            for(int i = 0;i < N;++i)
+            {
+                res.data[i] = 0.0f - data[i];
+            }
+            return res;
+        }
+        friend std::ostream& operator<<<T,N>(std::ostream& out,vec<T,N>& v);
 	private:
 		T data[N];
 	};
 
+	typedef vec<float, 2> vec2;
 	typedef vec<float, 3> vec3;
+	typedef vec<float, 4> vec4;
 }
