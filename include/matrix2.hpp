@@ -1,4 +1,6 @@
+#pragma once
 #include <dbg.hpp>
+#include <const_val.hpp>
 
 namespace wws {
 
@@ -21,7 +23,7 @@ namespace wws {
 
 	template<typename T,size_t N>
 	struct vec {
-        static_assert(std::is_floating_point_v<T> || std::is_integral_v<T>,"T must be floating point or integral!");
+        static_assert(std::is_floating_point_v<T>,"T must be floating point !");
 	public:
 		vec()
 		{
@@ -119,19 +121,38 @@ namespace wws {
             vec<T,N> res;
             for(int i = 0;i < N;++i)
             {
-                res.data[i] = 0.0f - data[i];
+                res.data[i] = zero<T>() - data[i];
             }
             return res;
         }
         T len()
         {
-            static_assert(std::is_floating_point_v<T>);
-            T res = static_cast<T>(0);
+            T res = zero<T>();
 		    for(int i = 0;i < N;++i)
             {
 		        res += std::pow(data[i], static_cast<T>(2));
             }
 		    return std::sqrt(res);
+        }
+        vec<T,N> unitized()
+        {
+		    vec<T,N> res;
+		    T l = len();
+            T ratio = one<T>() / l;
+            for(int i = 0;i < N;++i)
+            {
+                res.data[i] = data[i] * ratio;
+            }
+            return res;
+        }
+        T operator*(vec<T,N> v)
+        {
+		    T res = zero<T>();
+            for(int i = 0;i < N;++i)
+            {
+                res += data[i] * v.data[i];
+            }
+            return res;
         }
         friend std::ostream& operator<<<T,N>(std::ostream& out,vec<T,N>& v);
 	private:
