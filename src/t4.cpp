@@ -67,7 +67,7 @@ void play()
 	test::Str s;
 	//Str s2 = std::move(s);
 
-	auto f = [s_ = std::move(s),a = 2,&s]() mutable{
+	auto f = [s_ = std::move(s),a = 2,&s]() mutable { //不加 mutable s_的类型是 const test::Str, a的类型是 const int,s的类型是test::Str&
 		dbg(a);
 		dbg(s_);
 		s_.set(0,'b');
