@@ -123,6 +123,16 @@ namespace wws {
             }
             return res;
         }
+        T len()
+        {
+            static_assert(std::is_floating_point_v<T>);
+            T res = static_cast<T>(0);
+		    for(int i = 0;i < N;++i)
+            {
+		        res += std::pow(data[i], static_cast<T>(2));
+            }
+		    return std::sqrt(res);
+        }
         friend std::ostream& operator<<<T,N>(std::ostream& out,vec<T,N>& v);
 	private:
 		T data[N];

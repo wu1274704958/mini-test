@@ -23,6 +23,8 @@ int main()
 	vec3 v4 = wws::make_rgb(PREPARE_STRING("#ff0897")).make<vec3>();
     dbg(v4);
 	dbg(sizeof(vec3));
+	dbg(vec2({3.0f,4.0f}).len());
+	dbg(v3.len());
 
 	return 0;
 }

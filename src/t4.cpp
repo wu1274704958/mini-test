@@ -23,6 +23,11 @@ namespace test {
 				memcpy(data, s.data, sizeof(char) * 10);
 			}
 		}
+		void set(int i,char c)
+        {
+		    if(data)
+		        data[i] = c;
+        }
 		Str(Str && s)
 		{
 			dbg("Str(Str &&)");
@@ -62,8 +67,10 @@ void play()
 	test::Str s;
 	//Str s2 = std::move(s);
 
-	auto f = [s_ = std::forward<test::Str&&>(s),a = 2,&s]() {
+	auto f = [s_ = std::move(s),a = 2,&s]() mutable{
 		dbg(a);
+		dbg(s_);
+		s_.set(0,'b');
 		dbg(s_);
 		dbg(s);
 		std::cout << s_ <<std::endl;
