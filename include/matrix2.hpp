@@ -1,7 +1,7 @@
 #pragma once
 #include <dbg.hpp>
 #include <const_val.hpp>
-
+#include <cmath>
 namespace wws {
 
 
