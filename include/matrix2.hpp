@@ -122,13 +122,13 @@ namespace gcm {
             vec<T,N> res;
             for(int i = 0;i < N;++i)
             {
-                res.data[i] = zero<T>() - data[i];
+                res.data[i] = const_val::zero<T>() - data[i];
             }
             return res;
         }
         T len()
         {
-            T res = zero<T>();
+            T res = const_val::zero<T>();
 		    for(int i = 0;i < N;++i)
             {
 		        res += std::pow(data[i], static_cast<T>(2));
@@ -139,7 +139,7 @@ namespace gcm {
         {
 		    vec<T,N> res;
 		    T l = len();
-            T ratio = one<T>() / l;
+            T ratio = const_val::one<T>() / l;
             for(int i = 0;i < N;++i)
             {
                 res.data[i] = data[i] * ratio;
@@ -148,7 +148,7 @@ namespace gcm {
         }
         T operator*(vec<T,N> v)
         {
-		    T res = zero<T>();
+		    T res = const_val::zero<T>();
             for(int i = 0;i < N;++i)
             {
                 res += data[i] * v.data[i];
