@@ -2,9 +2,11 @@
 #include <matrix2.hpp>
 #include <make_color.hpp>
 #include <const_val.hpp>
+#include <cgm_funs.hpp>
+
 int main()
 {
-	using namespace gcm;
+	using namespace cgm;
 	using namespace const_val;
 
 	vec3 v;
@@ -36,5 +38,11 @@ int main()
     dbg(pi_1_2<double >());
     dbg(v2 * v3);
     dbg(vec2{2.0f,2.0f} * vec2{3.0f,4.0f});
+
+    dbg(radians(90.f));
+    dbg(std::make_tuple(degrees(3.1415f),degrees(6.2830)));
+
+    dbg(angle(vec2{1.0f,1.0f},vec2{-1.0f,1.0f}));
+    dbg(cross(vec3{0.f,0.f,1.f},vec3{1.f,0.f,0.f}));
 	return 0;
 }

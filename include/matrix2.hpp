@@ -3,7 +3,7 @@
 #include <const_val.hpp>
 #include <cmath>
 
-namespace gcm {
+namespace cgm {
 
 
     template<typename T,size_t N>
