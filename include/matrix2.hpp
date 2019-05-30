@@ -2,7 +2,8 @@
 #include <dbg.hpp>
 #include <const_val.hpp>
 #include <cmath>
-namespace wws {
+
+namespace gcm {
 
 
     template<typename T,size_t N>

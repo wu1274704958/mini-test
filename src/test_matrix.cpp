@@ -4,7 +4,8 @@
 #include <const_val.hpp>
 int main()
 {
-	using namespace wws;
+	using namespace gcm;
+	using namespace const_val;
 
 	vec3 v;
 	v.x() = 0.01f;
