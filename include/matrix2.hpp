@@ -28,7 +28,7 @@ namespace cgm {
 	public:
 		vec()
 		{
-			memset(data, 0,bits());
+			memset(data, 0,byte_size());
 		}
 		vec(T t)
 		{
@@ -80,7 +80,7 @@ namespace cgm {
         {
             return get<4>();
         }
-		static constexpr size_t bits()
+		static constexpr size_t byte_size()
 		{
 			return sizeof(T) * N;
 		}
@@ -155,10 +155,46 @@ namespace cgm {
             }
             return res;
         }
+        vec<T,N> operator*(T t)
+        {
+		    vec<T,N> res;
+            for (int i = 0; i < N; ++i) {
+                res.data[i] = data[i] * t;
+            }
+            return res;
+        }
         friend std::ostream& operator<<<T,N>(std::ostream& out,vec<T,N>& v);
 	private:
 		T data[N];
 	};
+
+    template <typename T,size_t M,size_t N>
+    struct matrix{
+        vec<T,M> data[N];
+        static constexpr size_t byte_size()
+        {
+            return sizeof(vec<T,M>) * N;
+        }
+        matrix()
+        {
+            memset(data,0,byte_size());
+        }
+        matrix(T t)
+        {
+            for (int i = 0; i < N; ++i) {
+                data[i] = vec<T,M>(t);
+            }
+        }
+        matrix(std::initializer_list<T> list)
+        {
+
+        }
+//        template<size_t I,typename = std::enable_if_t<(I > 0 && I <= M * N)> >
+//        T& get()
+//        {
+//            return data[];
+//        }
+    };
 
 	typedef vec<float, 2> vec2;
 	typedef vec<float, 3> vec3;

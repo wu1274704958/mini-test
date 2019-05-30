@@ -44,5 +44,7 @@ int main()
 
     dbg(angle(vec2{1.0f,1.0f},vec2{-1.0f,1.0f}));
     dbg(cross(vec3{0.f,0.f,1.f},vec3{1.f,0.f,0.f}));
+    dbg(v2 * 2.0f);
+    dbg(vec<double ,3>{3.0,4.0,5.0} * 3.0 );
 	return 0;
 }
