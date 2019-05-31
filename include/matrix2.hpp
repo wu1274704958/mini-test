@@ -180,6 +180,10 @@ namespace cgm {
             }
             return res;
         }
+        T& operator[](size_t i)
+        {
+            return data[i];
+        }
         friend std::ostream& operator<<<T,N>(std::ostream& out,vec<T,N>& v);
 	private:
 		T data[N];
@@ -268,6 +272,23 @@ namespace cgm {
         T& m43(){ return get<4,3>(); }
         T& m44(){ return get<4,4>(); }
 
+        matrix<T,N,M> transpose()
+        {
+            matrix<T,N,M> mat;
+            size_t i = 1,j = 1;
+            for(;;)
+            {
+                mat.set<1,1>(j,i,data[i - 1][j - 1]);
+                if(j == N)
+                {
+                    if(i == M)break;
+                    ++i;j = 1;
+                }else{
+                    ++j;
+                }
+            }
+            return mat;
+        }
     };
 
     typedef matrix<float,2,2> mat2;
