@@ -2,6 +2,7 @@
 #include <dbg.hpp>
 #include <const_val.hpp>
 #include <cmath>
+#include <cassert>
 
 namespace cgm {
 
@@ -55,7 +56,7 @@ namespace cgm {
 			int i = 1;
 			for (auto it = list.begin(); it != list.end(); ++it)
 			{
-				set<1>(i++, *it);
+				set(i++, *it);
 			}
 		}
 		template<size_t I>
@@ -100,8 +101,13 @@ namespace cgm {
 		{
 			return sizeof(T) * N;
 		}
+		void set(size_t i, T t)
+		{
+			assert(i > 0 && i <= N);
+			data[i - 1] = t;
+		}
 		template<size_t I>
-		void set(size_t i,T t)
+		void set_(size_t i,T t)
 		{
             static_assert((I > 0 && I <= N),"Out of bound!");
 			if constexpr(I > 0 && I < N)
@@ -109,7 +115,7 @@ namespace cgm {
 				if (i == I)
 					data[I - 1] = t;
 				else
-					set<I + 1>(i, t);
+					set_<I + 1>(i, t);
 			}else if constexpr (I == N){
                 if (i == I)
                     data[I - 1] = t;
@@ -205,7 +211,7 @@ namespace cgm {
         {
             size_t j = 1;
             for (int i = 0; i < M; ++i) {
-                data[i].set<1>(j++,t);
+                data[i].set(j++,t);
             }
         }
         matrix(std::initializer_list<T> list)
@@ -213,7 +219,7 @@ namespace cgm {
             size_t i = 1,j = 1;
             for(auto it = list.begin();it != list.end();++it)
             {
-                set<1,1>(i,j,*it);
+                set(i,j,*it);
                 if(j == N)
                 {
                     ++i;
@@ -229,26 +235,31 @@ namespace cgm {
             static_assert((I > 0 && I <= M ) && (J > 0 && J <= N),"Out of bound!");
             return data[I - 1].get<J>();
         }
+		void set(size_t i, size_t j, T t)
+		{
+			assert((i > 0 && i <= M) && (j > 0 && j <= N));
+			data[i - 1][j - 1] = t;
+		}
         template<size_t I,size_t J>
-        void set(size_t i,size_t j,T t)
+        void set_(size_t i,size_t j,T t)
         {
             static_assert((I > 0 && I <= M ) && (J > 0 && J <= N),"Out of bound!");
             if constexpr(J > 0 && J < N)
             {
                 if(i == I && j == J)
-                    data[I - 1].set<J>(j,t);
+                    data[I - 1].set(j,t);
                 else
-                    set<I,J + 1>(i,j,t);
+                    set_<I,J + 1>(i,j,t);
             }else if constexpr (I == M)
             {
                 if(i == I && j == J)
-                    data[I - 1].set<J>(j,t);
+                    data[I - 1].set(j,t);
             }else if constexpr (J == N)
             {
                 if(i == I && j == J)
-                    data[I - 1].set<J>(j,t);
+                    data[I - 1].set(j,t);
                 else
-                    set<I + 1,1>(i,j,t);
+                    set_<I + 1,1>(i,j,t);
             }
         }
 
@@ -278,7 +289,7 @@ namespace cgm {
             size_t i = 1,j = 1;
             for(;;)
             {
-                mat.set<1,1>(j,i,data[i - 1][j - 1]);
+                mat.set(j,i,data[i - 1][j - 1]);
                 if(j == N)
                 {
                     if(i == M)break;
