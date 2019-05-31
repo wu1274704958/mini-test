@@ -22,6 +22,21 @@ namespace cgm {
         return out;
     }
 
+    template <typename T,size_t M,size_t N>
+    struct matrix;
+
+    template <typename T,size_t M,size_t N>
+    std::ostream &operator<<(std::ostream& out,matrix<T,M,N>& m)
+    {
+        out << '\n';
+        for (int i = 0; i < M; ++i) {
+            out << m.data[i];
+            if(i != M - 1)
+                out << '\n';
+        }
+        return out;
+    }
+
 	template<typename T,size_t N>
 	struct vec {
         static_assert(std::is_floating_point_v<T>,"T must be floating point !");
@@ -43,9 +58,10 @@ namespace cgm {
 				set<1>(i++, *it);
 			}
 		}
-		template<size_t I,typename = std::enable_if_t<(I > 0 && I <= N)> >
+		template<size_t I>
 		T& get()
 		{
+            static_assert((I > 0 && I <= N),"Out of bound!");
 			return data[I - 1];
 		}
 		T& x()
@@ -84,9 +100,10 @@ namespace cgm {
 		{
 			return sizeof(T) * N;
 		}
-		template<size_t I,typename = std::enable_if_t<(I > 0 && I <= N)> >
-		void set(int i,T t)
+		template<size_t I>
+		void set(size_t i,T t)
 		{
+            static_assert((I > 0 && I <= N),"Out of bound!");
 			if constexpr(I > 0 && I < N)
 			{
 				if (i == I)
@@ -170,10 +187,11 @@ namespace cgm {
 
     template <typename T,size_t M,size_t N>
     struct matrix{
-        vec<T,M> data[N];
+        vec<T,N> data[M];
+        friend std::ostream&operator<<<T,M,N>(std::ostream&,matrix<T,M,N>&);
         static constexpr size_t byte_size()
         {
-            return sizeof(vec<T,M>) * N;
+            return sizeof(vec<T,N>) * M;
         }
         matrix()
         {
@@ -181,20 +199,80 @@ namespace cgm {
         }
         matrix(T t)
         {
-            for (int i = 0; i < N; ++i) {
-                data[i] = vec<T,M>(t);
+            size_t j = 1;
+            for (int i = 0; i < M; ++i) {
+                data[i].set<1>(j++,t);
             }
         }
         matrix(std::initializer_list<T> list)
         {
-
+            size_t i = 1,j = 1;
+            for(auto it = list.begin();it != list.end();++it)
+            {
+                set<1,1>(i,j,*it);
+                if(j == N)
+                {
+                    ++i;
+                    j = 1;
+                }else{
+                    ++j;
+                }
+            }
         }
-//        template<size_t I,typename = std::enable_if_t<(I > 0 && I <= M * N)> >
-//        T& get()
-//        {
-//            return data[];
-//        }
+        template<size_t I,size_t J>
+        T& get()
+        {
+            static_assert((I > 0 && I <= M ) && (J > 0 && J <= N),"Out of bound!");
+            return data[I - 1].get<J>();
+        }
+        template<size_t I,size_t J>
+        void set(size_t i,size_t j,T t)
+        {
+            static_assert((I > 0 && I <= M ) && (J > 0 && J <= N),"Out of bound!");
+            if constexpr(J > 0 && J < N)
+            {
+                if(i == I && j == J)
+                    data[I - 1].set<J>(j,t);
+                else
+                    set<I,J + 1>(i,j,t);
+            }else if constexpr (I == M)
+            {
+                if(i == I && j == J)
+                    data[I - 1].set<J>(j,t);
+            }else if constexpr (J == N)
+            {
+                if(i == I && j == J)
+                    data[I - 1].set<J>(j,t);
+                else
+                    set<I + 1,1>(i,j,t);
+            }
+        }
+
+        T& m11(){ return get<1,1>(); }
+        T& m12(){ return get<1,2>(); }
+        T& m13(){ return get<1,3>(); }
+        T& m14(){ return get<1,4>(); }
+
+        T& m21(){ return get<2,1>(); }
+        T& m22(){ return get<2,2>(); }
+        T& m23(){ return get<2,3>(); }
+        T& m24(){ return get<2,4>(); }
+
+        T& m31(){ return get<3,1>(); }
+        T& m32(){ return get<3,2>(); }
+        T& m33(){ return get<3,3>(); }
+        T& m34(){ return get<3,4>(); }
+
+        T& m41(){ return get<4,1>(); }
+        T& m42(){ return get<4,2>(); }
+        T& m43(){ return get<4,3>(); }
+        T& m44(){ return get<4,4>(); }
+
     };
+
+    typedef matrix<float,2,2> mat2;
+    typedef matrix<float,3,3> mat3;
+    typedef matrix<float,4,4> mat4;
 
 	typedef vec<float, 2> vec2;
 	typedef vec<float, 3> vec3;

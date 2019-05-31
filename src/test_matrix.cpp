@@ -46,5 +46,17 @@ int main()
     dbg(cross(vec3{0.f,0.f,1.f},vec3{1.f,0.f,0.f}));
     dbg(v2 * 2.0f);
     dbg(vec<double ,3>{3.0,4.0,5.0} * 3.0 );
+
+    mat2 m1 (1.0f);
+    mat2 m2 { 1.0f , 2.0f,
+              3.0f , 4.0f};
+    mat4 m3 (1.0f);
+
+    dbg(m1);
+    dbg(m2);
+    dbg(m3);
+
+    dbg(std::make_tuple( m2.m11(),m2.m12(),m2.m21(),m2.m22() ));
+
 	return 0;
 }
