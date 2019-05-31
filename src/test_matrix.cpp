@@ -58,5 +58,24 @@ int main()
 
     dbg(std::make_tuple( m2.m11(),m2.m12(),m2.m21(),m2.m22() ));
 
+    matrix<float ,2,3> m4{
+        1.0f,2.0f,3.0f,
+        4.0f,5.0f,6.0f
+    };
+
+    dbg(m4);
+    dbg(m4.m13());
+    dbg(m4.m23());
+
+    matrix<float ,3,2> m5{
+            1.0f,2.0f,
+            3.0f,4.0f,
+            5.0f,6.0f
+    };
+
+    dbg(m5);
+    dbg(m5.m31());
+    dbg(m5.m32());
+
 	return 0;
 }
