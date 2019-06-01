@@ -92,5 +92,25 @@ int main()
 
 	dbg(m4 * m5);
 
+	dbg(cofactor(m6, 1, 1));
+
+	mat4 m7{1.0f,2.0f,3.0f,4.0f,
+			5.0f,6.0f,7.0f,8.0f,
+			9.0f,8.0f,7.0f,6.0f,
+			5.0f,4.0f,3.0f,2.0f};
+	dbg(cofactor(m7, 2, 3));
+	dbg(cofactor(m7, 4, 4));
+
+	dbg(det(m2));
+	dbg(det(m6));
+	auto m6_tp = m6.transpose();
+	dbg(det(m6_tp));
+	mat3 m8(1.0f);
+	dbg(det(m8));
+	m8.m12() = 0.1f;
+	m8.m21() = -0.1f;
+	m8.m32() = 0.1f;
+	dbg(m8);
+	dbg(det(m8));
 	return 0;
 }

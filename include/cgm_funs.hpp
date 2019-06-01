@@ -33,4 +33,49 @@ namespace cgm{
                            v1.x() * v2.y() - v1.y() * v2.x()
         };
     }
+	template<typename T,size_t N>
+	matrix<T, N - 1, N - 1> cofactor(matrix<T,N,N>& m,size_t a, size_t b)
+	{
+		matrix<T, N - 1, N - 1> res;
+		for (size_t i = 1; i <= N - 1; ++i)
+		{
+			int fi = i;
+			if (i >= a)
+				fi += 1;
+			for (size_t j = 1; j <= N - 1; ++j)
+			{
+				int fj = j;
+				if (j >= b)
+					fj += 1;
+				res.set(i, j, m.get(fi, fj));
+			}
+		}
+		return res;
+	}
+
+	template<typename T,size_t N>
+	T alge_cofactor(matrix<T, N, N>& m, size_t a, size_t b)
+	{
+		assert((a > 0 && a <= N) && (b > 0 && b <= N));
+		T al = ((a + b) % 2 == 0) ? const_val::one<T>() : const_val::zero<T>() - const_val::one<T>();
+		auto cof = cofactor(m, a, b);
+		return al * det(cof);
+	}
+
+	template<typename T,size_t N >
+	T det(matrix<T, N, N>& m)
+	{
+		T res = const_val::zero<T>();
+		for (int j = 1; j <= N; ++j)
+		{
+			res += m.get(1, j) * alge_cofactor(m, 1, j);
+		}
+		return res;
+	}
+
+	template<typename T>
+	T det(matrix<T, 2, 2>& m)
+	{
+		return m.m11()* m.m22() - m.m12() * m.m21();
+	}
 }

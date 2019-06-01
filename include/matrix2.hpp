@@ -74,7 +74,7 @@ namespace cgm {
 			}
 		}
 		
-		T& get_(size_t i)
+		T& get(size_t i)
 		{
 			assert((i > 0 && i <= N));
 			return data[i - 1];
