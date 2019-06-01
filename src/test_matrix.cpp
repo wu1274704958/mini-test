@@ -85,5 +85,12 @@ int main()
     dbg(m6);
     dbg(m6.transpose());
 
+	dbg(2.0f * m6);
+	dbg(3.0f * m5);
+
+	dbg(m5 * vec2{ 1.0f,1.0f });
+
+	dbg(m4 * m5);
+
 	return 0;
 }
