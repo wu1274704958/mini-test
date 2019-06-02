@@ -161,12 +161,63 @@ namespace test3{
 			return false;
 	}
 
+	ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+		if(!l1 && !l2) return nullptr;
+		ListNode* res = new ListNode(0);
+		ListNode* curr = res;
+		for (;;)
+		{
+			if (!l1 && !l2) break;
+			int v = 0;
+			if (l1 && !l2)
+			{
+				v = l1->val;
+				l1 = l1->next;
+				goto Go;
+			}
+			if(l2 && !l1)
+			{
+				v = l2->val;	
+				l2 = l2->next;
+				goto Go;
+			}
+			if (l1->val <= l2->val)
+			{
+				v = l1->val; l1 = l1->next;
+			}
+			else {
+				v = l2->val; l2 = l2->next;
+			}
+			Go:
+			curr->val = v;
+			if (l1 || l2)
+			{
+				curr->next = new ListNode(0);
+			}
+			curr = curr->next;
+		}
+		return res;
+	}
+
+	void test_mergeTwoLists()
+	{
+		ListNode* in1 = ListNode::from_num(421);
+		ListNode* in2 = ListNode::from_num(431);
+		dbg(in1);
+		dbg(in2);
+		auto res = mergeTwoLists(in1, in2);
+		dbg(res);
+		delete in1;
+		delete in2;
+		delete res;
+	}
 
 	auto init()
 	{
 		return  wws::CreateTFArray(
 			CREATE_TEST_FUNC(test_removeNthFromEnd),
-			CREATE_TEST_FUNC(isValid)
+			CREATE_TEST_FUNC(isValid),
+			CREATE_TEST_FUNC(test_mergeTwoLists)
 		);
 	}
 }// test3
