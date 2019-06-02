@@ -74,7 +74,7 @@ namespace cgm {
 			}
 		}
 		
-		T& get(size_t i)
+		T get(size_t i) const
 		{
 			assert((i > 0 && i <= N));
 			return data[i - 1];
@@ -257,7 +257,7 @@ namespace cgm {
 			assert(i > 0 && i <= M);
 			return data[i - 1];
 		}
-		T& get(size_t i,size_t j)
+		T get(size_t i,size_t j) const
 		{
 			assert((i > 0 && i <= M) && (j > 0 && j <= N));
 			return data[i - 1].get(j);

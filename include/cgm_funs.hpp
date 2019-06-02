@@ -34,7 +34,7 @@ namespace cgm{
         };
     }
 	template<typename T,size_t N>
-	matrix<T, N - 1, N - 1> cofactor(matrix<T,N,N>& m,size_t a, size_t b)
+	matrix<T, N - 1, N - 1> cofactor(const matrix<T,N,N>& m,size_t a, size_t b)
 	{
 		matrix<T, N - 1, N - 1> res;
 		for (size_t i = 1; i <= N - 1; ++i)
@@ -54,7 +54,7 @@ namespace cgm{
 	}
 
 	template<typename T,size_t N>
-	T alge_cofactor(matrix<T, N, N>& m, size_t a, size_t b)
+	T alge_cofactor(const matrix<T, N, N>& m, size_t a, size_t b)
 	{
 		assert((a > 0 && a <= N) && (b > 0 && b <= N));
 		T al = ((a + b) % 2 == 0) ? const_val::one<T>() : const_val::zero<T>() - const_val::one<T>();
@@ -63,7 +63,7 @@ namespace cgm{
 	}
 
 	template<typename T,size_t N >
-	T det(matrix<T, N, N>& m)
+	T det(const matrix<T, N, N>& m)
 	{
 		T res = const_val::zero<T>();
 		for (int j = 1; j <= N; ++j)
@@ -74,13 +74,13 @@ namespace cgm{
 	}
 
 	template<typename T>
-	T det(matrix<T, 2, 2>& m)
+	T det(const matrix<T, 2, 2>& m)
 	{
-		return m.m11()* m.m22() - m.m12() * m.m21();
+		return m.get(1,1) * m.get(2,2) - m.get(1,2) * m.get(2,1);
 	}
 
 	template<typename T,size_t N>
-	matrix<T, N, N> adj(matrix<T, N, N>& m)
+	matrix<T, N, N> adj(const matrix<T, N, N>& m)
 	{
 		matrix<T, N, N> res;
 		for (int i = 1; i <= N; ++i)
@@ -94,7 +94,7 @@ namespace cgm{
 	}
 
 	template<typename T,size_t N>
-	matrix<T, N, N> inv(matrix<T, N, N>& m)
+	matrix<T, N, N> inv(const matrix<T, N, N>& m)
 	{
 		auto m_adj = adj(m);
 		return (const_val::one<T>() / det(m)) * m_adj;
