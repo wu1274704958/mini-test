@@ -112,5 +112,28 @@ int main()
 	m8.m32() = 0.1f;
 	dbg(m8);
 	dbg(det(m8));
+
+	mat3 m9{ -4.f,-3.f,3.f,
+			0.f,2.f,-2.f,
+			1.f,4.f,-1.f };
+
+	dbg(adj(m9));
+
+	mat3 m10{
+		6.f,9.f,0.f,
+		-2.0f,1.f,-8.f,
+		-2.f,13.f,-8.f
+	};
+
+	mat3 m11{
+		1,2,4,
+		3,6,9,
+		-2,7,9
+	};
+
+	dbg(det(m10));
+	dbg(inv(m9));
+	dbg(inv(m10));
+	dbg(inv(m11));
 	return 0;
 }

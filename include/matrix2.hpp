@@ -252,7 +252,7 @@ namespace cgm {
                 }
             }
         }
-		vec<T, N> row(int i)
+		vec<T, N> row(size_t i)
 		{
 			assert(i > 0 && i <= M);
 			return data[i - 1];

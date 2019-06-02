@@ -39,12 +39,12 @@ namespace cgm{
 		matrix<T, N - 1, N - 1> res;
 		for (size_t i = 1; i <= N - 1; ++i)
 		{
-			int fi = i;
+			size_t fi = i;
 			if (i >= a)
 				fi += 1;
 			for (size_t j = 1; j <= N - 1; ++j)
 			{
-				int fj = j;
+				size_t fj = j;
 				if (j >= b)
 					fj += 1;
 				res.set(i, j, m.get(fi, fj));
@@ -77,5 +77,26 @@ namespace cgm{
 	T det(matrix<T, 2, 2>& m)
 	{
 		return m.m11()* m.m22() - m.m12() * m.m21();
+	}
+
+	template<typename T,size_t N>
+	matrix<T, N, N> adj(matrix<T, N, N>& m)
+	{
+		matrix<T, N, N> res;
+		for (int i = 1; i <= N; ++i)
+		{
+			for (int j = 1; j <= N; ++j)
+			{
+				res.set(i, j, alge_cofactor(m, i, j));
+			}
+		}
+		return res.transpose();
+	}
+
+	template<typename T,size_t N>
+	matrix<T, N, N> inv(matrix<T, N, N>& m)
+	{
+		auto m_adj = adj(m);
+		return (const_val::one<T>() / det(m)) * m_adj;
 	}
 }
