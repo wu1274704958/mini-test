@@ -240,13 +240,70 @@ namespace test3{
         return res;
     }
 
+	ListNode* mergeKLists(std::vector<ListNode*>& lists) {
+		for (auto ln : lists)
+		{
+			if (ln)
+				goto BEG;
+		}
+		return nullptr;
+	BEG:
+		ListNode* res = new ListNode(0);
+		ListNode* curr = res;
+		for (;;)
+		{
+			int v = std::numeric_limits<int>::max();
+			ListNode **choose = nullptr;
+			for (auto& ln : lists)
+			{
+				if (ln)
+				{
+					if (ln->val < v)
+					{
+						v = ln->val;
+						choose = &ln;
+					}
+				}
+			}
+			if (!choose)
+				break;
+			(*choose) = (*choose)->next;
+			curr->val = v;
+			bool is_find = false;
+			for (auto ln : lists)
+			{
+				if (ln) { is_find = true; break; }
+			}
+			if (is_find)
+				curr->next = new ListNode(0);
+			curr = curr->next;
+		}
+		return res;
+	}
+
+	void test_mergeKLists()
+	{
+		std::vector<ListNode*> list;
+		list.push_back(ListNode::from_num(541));
+		list.push_back(ListNode::from_num(431));
+		list.push_back(ListNode::from_num(62));
+		auto res = mergeKLists(list);
+		dbg(res);
+		delete res;
+		for (auto ln : list)
+		{
+			delete ln;
+		}
+	}
+
 	auto init()
 	{
 		return  wws::CreateTFArray(
 			CREATE_TEST_FUNC(test_removeNthFromEnd),
 			CREATE_TEST_FUNC(isValid),
 			CREATE_TEST_FUNC(test_mergeTwoLists),
-			CREATE_TEST_FUNC(generateParenthesis)
+			CREATE_TEST_FUNC(generateParenthesis),
+			CREATE_TEST_FUNC(test_mergeKLists)
 		);
 	}
 }// test3
