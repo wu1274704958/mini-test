@@ -39,7 +39,7 @@ T fromGray(T g)
 	return res;
 }
 
-template<typename T>
+template<typename T,typename = std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>> >
 void printBin(T b)
 {
 	size_t len = sizeof(T) * 8 - 1;
@@ -57,5 +57,20 @@ void printBin(T b)
 	}
 	printf("\n");
 }
+
+template <typename T>
+void printBin(const T *ptr)
+{
+    if(ptr)
+    {
+        size_t len = sizeof(T) / sizeof(int);
+        const int *ptr_in = reinterpret_cast<const int *>(ptr);
+        for(size_t i = 0;i < len;++i)
+        {
+            printBin(*(ptr_in + i));
+        }
+    }
+}
+
 #endif //__WWS_GRAY_CODE_H__
  

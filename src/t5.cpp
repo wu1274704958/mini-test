@@ -40,6 +40,29 @@ struct Go{
 	}
 };
 
+class father{
+public:
+    int a = 1;
+//    virtual void run()
+//    {
+//
+//    }
+};
+
+class mother{
+public:
+    int b = 2;
+};
+
+class son : public father,public mother{
+public:
+    int c = 3;
+
+//    void run() override {
+//
+//    }
+};
+
 int main()
 {
 	dbg(defined_const_str::Test);
@@ -75,6 +98,17 @@ int main()
 	printBin(*(p + 1));
 	Go g;
 	dbg(g.operator Go::go()());
+//---------------------------------多重继承C style强转
+	son* s = new son();
+    dbg(std::make_tuple(s,s->a,s->b,s->c)); //没有虚函数时可能的输出
+	father* f = (father*)(s);   //f = 000001C10C202550
+    dbg(f);
+    mother* m = (mother*)(s);   //m = 000001C10C202554
+    dbg(m);
+    dbg(sizeof(son));
+    printBin(s);                //0000 0000 0000 0000 0000 0000 0000 0001
+    delete s;                   //0000 0000 0000 0000 0000 0000 0000 0010
+                                //0000 0000 0000 0000 0000 0000 0000 0011
 #ifdef WIN32
 	system("pause");
 #endif
