@@ -109,6 +109,11 @@ int main()
     printBin(s);                //0000 0000 0000 0000 0000 0000 0000 0001
     delete s;                   //0000 0000 0000 0000 0000 0000 0000 0010
                                 //0000 0000 0000 0000 0000 0000 0000 0011
+    Test&& t4 = Test();
+    Test&& t5 = std::move(t);
+
+    dbg(sizeof(t4));
+    dbg(sizeof(t5));
 #ifdef WIN32
 	system("pause");
 #endif
