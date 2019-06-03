@@ -523,8 +523,7 @@ std::vector<std::vector<int>> threeSum(std::vector<int>& nums)
 	return res;
 }
 
-std::vector<std::string> letterCombinations(std::string&& digits_) {
-	std::string digits = std::move(digits_);
+std::vector<std::string> letterCombinations(std::string&& digits) {
 
 	std::vector<std::string> res;
 	if (digits.empty())
