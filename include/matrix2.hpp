@@ -266,7 +266,7 @@ namespace cgm {
         T& get_()
         {
             static_assert((I > 0 && I <= M ) && (J > 0 && J <= N),"Out of bound!");
-            return data[I - 1].get_<J>();
+            return data[I - 1].template get_<J>();
         }
 		void set(size_t i, size_t j, T t)
 		{
