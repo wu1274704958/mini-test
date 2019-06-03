@@ -212,12 +212,41 @@ namespace test3{
 		delete res;
 	}
 
+
+    std::vector<std::string> generateParenthesis(int n) {
+        if(n == 0)
+            return {""};
+        std::vector<std::string> res;
+        std::stack<std::tuple<std::string,int,int>> st;
+        st.push(std::make_tuple("",0,0));
+        for(;;)
+        {
+            if(st.empty()) break;
+            auto&& curr = std::move(st.top());
+            std::string str = std::move(std::get<0>(curr));
+            if(str.size() == n * 2)
+            {
+                res.push_back(std::move(str));
+                continue;
+            }
+            int b = std::get<1>(curr);
+            int e = std::get<2>(curr);
+            st.pop();
+            if(b < n)
+                st.push(std::make_tuple(str + '(',b + 1,e));
+            if(e < b)
+                st.push(std::make_tuple(str + ')',b,e + 1 ));
+        }
+        return res;
+    }
+
 	auto init()
 	{
 		return  wws::CreateTFArray(
 			CREATE_TEST_FUNC(test_removeNthFromEnd),
 			CREATE_TEST_FUNC(isValid),
-			CREATE_TEST_FUNC(test_mergeTwoLists)
+			CREATE_TEST_FUNC(test_mergeTwoLists),
+			CREATE_TEST_FUNC(generateParenthesis)
 		);
 	}
 }// test3

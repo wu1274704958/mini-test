@@ -105,7 +105,8 @@ int main(int argc,char **argv)
 			
 			RUN_TF_CASE(22, tup)
 			RUN_TF_CASE(23, tup, "{[)}")
-			RUN_TF_CASE(24, tup);
+			RUN_TF_CASE(24, tup)
+            RUN_TF_CASE(25, tup,2)
 		}
 	}
 	return 0;
