@@ -281,13 +281,40 @@ namespace test3{
 		return res;
 	}
 
+    ListNode* mergeKLists2_unit(std::vector<ListNode*>& lists,int b,int e) {
+        if(b == e)
+            return lists[b];
+        if(e - b == 1)
+            return mergeTwoLists(lists[b],lists[e]);
+        int mid = (b + e) / 2;
+        ListNode* l1 = mergeKLists2_unit(lists,b,mid);
+        ListNode* l2 = mergeKLists2_unit(lists,mid+1,e);
+
+        ListNode* res = mergeTwoLists(l1,l2);
+		if(l1 != lists[b] && l1 != lists[mid])
+			delete l1;
+		if(l2 != lists[mid + 1] && l2 != lists[e])
+			delete l2;
+        return res;
+	}
+
+    ListNode* mergeKLists2(std::vector<ListNode*>& lists) {
+        if(lists.empty())
+            return nullptr;
+	    if(lists.size() == 2)
+        {
+            return mergeTwoLists(lists[0],lists[1]);
+        }
+	    return mergeKLists2_unit(lists,0,lists.size() - 1);
+    }
+
 	void test_mergeKLists()
 	{
 		std::vector<ListNode*> list;
 		list.push_back(ListNode::from_num(541));
 		list.push_back(ListNode::from_num(431));
 		list.push_back(ListNode::from_num(62));
-		auto res = mergeKLists(list);
+		auto res = mergeKLists2(list);
 		dbg(res);
 		delete res;
 		for (auto ln : list)
