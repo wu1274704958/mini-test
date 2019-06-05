@@ -319,17 +319,86 @@ namespace test3{
 
 	ListNode* reverseKGroup_reverse(ListNode* head,ListNode* foot)
     {
-        return nullptr;
+		if (!head || !foot)
+			return nullptr;
+		if (head == foot)
+			return head;
+		ListNode* t = nullptr;
+		while (head)
+		{
+			if (t)
+			{
+				auto temp = head->next;
+				head->next = t;
+				if (head == foot)
+					break;
+				t = head;
+				head = temp;
+			}
+			else {
+				t = head;
+				head = head->next;
+			}
+		}
+        return head;
     }
 
     ListNode* reverseKGroup(ListNode* head, int k) {
-        return nullptr;
+		if (k == 0 || k == 1)
+			return head;
+		if (k == 2)
+			return swapPairs(head);
+		ListNode* res = nullptr;
+		ListNode* h = head;
+		ListNode* l = nullptr;
+		ListNode* f = nullptr;
+		while (h)
+		{
+			f = h;
+			for (uint32_t i = 0; i < k - 1; ++i)
+			{
+				if (f)
+					f = f->next;
+				else
+				{
+					if (!res) { return head; }
+					else {
+						l->next = h;
+						return res; 
+					}
+				}
+			}
+			if (!f)
+			{
+				if (!res) { return head; }
+				else {
+					l->next = h;
+					return res;
+				}
+			}
+			auto n = f->next;
+			auto l_h = h;
+			auto temp = reverseKGroup_reverse(h, f);
+			h = n;
+			if (!res) res = temp;
+			if (l)
+			{
+				l->next = temp;
+				l = l_h;
+			}
+			else {
+				l = l_h;
+			}
+		}
+		if(l)
+			l->next = nullptr;
+        return res;
     }
 
     void test_reverseKGroup()
     {
-	    auto in = ListNode::from_num(54321);
-	    ListNode* res = reverseKGroup(in,3);
+	    auto in = ListNode::from_num(987654321);
+		ListNode* res = reverseKGroup(in,3);
 	    dbg(res);
 	    delete res;
     }
