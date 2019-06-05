@@ -213,38 +213,38 @@ double findMedianSortedArrays(std::vector<int>& nums1, std::vector<int>& nums2)
 }
 double findMedianSortedArrays2(std::vector<int>& nums1, std::vector<int>& nums2)
 {
-	int m = nums1.size();
-	int n = nums2.size();
-	if (m > n) { // to ensure m<=n
-		std::vector<int> temp = std::move(nums1); nums1 = std::move(nums2); nums2 = std::move(temp);
-		int tmp = m; m = n; n = tmp;
-	}
-	int iMin = 0, iMax = m, halfLen = (m + n + 1) / 2;
-	while (iMin <= iMax) {
-		int i = (iMin + iMax) / 2;
-		int j = halfLen - i;
-		if (i < iMax && nums2[j - 1] > nums1[i]) {
-			iMin = i + 1; // i is too small
-		}
-		else if (i > iMin && nums1[i - 1] > nums2[j]) {
-			iMax = i - 1; // i is too big
-		}
-		else { // i is perfect
-			int maxLeft = 0;
-			if (i == 0) { maxLeft = nums2[j - 1]; }
-			else if (j == 0) { maxLeft = nums1[i - 1]; }
-			else { maxLeft = std::max(nums1[i - 1], nums2[j - 1]); }
-			if ((m + n) % 2 == 1) { return maxLeft; }
-
-			int minRight = 0;
-			if (i == m) { minRight = nums2[j]; }
-			else if (j == n) { minRight = nums1[i]; }
-			else { minRight = std::min(nums2[j], nums1[i]); }
-
-			return (maxLeft + minRight) / 2.0;
-		}
-	}
-	return 0.0;
+    auto m = nums1.size();
+    auto n = nums2.size();
+    if(m > n)
+    {
+        return findMedianSortedArrays(nums2,nums1);
+    }
+    int k = (m + n + 1) / 2;
+    int min_i = 0,max_i = m,i = 0,j = 0;
+    while(min_i <= max_i)
+    {
+        i = (min_i + max_i) / 2;
+        j = k - i;
+        if(i < max_i && nums2[j - 1] > nums1[i] )
+        {
+            min_i = i + 1;
+        }else if(i > min_i && nums1[i - 1] > nums2[j]){
+            max_i = i - 1;
+        }else{
+            break;
+        }
+    }
+    int leftMax;
+    if(i == 0){ leftMax = nums2[j - 1]; }
+    else if(j == 0){leftMax = nums1[i - 1];}
+    else{ leftMax = std::max(nums1[i - 1],nums2[j - 1]); }
+    if((m+n) % 2 != 0)
+        return static_cast<double>(leftMax);
+    int rightMin;
+    if(i == m){ rightMin = nums2[j]; }
+    else if(j == n){ rightMin = nums1[i]; }
+    else{ rightMin = std::min(nums1[i],nums2[j]); }
+    return (static_cast<double>(leftMax) + static_cast<double>(rightMin)) / 2.0;
 }
 
 std::tuple<int,int> get_plalindrome_len(std::string& str,int i, int j)
