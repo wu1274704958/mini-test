@@ -109,6 +109,7 @@ int main(int argc,char **argv)
             RUN_TF_CASE(25, tup,2)
 			RUN_TF_CASE(26, tup)
 			RUN_TF_CASE(27, tup)
+            RUN_TF_CASE(28, tup)
 		}
 	}
 	return 0;

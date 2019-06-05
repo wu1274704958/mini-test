@@ -317,6 +317,23 @@ namespace test3{
 		delete res;
 	}
 
+	ListNode* reverseKGroup_reverse(ListNode* head,ListNode* foot)
+    {
+        return nullptr;
+    }
+
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        return nullptr;
+    }
+
+    void test_reverseKGroup()
+    {
+	    auto in = ListNode::from_num(54321);
+	    ListNode* res = reverseKGroup(in,3);
+	    dbg(res);
+	    delete res;
+    }
+
 	auto init()
 	{
 		return  wws::CreateTFArray(
@@ -325,7 +342,8 @@ namespace test3{
 			CREATE_TEST_FUNC(test_mergeTwoLists),
 			CREATE_TEST_FUNC(generateParenthesis),
 			CREATE_TEST_FUNC(test_mergeKLists),
-			CREATE_TEST_FUNC(test_swapPairs)
+			CREATE_TEST_FUNC(test_swapPairs),
+			CREATE_TEST_FUNC(test_reverseKGroup)
 		);
 	}
 }// test3
