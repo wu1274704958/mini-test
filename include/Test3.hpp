@@ -3,64 +3,13 @@
 #include <iostream>
 #include "TestFunc.hpp"
 #include <stack>
+#include <ListNode.h>
 
 namespace test3{
-	using  std::cout;
-	using  std::endl;
-	struct ListNode {
-		int val;
-		ListNode *next;
-		ListNode(int x) : val(x), next(nullptr) {}
-		~ListNode() noexcept(false)
-		{
-			if (next)
-			{
-				delete next;
-			}
-		}
-		static ListNode* from_num(int);
 
-		friend std::ostream& operator<<(std::ostream&, ListNode*);
-	};
+	using std::cout;
+	using std::endl;
 
-	std::ostream& operator<<(std::ostream& out, ListNode* n)
-	{
-		if (!n)
-		{
-			out << "nullptr";
-			return out;
-		}
-		while (n)
-		{
-			if (n->next) {
-				out << n->val << "->";
-				n = n->next;
-			}else {
-				out << n->val;
-				break;
-			}
-		}
-		return out;
-	}
-
-	ListNode* ListNode::from_num(int a)
-	{
-		if (a <= 0)
-			return nullptr;
-		ListNode *p = new ListNode(0);
-		ListNode *res = p;
-		while (a > 0)
-		{
-			p->val = a % 10;
-			a /= 10;
-			if (a > 0) {
-				p->next = new ListNode(0);
-				p = p->next;
-			}
-		}
-		return res;
-	}
-	
 	ListNode* removeNthFromEnd(ListNode* head, int n) {
 		int len = 0;
 		ListNode *p = head;

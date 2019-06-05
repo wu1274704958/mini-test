@@ -14,7 +14,7 @@ else()
     
 endif()
 
-add_executable(hello hello.cpp src/tool.cpp)
+add_executable(hello hello.cpp src/tool.cpp src/ListNode.cpp)
 add_executable(t2 src/t2.cpp)
 add_executable(t3 src/t3.cpp)
 add_executable(t4 src/t4.cpp)
