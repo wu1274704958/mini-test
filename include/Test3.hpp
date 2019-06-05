@@ -323,6 +323,51 @@ namespace test3{
 		}
 	}
 
+	ListNode* swapPairs(ListNode* head) {
+		if (!head) return nullptr;
+		ListNode* res = nullptr;
+		if (head->next)
+			res = head->next;
+		else
+			return head;
+		ListNode* l = nullptr;
+		ListNode* n = nullptr;
+		while (head)
+		{
+			if (l)
+			{
+				n = head->next;
+				head->next = l;
+				if (n == nullptr)
+				{
+					l->next = nullptr;
+					return res;
+				}
+				if (n->next == nullptr)
+				{
+					l->next = n;
+					return res;
+				}
+				l->next = n->next;
+				l = nullptr;
+				head = n;
+			}
+			else {
+				l = head;
+				head = head->next;
+			}
+		}
+		return res;
+	}
+
+	void test_swapPairs()
+	{
+		ListNode *in = ListNode::from_num(4321);
+		ListNode *res = swapPairs(in);
+		dbg(res);
+		delete res;
+	}
+
 	auto init()
 	{
 		return  wws::CreateTFArray(
@@ -330,7 +375,8 @@ namespace test3{
 			CREATE_TEST_FUNC(isValid),
 			CREATE_TEST_FUNC(test_mergeTwoLists),
 			CREATE_TEST_FUNC(generateParenthesis),
-			CREATE_TEST_FUNC(test_mergeKLists)
+			CREATE_TEST_FUNC(test_mergeKLists),
+			CREATE_TEST_FUNC(test_swapPairs)
 		);
 	}
 }// test3
