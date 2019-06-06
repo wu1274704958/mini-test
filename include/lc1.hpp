@@ -13,25 +13,18 @@
 
 namespace lc1{
 
-    void move_left(std::vector<int>& nums,int b,int r_len) {
-        for (int i = b; i < r_len; ++i) {
-            nums[i - 1] = nums[i];
-        }
-    }
+   
     int removeDuplicates(std::vector<int>& nums) {
         if(nums.empty())
             return 0;
-        int r_len = nums.size();
-        int last = nums[0];
-        for (int i = 1; i < r_len; ++i) {
-            if(nums[i] == last)
-            {
-                move_left(nums,i,r_len);
-                i -= 1; r_len -= 1;
-            }
-            last = nums[i];
-        }
-        return r_len;
+        int n = nums.size();
+		int i = 0;
+		for (int j = 1; j < n; ++j)
+		{
+			if (nums[i] != nums[j])
+				nums[++i] = nums[j];
+		}
+		return i + 1;
     }
 
 
