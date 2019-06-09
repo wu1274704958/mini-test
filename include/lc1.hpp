@@ -76,11 +76,54 @@ namespace lc1{
 		dbg(res);
 		dbg(in3);
     }
+
+	int strStr(std::string haystack, std::string needle) {
+		if (needle.size() == 0)
+			return 0;
+		if (needle.size() > haystack.size())
+			return -1;
+		int m = haystack.size(), n = needle.size();
+		int i = 0, j = 0;
+		for (; i < m; ++i)
+		{
+			Go:
+			if (haystack[i] == needle[j])
+			{
+				int t_i = i + 1;
+				++j;
+				while (j < n)
+				{
+					if (t_i >= m)
+					{
+						return -1;
+					}
+					if (haystack[t_i] != needle[j])
+					{
+						i = i + 1; j = 0; goto Go;
+					}
+					++t_i; ++j;
+				}
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	void test_strStr()
+	{
+		dbg(strStr("aaa", "aaaa"));
+		dbg(strStr("aabc", "abc"));
+		dbg(strStr("aaa", "aaa"));
+		dbg(strStr("aaa", "ac"));
+	}
+
+
     auto init()
     {
         return  wws::CreateTFArray(
             CREATE_TEST_FUNC(test_removeDuplicates),
-            CREATE_TEST_FUNC(test_removeElemens)
+            CREATE_TEST_FUNC(test_removeElemens),
+			CREATE_TEST_FUNC(test_strStr)
         );
     }
 }
