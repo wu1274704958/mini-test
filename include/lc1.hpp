@@ -117,13 +117,59 @@ namespace lc1{
 		dbg(strStr("aaa", "ac"));
 	}
 
+	int divide(int dividend, int divisor) {
+		if (divisor == 0) return 0;
+		bool nv = (dividend ^ divisor) > 0 ? false : true;
+		if (dividend == divisor) nv = false;
+
+		long long res = 0;
+		long long lldividend = abs((long long)dividend);
+		long long lldivisor = abs((long long)divisor);
+		long long t = 1;
+		while (lldividend >= lldivisor << 1 && (lldivisor << 1) > 0)
+		{
+			t <<= 1;
+			lldivisor <<= 1;
+		}
+		while (t > 0 && lldividend > 0)
+		{
+			if (lldividend >= lldivisor)
+			{
+				lldividend -= lldivisor;
+				res += t;
+			}
+			lldivisor >>= 1;
+			t >>= 1;
+		}
+		res = nv ? -res : res;
+		if (res > 0x7fffffff)
+		{
+			return std::numeric_limits<int>::max();
+		}
+		return (int)res;
+	}
+
+	void test_divide()
+	{
+		dbg(divide(10, 3));
+		dbg(divide(7, -3));
+		dbg(divide(-70, -3));
+		dbg(divide(-78, 2));
+		dbg(divide(-78, -1));
+		dbg(divide(-78, 1));
+		dbg(divide(78, -1));
+		dbg(divide(2147483647, 2));
+		dbg(divide(-2147483648, 1));
+		dbg(divide(1, 1));
+	}
 
     auto init()
     {
         return  wws::CreateTFArray(
             CREATE_TEST_FUNC(test_removeDuplicates),
             CREATE_TEST_FUNC(test_removeElemens),
-			CREATE_TEST_FUNC(test_strStr)
+			CREATE_TEST_FUNC(test_strStr),
+			CREATE_TEST_FUNC(test_divide)
         );
     }
 }
