@@ -287,28 +287,33 @@ namespace lc1{
 		{
 			std::unordered_map<std::string, int> m2;
 			int hwn = 0;
-			for (int b = i; b <= n - wl; b += wl)
+			for (int b = i; b <= n - wl * wn; b += wl)
 			{
-
+				while (hwn < wn)
+				{
+					std::string temp = s.substr(b + hwn * wn, b + (hwn + 1) * wn);
+				}
 			}
 		}
+
+		return {};
 	}
 
 
     void test_findSubstring()
     {
        
-		dbg(findSubstring("barfoothefoobarman", { "bar", "foo" }));
+		/*dbg(findSubstring("barfoothefoobarman", { "bar", "foo" }));
 
 		dbg(findSubstring("wordgoodgoodgoodbestword", { "word", "good", "best", "word" }));
 
 		dbg(findSubstring("abacbabacba", { "ab", "ba", "ac", "ba" }));
 
-		dbg(findSubstring("ababaab", { "ab", "ba", "ba" }));
+		dbg(findSubstring("ababaab", { "ab", "ba", "ba" }));*/
 	
-		dbg(findSubstring("barfoofoobarthefoobarman", { "bar", "foo", "the" }));
+		dbg(findSubstring2("barfoofoobarthefoobarman", { "bar", "foo", "the" }));
 
-		dbg(findSubstring("aaaaaaaa", { "aa", "aa", "aa" }));
+		dbg(findSubstring2("aaaaaaaa", { "aa", "aa", "aa" }));
     }
 
     auto init()
