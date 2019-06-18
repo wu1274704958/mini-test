@@ -10,6 +10,7 @@
 #include <vector>
 #include <TestFunc.hpp>
 #include <print_stl.hpp>
+#include <map>
 
 namespace lc1{
 
@@ -163,13 +164,131 @@ namespace lc1{
 		dbg(divide(1, 1));
 	}
 
+    bool map_same(std::map<std::string*,int> m1,std::map<std::string*,int> m2)
+    {
+        if(m1.size() != m2.size())
+            return false;
+        for(auto it = m1.begin();it != m1.end();++it)
+        {
+            if(m2.find(it->first) != m2.end())
+            {
+                if(m2[it->first] != it->second)
+                    return  false;
+            }else
+                return  false;
+        }
+        return true;
+    }
+
+    int same_words(std::string &s,int i,std::vector<std::string>& words)
+    {
+        int wl = words[0].size();
+        if(i + wl > s.size())
+            return -1;
+        int j,n,wi;
+        for(j = 0,n = i,wi = 0;wi < wl;++n,++wi)
+        {
+            if(s[n] != words[j][wi])
+            {
+                if(j == words.size() - 1)
+                    return -1;
+				++j; n = i - 1; wi = -1;
+                continue;
+            }
+        }
+        return j;
+    }
+
+	int find_first(std::string& s, std::vector<std::string>& words)
+	{
+		for (int i = 0;i < words.size();++i)
+		{
+			if (s == words[i])
+				return i;
+		}
+		return -1;
+	}
+
+    std::vector<int> findSubstring(std::string s, std::vector<std::string>&& words) {
+        if(s.empty() || words.empty()) return {};
+        int wl = words[0].size();
+        int n = s.size();
+        int wn = words.size();
+        std::vector<int> res;
+        std::map<std::string*,int> m1;
+        for(auto& w : words)
+        {
+			int v = find_first(w, words);
+			std::string* t = &words[v];
+            if(m1.find(t) != m1.end())
+            {
+                int v = m1[t];
+                m1[t] = v + 1;
+            } else
+                m1[t] = 1;
+        }
+        int sl = 0;
+        int bi = 0;
+        std::map<std::string*,int> m2;
+        for(int i = 0;i < n;)
+        {
+            if(sl == wn)
+            {
+                if(map_same(m1,m2))
+                    res.push_back(bi);
+                m2.clear();
+                sl = 0;
+				i = bi + 1;
+				bi = i;
+            }
+            int v = same_words(s,i,words);
+            if(v == -1)
+            {
+				m2.clear(); 
+				sl = 0;
+				i = bi + 1;
+				bi = i;
+                continue;
+            }
+            if(m2.find(&words[v]) != m2.end())
+            {
+                int temp = m2[&words[v]];
+                m2[&words[v]] = temp + 1;
+            }else{
+                m2[&words[v]] = 1;
+            }
+			i += wl;
+			++sl;
+        }
+		if (sl == wn && map_same(m1, m2))
+			res.push_back(bi);
+        return res;
+    }
+
+    void test_findSubstring()
+    {
+       
+		dbg(findSubstring("barfoothefoobarman", { "bar", "foo" }));
+
+		dbg(findSubstring("wordgoodgoodgoodbestword", { "word", "good", "best", "word" }));
+
+		dbg(findSubstring("abacbabacba", { "ab", "ba", "ac", "ba" }));
+
+		dbg(findSubstring("ababaab", { "ab", "ba", "ba" }));
+	
+		dbg(findSubstring("barfoofoobarthefoobarman", { "bar", "foo", "the" }));
+
+		dbg(findSubstring("aaaaaaaa", { "aa", "aa", "aa" }));
+    }
+
     auto init()
     {
         return  wws::CreateTFArray(
             CREATE_TEST_FUNC(test_removeDuplicates),
             CREATE_TEST_FUNC(test_removeElemens),
 			CREATE_TEST_FUNC(test_strStr),
-			CREATE_TEST_FUNC(test_divide)
+			CREATE_TEST_FUNC(test_divide),
+			CREATE_TEST_FUNC(test_findSubstring)
         );
     }
 }
