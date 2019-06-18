@@ -11,6 +11,7 @@
 #include <TestFunc.hpp>
 #include <print_stl.hpp>
 #include <map>
+#include <unordered_map>
 
 namespace lc1{
 
@@ -264,6 +265,35 @@ namespace lc1{
 			res.push_back(bi);
         return res;
     }
+
+	std::vector<int> findSubstring2(std::string s, std::vector<std::string>&& words) {
+		if (s.empty() || words.empty()) return {};
+		int wl = words[0].size();
+		int n = s.size();
+		int wn = words.size();
+		std::vector<int> res;
+		std::unordered_map<std::string, int> m1;
+		for (auto& w : words)
+		{
+			if (m1.find(w) != m1.end())
+			{
+				++m1[w];
+			}
+			else
+				m1[w] = 1;
+		}
+
+		for (int i = 0; i < wl; ++i)
+		{
+			std::unordered_map<std::string, int> m2;
+			int hwn = 0;
+			for (int b = i; b <= n - wl; b += wl)
+			{
+
+			}
+		}
+	}
+
 
     void test_findSubstring()
     {
