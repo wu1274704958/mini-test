@@ -287,29 +287,69 @@ namespace lc1{
 		{
 			std::unordered_map<std::string, int> m2;
 			int hwn = 0;
+			
 			for (int b = i; b <= n - wl * wn; b += wl)
 			{
+				bool has_removed = false;
 				while (hwn < wn)
 				{
-					std::string temp = s.substr(b + hwn * wn, b + (hwn + 1) * wn);
+					std::string temp = s.substr(b + hwn * wl, wl);
+					if (m1.find(temp) != m1.end())
+					{
+						if (m2.find(temp) != m2.end())
+							++m2[temp];
+						else
+							m2[temp] = 1;
+						if (m2[temp] > m1[temp]) //遇到符合的单词 但是超了
+						{
+							int remove_num = 0;
+							has_removed = true;
+							while (m2[temp] > m1[temp])
+							{
+								auto will_remo = s.substr(b + remove_num * wl, wl);
+								--m2[will_remo];
+								++remove_num;
+							}
+							hwn = hwn - remove_num + 1;
+							b = b + (remove_num - 1) * wl;
+							break;
+						}
+					}
+					else {//遇到了错误的单词
+						m2.clear();
+						b = b + hwn * wl;
+						hwn = 0;
+						break;
+					}
+					++hwn;
+				}
+				if (hwn == wn)
+				{
+					res.push_back(b);
+				}
+				if (hwn > 0 && !has_removed) 
+				{
+					auto ts = s.substr(b, wl);
+					--m2[ts];
+					--hwn;
 				}
 			}
 		}
 
-		return {};
+		return res;
 	}
 
 
     void test_findSubstring()
     {
        
-		/*dbg(findSubstring("barfoothefoobarman", { "bar", "foo" }));
+		dbg(findSubstring2("barfoothefoobarman", { "bar", "foo" }));
 
-		dbg(findSubstring("wordgoodgoodgoodbestword", { "word", "good", "best", "word" }));
+		dbg(findSubstring2("wordgoodgoodgoodbestword", { "word", "good", "best", "word" }));
 
-		dbg(findSubstring("abacbabacba", { "ab", "ba", "ac", "ba" }));
+		dbg(findSubstring2("abacbabacba", { "ab", "ba", "ac", "ba" }));
 
-		dbg(findSubstring("ababaab", { "ab", "ba", "ba" }));*/
+		dbg(findSubstring2("ababaab", { "ab", "ba", "ba" }));
 	
 		dbg(findSubstring2("barfoofoobarthefoobarman", { "bar", "foo", "the" }));
 
