@@ -356,6 +356,58 @@ namespace lc1{
 		dbg(findSubstring2("aaaaaaaa", { "aa", "aa", "aa" }));
     }
 
+	void swap(std::vector<int>& c, int i, int j)
+	{
+		if (i == j) return;
+		int temp = c[i];
+		c[i] = c[j];
+		c[j] = temp;
+	}
+
+	void reverse(std::vector<int>& nums, int s_i)
+	{
+		int e = nums.size() - 1;
+		if (s_i == e) return;
+		int l = ((e - s_i) / 2) + 1;
+		for (int i = 0; i < l; ++s_i, --e,++i)
+		{
+			swap(nums,s_i, e);
+		}
+	}
+
+	void nextPermutation(std::vector<int>& nums) {
+		int len = nums.size();
+		int i = len - 2;
+		while (i >= 0 && nums[i + 1] <= nums[i])
+			--i;
+
+		if (i >= 0)
+		{
+			int j = len - 1;
+			while (j >= 0 && nums[j] <= nums[i])
+				--j;
+			swap(nums, i, j);
+			reverse(nums, i + 1);
+			return;
+		}
+		std::reverse(std::begin(nums), std::end(nums));
+	}
+
+	void test_nextPermutation()
+	{
+		std::vector<int> _1 = { 1, 2, 3, 4 };
+		nextPermutation(_1);
+		dbg(_1);
+		nextPermutation(_1);
+		dbg(_1);
+		nextPermutation(_1);
+		dbg(_1);
+		nextPermutation(_1);
+		dbg(_1);
+		nextPermutation(_1);
+		dbg(_1);
+	}
+
     auto init()
     {
         return  wws::CreateTFArray(
@@ -363,7 +415,8 @@ namespace lc1{
             CREATE_TEST_FUNC(test_removeElemens),
 			CREATE_TEST_FUNC(test_strStr),
 			CREATE_TEST_FUNC(test_divide),
-			CREATE_TEST_FUNC(test_findSubstring)
+			CREATE_TEST_FUNC(test_findSubstring),
+			CREATE_TEST_FUNC(test_nextPermutation)
         );
     }
 }

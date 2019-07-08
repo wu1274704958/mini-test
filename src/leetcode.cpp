@@ -24,4 +24,5 @@ int main(int argc,char **argv) {
         wws::RunFuncNoArgs(MAEK_IS_TUPLE_SIZE(tup), tup, a);
         std::cout << std::endl;
     }
+	return 0;
 }
