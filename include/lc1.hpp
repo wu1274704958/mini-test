@@ -408,6 +408,47 @@ namespace lc1{
 		dbg(_1);
 	}
 
+	int longestValidParentheses(std::string s) {
+		int dpl = s.size();
+		int* dp = new int[dpl];
+		memset(dp, 0, sizeof(int) * dpl);
+		int res = 0;
+		for (int i = 1; i < dpl; ++i)
+		{
+			if (s[i] == ')')
+			{
+				if (s[i - 1] == '(')
+				{
+					if (i > 1)
+					{
+						dp[i] = dp[i - 2] + 2;
+					}
+					else {
+						dp[i] = 2;
+					}
+				}
+				else if (i > 1 && s[i - 1] == ')' && (i - dp[i - 1] - 1) >= 0 && s[i - dp[i - 1] - 1] == '(')
+				{
+					dp[i] = dp[i - 1] + ( (i - dp[i - 1]) >= 2 ? dp[i - dp[i - 1] - 2] : 0 ) + 2;
+				}
+			}
+			if (dp[i] > res) res = dp[i];
+		}
+		delete[] dp;
+		return res;
+	}
+
+	void test_longestValidParentheses()
+	{
+		auto f = longestValidParentheses;
+		dbg(f("()()()(()))"));
+		dbg(f("()()"));
+		dbg(f("()(()"));
+		dbg(f(")))(((("));
+		dbg(f("(((()))"));
+		dbg(f("(()())"));
+	}
+
     auto init()
     {
         return  wws::CreateTFArray(
@@ -416,7 +457,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_strStr),
 			CREATE_TEST_FUNC(test_divide),
 			CREATE_TEST_FUNC(test_findSubstring),
-			CREATE_TEST_FUNC(test_nextPermutation)
+			CREATE_TEST_FUNC(test_nextPermutation),
+			CREATE_TEST_FUNC(test_longestValidParentheses)
         );
     }
 }
