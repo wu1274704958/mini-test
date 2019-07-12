@@ -448,7 +448,25 @@ namespace lc1{
 		dbg(f("(((()))"));
 		dbg(f("(()())"));
 	}
-
+	int search(std::vector<int> nums, int target) {
+        int b = 0,e = nums.size() - 1,stage = 0;
+		while(b > e)
+		{
+			int m = (b + e) / 2;
+			if(!stage)
+			{
+				if(m
+			}else{
+				
+			}
+		}
+		
+    }
+	
+	void test_search() {
+        dbg(search({3,4,5,1,2,3},3));
+    }
+	
     auto init()
     {
         return  wws::CreateTFArray(
@@ -458,7 +476,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_divide),
 			CREATE_TEST_FUNC(test_findSubstring),
 			CREATE_TEST_FUNC(test_nextPermutation),
-			CREATE_TEST_FUNC(test_longestValidParentheses)
+			CREATE_TEST_FUNC(test_longestValidParentheses),
+			CREATE_TEST_FUNC(test_search)
         );
     }
 }
