@@ -449,22 +449,58 @@ namespace lc1{
 		dbg(f("(()())"));
 	}
 	int search(std::vector<int> nums, int target) {
+		if (nums.size() == 1 && nums[0] == target) return 0;
         int b = 0,e = nums.size() - 1,stage = 0;
-		while(b > e)
+		while(b < e)
 		{
 			int m = (b + e) / 2;
+			if (nums[b] == target) return b;
+			if (nums[e] == target) return e;
+			if (nums[m] == target) return m;
+			if (m == b || m == e) break;
 			if(!stage)
 			{
-				if(m
+				if (nums[m] > nums[0]) // 0 - m order
+				{
+					if (nums[0] < target && nums[m] > target)
+					{
+						stage = 1;
+						e = m;
+					}
+					else {
+						b = m;
+					}
+				}
+				else
+				{
+					if (nums[m] < target && nums[e] > target)
+					{
+						stage = 1;
+						b = m;
+					}
+					else {
+						e = m;
+					}
+				}
 			}else{
-				
+				if (target > nums[m])
+				{
+					b = m;
+				}
+				else {
+					e = m;
+				}
 			}
 		}
-		
+		return -1;
     }
 	
 	void test_search() {
-        dbg(search({3,4,5,1,2,3},3));
+        dbg(search({3,4,5,0,1,2},3));
+		dbg(search({ 0,1,2,3,4,5 }, 3));
+		dbg(search({ 4,5,0,1,2,3 }, 7));
+		dbg(search({ 4,5,6,7,8,2,3 }, 2));
+		dbg(search({ 1 }, 1));
     }
 	
     auto init()
