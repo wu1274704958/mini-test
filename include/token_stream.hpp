@@ -174,14 +174,19 @@ namespace token {
 					if (c == ' ' ||
 						c == '.' ||
 						c == ',' || 
-						c == '\t' )
+						c == '\t'||
+						c == '=' ||
+						c == '+')
 					{
 						switch (stage)
 						{
 						case 0:
 							t.per = c;
-							while (iter.has_next() && (c = iter.next()) == ' ') {}
-							not_take = true;
+							if (c == ' ')
+							{
+								while (iter.has_next() && (c = iter.next()) == ' ') {}
+								not_take = true;
+							}
 							++stage;
 							break;
 						case 1:
