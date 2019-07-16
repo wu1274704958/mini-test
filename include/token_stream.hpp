@@ -141,7 +141,8 @@ namespace token {
 						c = iter.next();
 					else
 						not_take = false;
-					if (c == '\r') continue;
+					if (c == '\r' ||
+						c == -1) continue;
 					if (c == '"' ||
 						c == '\'')
 					{
@@ -252,6 +253,68 @@ namespace token {
 			{
 				throw e;
 			}
+		}
+
+		bool save(std::string& path,bool o = false)
+		{
+			namespace fs = std::filesystem;
+			fs::path p(path);
+			if (fs::exists(p))
+			{
+				if (o )
+				{
+					fs::remove(p);
+					std::ofstream os(p.generic_string(), std::ios::binary);
+					return save_(os);
+				}
+				else
+					return false;
+			}
+			else {
+				std::ofstream os(p.generic_string(), std::ios::binary);
+				return save_(os);
+			}
+		}
+
+	private:
+		bool save_(std::ofstream& os)
+		{
+#ifdef WIN32
+			const char *enter = "\r\n";
+			const long long enter_len = 2;
+#else
+			const char *enter = "\n";
+			const long long enter_len = 1;
+#endif // WIN32
+			for (auto& t : tokens)
+			{
+				if (!t.per_is_none())
+				{
+					if (t.per == '\n')
+					{
+						os.write(enter, enter_len);
+					}
+					else {
+						os.write(&t.per, 1);
+					}
+				}
+				if (t.body.size() > 0)
+				{
+					os.write(t.body.data(), t.body.size());
+				}
+				if (!t.back_is_none())
+				{
+					if (t.back == '\n')
+					{
+						os.write(enter, enter_len);
+					}
+					else {
+						os.write(&t.back, 1);
+					}
+				}
+			}
+			os.flush();
+			return true;
 		}
 	};
 

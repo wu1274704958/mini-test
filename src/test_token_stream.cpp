@@ -54,6 +54,8 @@ int main(int argc,char **argv)
 			{
 				std::cout << s << "\n";
 			}
+			std::string out = "C:/Users/admin/Desktop/test2.js";
+			ts.save(out,true);
 		}
 	}
 	
