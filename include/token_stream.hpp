@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 namespace token {
 
@@ -64,10 +65,20 @@ namespace token {
 	inline std::ostream& operator<<(std::ostream& out, Token &t)
 	{
 		if (!t.per_is_none())
-			out << '\'' << t.per << '\'';
+		{
+			if(t.per == '\n')
+				out << '\'' << "\\n" << '\'';
+			else
+				out << '\'' << t.per << '\'';
+		}
 		out << t.body;
 		if (!t.back_is_none())
-			out << '\'' << t.back << '\'';
+		{
+			if (t.back == '\n')
+				out << '\'' << "\\n" << '\'';
+			else
+				out << '\'' << t.back << '\'';
+		}
 		return out;
 	}
 
@@ -99,18 +110,70 @@ namespace token {
 				}
 			}
 		}
+		bool is_token(char c)
+		{
+			return
+				c == '\'' ||
+				c == '"' ||
+				c == ' ' ||
+				c == '.' ||
+				c == ',' ||
+				c == '\t' ||
+				c == '(' ||
+				c == '{' ||
+				c == '<' ||
+				c == '[' ||
+				c == ')' ||
+				c == '}' ||
+				c == '>' ||
+				c == ']' ||
+				c == ';' ||
+				c == '\n';
+		}
 		Token get_next_token() noexcept(false)
 		{
 			try {
 				Token t;
 				int stage = 0;
-				while (iter.has_next())
+				while (not_take || iter.has_next())
 				{
 					if (!not_take)
 						c = iter.next();
 					else
 						not_take = false;
-					if (c == ' ')
+					if (c == '\r') continue;
+					if (c == '"' ||
+						c == '\'')
+					{
+						char temp = 0;
+						switch (stage)
+						{
+						case 0:
+							t.per = c;
+							while (iter.has_next() && (temp = iter.next()) != c) {
+								t.body += temp;
+							}
+							if (is_token(temp))
+							{
+								t.back = temp;
+								stage = 2;
+							}
+							else {
+								not_take = true;
+								stage = 1;
+							}
+							break;
+						case 1:
+							t.none_back();
+							++stage;
+							not_take = true;
+							break;
+						}
+					}else
+					if (c == ' ' ||
+						c == '.' ||
+						c == ',' || 
+						c == '\t' )
 					{
 						switch (stage)
 						{
@@ -125,6 +188,40 @@ namespace token {
 							++stage;
 							break;
 						}
+					}else
+					if (c == '(' ||
+						c == '{' ||
+						c == '<' ||
+						c == '[')
+					{
+						switch (stage)
+						{
+						case 0:
+							t.per = c;
+							while (iter.has_next() && (c = iter.next()) == ' ') {}
+							not_take = true;
+							++stage;
+							break;
+						case 1:
+							t.none_back();
+							++stage;
+							not_take = true;
+							break;
+						}
+					}
+					else
+					if (c == ')' ||
+						c == '}' ||
+						c == '>' ||
+						c == ']' ||
+						c == ';' ||
+						c == '\n'
+					 )
+					{
+						if (stage == 0)
+							t.none_per();
+						t.back = c;
+						stage = 2;
 					}else
 					{
 						if (stage == 0)
@@ -179,6 +276,29 @@ namespace token {
 		bool has_next()
 		{
 			return i < str.size();
+		}
+	};
+
+	template<>
+	struct CharIter<std::ifstream>
+	{
+		std::ifstream str;
+		CharIter(std::ifstream s) : str(std::move(s)) { }
+
+		char next() noexcept(false)
+		{
+			if (!has_next())
+			{
+				throw NoNextErr();
+			}
+			else {
+				return str.get();
+			}
+		}
+
+		bool has_next()
+		{
+			return !str.eof();
 		}
 	};
 
