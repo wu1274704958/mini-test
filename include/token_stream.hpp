@@ -254,7 +254,9 @@ namespace token {
 				throw e;
 			}
 		}
-
+		/*
+		* o is 如果文件已存在是否重写
+		**/
 		bool save(std::string& path,bool o = false)
 		{
 			namespace fs = std::filesystem;
