@@ -191,6 +191,11 @@ namespace token {
 							break;
 						case 1:
 							t.back = c;
+							if (c == ' ')
+							{
+								while (iter.has_next() && (c = iter.next()) == ' ') {}
+								not_take = true;
+							}
 							++stage;
 							break;
 						}
