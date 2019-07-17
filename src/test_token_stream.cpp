@@ -128,7 +128,6 @@ void confound_js<T>(TokenStream<T>& ts)
 		if (curr.per == '{' && if_stage == 2)
 		{
 			if_stage = 3;
-			deep = 1;
 		}
 		if (curr.per == '{' && if_stage == 3)
 		{
