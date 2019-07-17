@@ -19,7 +19,7 @@ int main(int argc,char **argv)
 	Token t3("wws", Token::None, '>');
 	dbg(t3);
 
-	/*if (argc <= 1)
+	if (argc <= 1)
 	{
 		TokenStream<std::string> ts("var a = 30;\n"
 		"	var b = function()\n"
@@ -34,11 +34,11 @@ int main(int argc,char **argv)
 			std::cout << s << "\n";
 		}
 	}
-	else*/
+	else
 	{
 		namespace fs = std::filesystem;
-		//fs::path f(argv[1]);
-		fs::path f("C:/Users/admin/Desktop/test.js");
+		fs::path f(argv[1]);
+		//fs::path f("C:/Users/admin/Desktop/test.js");
 		if (fs::exists(f))
 		{
 			auto path = f.generic_string();
