@@ -279,7 +279,7 @@ namespace token {
 			{
 				if (o )
 				{
-					fs::remove(p);
+					//fs::remove(p);
 					std::ofstream os(p.generic_string(), std::ios::binary);
 					return save_(os);
 				}
