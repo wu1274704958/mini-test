@@ -29,6 +29,7 @@ add_executable(test_ts src/test_token_stream.cpp)
 add_executable(no_trans src/NoTrans.cpp)
 add_executable(rm_pkg src/rm_pkg.cpp)
 add_executable(no_trans_am src/no_trans_am.cpp)
+add_executable(m_pkg_name src/m_pkg_name.cpp)
 
 #add_subdirectory(test)
 #enable_testing()
