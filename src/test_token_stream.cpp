@@ -268,12 +268,16 @@ void confound_as(std::vector<Token>& ts)
 				g_map[s[i + 1].body] = line_n;
 				++line_n;
 			}
-			else {
-				l_map[s[i + 1].body] = l_line_n;
-				++l_line_n;
-			}
 			continue;
 		}
+
+		if (if_stage > 0 && curr.body == "var")
+		{
+			l_map[s[i + 1].body] = l_line_n;
+			++l_line_n;
+		}
+
+
 		for (auto it = g_map.begin(); it != g_map.end(); ++it)
 		{
 			if (it->first == curr.body && curr.per != '"' && curr.back != '"')
