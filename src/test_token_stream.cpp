@@ -21,7 +21,7 @@ int main(int argc,char **argv)
 	Token t3("wws", Token::None, '>');
 	dbg(t3);
 
-	if (argc <= 1)
+	/*if (argc <= 1)
 	{
 		TokenStream<std::string> ts("var a = 30;\n"
 		"	var b = function()\n"
@@ -37,10 +37,11 @@ int main(int argc,char **argv)
 			std::cout << s << "\n";
 		}
 	}
-	else
+	else*/
 	{
 		namespace fs = std::filesystem;
-		fs::path f(argv[1]);
+		//fs::path f(argv[1]);
+		fs::path f("C:\\Users\\wushu\\Desktop\\HallView.as");
 		int is_support = 0;
 		if (f.has_extension())
 		{
@@ -53,7 +54,7 @@ int main(int argc,char **argv)
 			dbg(is_support);
 		}
 		
-		//fs::path f("C:/Users/admin/Desktop/test.js");
+		
 		if (fs::exists(f) && is_support > 0)
 		{
 			auto path = f.generic_string();
@@ -214,6 +215,7 @@ void confound_as(std::vector<Token>& ts)
 	std::unordered_map<std::string, int> l_map;
 	int if_stage = 0;
 	int deep = 0;
+	bool def_var = false;
 	for (int i = 0; i < ts.size(); ++i)
 	{
 		auto& s = ts;
@@ -268,6 +270,7 @@ void confound_as(std::vector<Token>& ts)
 				g_map[s[i + 1].body] = line_n;
 				++line_n;
 			}
+			def_var = true;
 			continue;
 		}
 
@@ -275,8 +278,26 @@ void confound_as(std::vector<Token>& ts)
 		{
 			l_map[s[i + 1].body] = l_line_n;
 			++l_line_n;
+			
+			def_var = true;
+			continue;
 		}
 
+		if (def_var)
+		{
+			if (curr.per == ',' && s[i].body != "")
+			{
+				l_map[s[i].body] = l_line_n;
+				++l_line_n;
+
+			}else
+			if (curr.back == ',' && s[i + 1].body != "")
+			{
+				l_map[s[i + 1].body] = l_line_n;
+				++l_line_n;
+			}
+			def_var =  !( curr.back == '\n' || curr.back == ';');
+		}
 
 		for (auto it = g_map.begin(); it != g_map.end(); ++it)
 		{
