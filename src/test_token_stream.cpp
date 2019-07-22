@@ -21,7 +21,7 @@ int main(int argc,char **argv)
 	Token t3("wws", Token::None, '>');
 	dbg(t3);
 
-	/*if (argc <= 1)
+	if (argc <= 1)
 	{
 		TokenStream<std::string> ts("var a = 30;\n"
 		"	var b = function()\n"
@@ -37,11 +37,11 @@ int main(int argc,char **argv)
 			std::cout << s << "\n";
 		}
 	}
-	else*/
+	else
 	{
 		namespace fs = std::filesystem;
-		//fs::path f(argv[1]);
-		fs::path f("C:\\Users\\wushu\\Desktop\\HallView.as");
+		fs::path f(argv[1]);
+		//fs::path f("C:\\Users\\wushu\\Desktop\\HallView.as");
 		int is_support = 0;
 		if (f.has_extension())
 		{
@@ -303,7 +303,17 @@ void confound_as(std::vector<Token>& ts)
 		{
 			if (it->first == curr.body && curr.per != '"' && curr.back != '"')
 			{
-				curr.body = get_under_line(it->second);
+				if (s[i - 1].back == '.')
+				{
+					if (s[i - 1].body == "this")
+					{
+						curr.body = get_under_line(it->second);
+					}
+				}
+				else
+				{
+					curr.body = get_under_line(it->second);
+				}
 			}
 		}
 
@@ -314,7 +324,17 @@ void confound_as(std::vector<Token>& ts)
 			{
 				if (it->first == curr.body && curr.per != '"' && curr.back != '"')
 				{
-					curr.body = get_under_line(it->second);
+					if (s[i - 1].back == '.')
+					{
+						if (s[i - 1].body == "this")
+						{
+							curr.body = get_under_line(it->second);
+						}
+					}
+					else
+					{
+						curr.body = get_under_line(it->second);
+					}
 				}
 			}
 		}
