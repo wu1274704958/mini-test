@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 	}
 
 	fs::path f(argv[1]);
-	//fs::path f("C:/Users/admin/Desktop/Ö÷Ô×´«ÆæBT°æ_5535£¨°®È¤£©_5.6_201907172014/AndroidManifest.xml");
+	//fs::path f("C:\\Users\\admin\\Desktop\\qk_sub_pass\\out\\AndroidManifest.xml");
 	if (fs::exists(f))
 	{
 		std::ifstream is(f.generic_string(), std::ios::binary);
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 void no_trans_am(std::vector<Token>& ts)
 {
 	bool in_activity = false;
-	bool is_login = false;
+	//bool is_login = false;
 	for (int i = 0; i < ts.size() - 1; ++i)
 	{
 		auto& t = ts[i];
@@ -53,17 +53,18 @@ void no_trans_am(std::vector<Token>& ts)
 		if (in_activity && t.back == '>')
 		{
 			in_activity = false;
-			is_login = false;
+			//is_login = false;
 		}
 
-		if (in_activity && t.body == "android:name" && t.back == '=')
+		/*if (in_activity && t.body == "android:name" && t.back == '=')
 		{
 			is_login = ts[i + 1].body.find("Login") != std::string::npos;
-		}
+		}*/
 
-		if (in_activity && is_login && t.body == "android:theme" && t.back == '=')
+		if (in_activity && t.body == "theme" && t.back == '=')
 		{
-			if ((ts[i + 1].body.find("@android:style") != std::string::npos) ) //
+			bool temp = ts[i + 1].body.find("@android:style") != std::string::npos;
+			if (temp) //
 			{
 				std::string::size_type s;
 				if ((s = ts[i + 1].body.find("Translucent")) != std::string::npos)
