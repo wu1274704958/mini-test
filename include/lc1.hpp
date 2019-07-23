@@ -572,6 +572,16 @@ namespace lc1{
 		V v2 = { 5,7,7,8,8,10 };
 		dbg(searchRange(v2, 6));
 	}
+
+	void test_da_duan()
+	{
+		int a = 0x01020304;
+		char  *p = (char *)&a;
+		if (p[0] > p[1])
+			printf("´ó¶Ë\n");
+		else
+			printf("Ð¡¶Ë\n");
+	}
 	
     auto init()
     {
@@ -584,7 +594,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_nextPermutation),
 			CREATE_TEST_FUNC(test_longestValidParentheses),
 			CREATE_TEST_FUNC(test_search),
-			CREATE_TEST_FUNC(test_searchRange)
+			CREATE_TEST_FUNC(test_searchRange),
+			CREATE_TEST_FUNC(test_da_duan)
         );
     }
 }
