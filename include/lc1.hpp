@@ -502,6 +502,76 @@ namespace lc1{
 		dbg(search({ 4,5,6,7,8,2,3 }, 2));
 		dbg(search({ 1 }, 1));
     }
+	template<bool left>
+	int searchRange_find(std::vector<int>& nums, int target, int b_ = 0)
+	{
+		int b = b_;
+		int e = nums.size() - 1;
+		while (b <= e)
+		{
+			int mid = (b + e) / 2;
+			if (nums[mid] == target)
+			{
+				if constexpr (left) {
+					if (mid > 0)
+					{
+						if (nums[mid - 1] == target)
+						{
+							e = mid - 1;
+						}
+						else {
+							return mid;
+						}
+					}
+					else {
+						return mid;
+					}
+				}
+				else {//right
+					if (mid < nums.size() - 1)
+					{
+						if (nums[mid + 1] == target)
+						{
+							b = mid + 1;
+						}
+						else {
+							return mid;
+						}
+					}
+					else {
+						return mid;
+					}
+				}
+
+			}
+			else if (nums[mid] > target)
+			{
+				e = mid - 1;
+			}
+			else {
+				b = mid + 1;
+			}
+		}
+		return -1;
+	}
+
+	std::vector<int> searchRange(std::vector<int>& nums, int target) {
+		std::vector<int> res = { -1,-1 };
+		res[0] = searchRange_find<true>(nums, target);
+		if (res[0] == -1)
+			return res;
+		res[1] = searchRange_find<false>(nums, target, res[0]);
+		return res;
+	}
+
+	void test_searchRange()
+	{
+		typedef std::vector<int> V;
+		V v1 = { 1,4,6,7,7,7,7,7,8,9 };
+		dbg(searchRange(v1,7));
+		V v2 = { 5,7,7,8,8,10 };
+		dbg(searchRange(v2, 6));
+	}
 	
     auto init()
     {
@@ -513,7 +583,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_findSubstring),
 			CREATE_TEST_FUNC(test_nextPermutation),
 			CREATE_TEST_FUNC(test_longestValidParentheses),
-			CREATE_TEST_FUNC(test_search)
+			CREATE_TEST_FUNC(test_search),
+			CREATE_TEST_FUNC(test_searchRange)
         );
     }
 }
