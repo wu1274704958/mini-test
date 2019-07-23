@@ -300,7 +300,7 @@ namespace lc1{
 							++m2[temp];
 						else
 							m2[temp] = 1;
-						if (m2[temp] > m1[temp]) //Óöµ½·ûºÏµÄµ¥´Ê µ«ÊÇ³¬ÁË
+						if (m2[temp] > m1[temp]) //é‡åˆ°ç¬¦åˆçš„å•è¯ ä½†æ˜¯è¶…äº†
 						{
 							int remove_num = 0;
 							has_removed = true;
@@ -315,7 +315,7 @@ namespace lc1{
 							break;
 						}
 					}
-					else {//Óöµ½ÁË´íÎóµÄµ¥´Ê
+					else {//é‡åˆ°äº†é”™è¯¯çš„å•è¯
 						m2.clear();
 						b = b + hwn * wl;
 						hwn = 0;
@@ -578,9 +578,9 @@ namespace lc1{
 		int a = 0x01020304;
 		char  *p = (char *)&a;
 		if (p[0] > p[1])
-			printf("´ó¶Ë\n");
+			printf("big\n");
 		else
-			printf("Ð¡¶Ë\n");
+			printf("smail\n");
 	}
 	
     auto init()
