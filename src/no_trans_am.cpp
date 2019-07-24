@@ -70,6 +70,10 @@ void no_trans_am(std::vector<Token>& ts)
 				if ((s = ts[i + 1].body.find("Translucent")) != std::string::npos)
 				{
 					ts[i + 1].body.erase(s, 12);
+					if (ts[i + 1].body.back() == '.')
+					{
+						ts[i + 1].body.append("NoTitleBar.Fullscreen");
+					}
 				}
 			}
 		}
