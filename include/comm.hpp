@@ -31,7 +31,7 @@ namespace wws {
 	using detected_t = typename detector<nonesuch, void, Op, Args...>::type;
 
 
-	constexpr bool big_endian()
+    inline bool big_endian()
 	{
 		union Temp
 		{
@@ -40,7 +40,7 @@ namespace wws {
 		};
 
 		constexpr Temp temp = {1};
-		if (temp._2[0] == static_cast<char>(1))
+		if(temp._2[0] == static_cast<char>(1))
 			return true;
 		else
 			return false;
