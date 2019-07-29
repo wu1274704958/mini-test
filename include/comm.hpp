@@ -47,4 +47,23 @@ namespace wws {
 		else
 			return false;
 	}
+
+	template <typename T,typename = std::enable_if_t<std::is_integral_v<T>>>
+	T reverse_byte(T t)
+	{
+		int len = static_cast<int>(sizeof(T));
+		char *p = reinterpret_cast<char*>(&t);
+		int e = len - 1;
+		int b = 0;
+		while ( b < e )
+		{
+			char temp = p[b];
+			p[b] = p[e];
+			p[e] = temp;
+
+			++b;
+			--e;
+		}
+		return t;
+	}
 }

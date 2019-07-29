@@ -43,10 +43,10 @@ template<typename T,typename = std::enable_if_t<std::is_integral_v<T> || std::is
 void printBin(T b)
 {
 	size_t len = sizeof(T) * 8 - 1;
-	T K = ((T)1) << len;
+	T K = static_cast<T>(1) << len;
 	for(int i = len;i >= 0;i--)
 	{
-		if( (K & (b << (len - i))) == 0)
+		if( (K & static_cast<T>(b << (len - i))) == 0)
 		{
 			printf("%c",'0');
 		}else{

@@ -13,6 +13,7 @@
 #include <map>
 #include <unordered_map>
 #include <comm.hpp>
+#include <gray.hpp>
 
 namespace lc1{
 
@@ -579,6 +580,22 @@ namespace lc1{
 		std::cout << std::boolalpha;
 		std::cout << wws::big_endian() << std::endl;
 	}
+
+	void test_reverse_byte()
+	{
+		int a = 0x01020304;
+		printBin(a);
+		a = wws::reverse_byte(a);
+		printBin(a);
+
+		short b = 0x1122;
+		printBin(b);
+		b = wws::reverse_byte(b);
+		printBin(b);
+
+		char c = 8;
+		printBin(c);
+	}
 	
     auto init()
     {
@@ -592,7 +609,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_longestValidParentheses),
 			CREATE_TEST_FUNC(test_search),
 			CREATE_TEST_FUNC(test_searchRange),
-			CREATE_TEST_FUNC(test_big_endina)
+			CREATE_TEST_FUNC(test_big_endina),
+			CREATE_TEST_FUNC(test_reverse_byte)
         );
     }
 }
