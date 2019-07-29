@@ -12,6 +12,7 @@
 #include <print_stl.hpp>
 #include <map>
 #include <unordered_map>
+#include <comm.hpp>
 
 namespace lc1{
 
@@ -573,14 +574,10 @@ namespace lc1{
 		dbg(searchRange(v2, 6));
 	}
 
-	void test_da_duan()
+	void test_big_endina()
 	{
-		int a = 0x01020304;
-		char  *p = (char *)&a;
-		if (p[0] > p[1])
-			printf("big\n");
-		else
-			printf("smail\n");
+		std::cout << std::boolalpha;
+		std::cout << wws::big_endian() << std::endl;
 	}
 	
     auto init()
@@ -595,7 +592,7 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_longestValidParentheses),
 			CREATE_TEST_FUNC(test_search),
 			CREATE_TEST_FUNC(test_searchRange),
-			CREATE_TEST_FUNC(test_da_duan)
+			CREATE_TEST_FUNC(test_big_endina)
         );
     }
 }
