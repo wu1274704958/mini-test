@@ -35,12 +35,14 @@ namespace wws {
 	{
 		union Temp
 		{
-			int _1;
-			char _2[4];
-		};
+			short _1;
+			char _2[2];
+		} temp;
 
-		constexpr Temp temp = {1};
-		if(temp._2[0] == static_cast<char>(1))
+		temp._2[0] = 0x11;
+		temp._2[1] = 0x22;
+		
+		if(temp._1 == static_cast<short>(0x1122))
 			return true;
 		else
 			return false;
