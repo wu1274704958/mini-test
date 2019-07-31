@@ -115,6 +115,12 @@ namespace wws{
 		return std::forward<std::tuple<Args...>>(tup);
 	}
 }
-
+#ifndef dbg
 #define dbg(...)  wws::dbg_func(#__VA_ARGS__,__FILE__,__LINE__,(__VA_ARGS__))
+#endif // !dbg
+
+#ifndef dbgv
 #define dbgv(...) wws::dbg_func(#__VA_ARGS__,__FILE__,__LINE__,wws::V())
+#endif // !dbgv
+
+
