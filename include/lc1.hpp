@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <comm.hpp>
 #include <gray.hpp>
+#include <serialization.hpp>
 
 namespace lc1{
 
@@ -637,6 +638,20 @@ namespace lc1{
 	{
 		dbg(searchInsert({ 1,3,5,6 }, 3));
 	}
+
+	void test_parser()
+	{
+		std::string s1 = "189";
+		std::string s2 = "-902";
+		std::string s3 = "1.89";
+		std::string s4 = "4294967295";
+
+		dbg(wws::parser<int>(s1));
+		dbg(wws::parser<int>(s2));
+		dbg(wws::parser<float>(s3));
+		dbg(wws::parser<unsigned int>(s4));
+		dbg(wws::parser<short>(s1));
+	}
 	
     auto init()
     {
@@ -652,7 +667,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_searchRange),
 			CREATE_TEST_FUNC(test_big_endina),
 			CREATE_TEST_FUNC(test_reverse_byte),
-			CREATE_TEST_FUNC(test_searchInsert)
+			CREATE_TEST_FUNC(test_searchInsert),
+			CREATE_TEST_FUNC(test_parser)
         );
     }
 }
