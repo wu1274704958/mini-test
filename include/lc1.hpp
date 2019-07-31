@@ -596,6 +596,47 @@ namespace lc1{
 		char c = 8;
 		printBin(c);
 	}
+
+	int searchInsert(std::vector<int> nums, int target) {
+		int b = 0;
+		int e = nums.size() - 1;
+		if (target < nums[b])
+			return 0;
+		if (target > nums[e])
+			return e + 1;
+		while (b < e)
+		{
+			//std::cout << b << " " << e << std::endl;
+			if (nums[b] == target)
+				return b;
+			if (nums[e] == target)
+				return e;
+			if (e - b == 1)
+			{
+				if (nums[b] < target && nums[e] > target)
+				{
+					return e;
+				}
+			}
+			int m = (b + e) / 2;
+			if (nums[m] == target)
+			{
+				return m;
+			}
+			else if (nums[m] > target) {
+				e = m;
+			}
+			else {
+				b = m;
+			}
+		}
+		return 0;
+	}
+
+	void test_searchInsert()
+	{
+		dbg(searchInsert({ 1,3,5,6 }, 3));
+	}
 	
     auto init()
     {
@@ -610,7 +651,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_search),
 			CREATE_TEST_FUNC(test_searchRange),
 			CREATE_TEST_FUNC(test_big_endina),
-			CREATE_TEST_FUNC(test_reverse_byte)
+			CREATE_TEST_FUNC(test_reverse_byte),
+			CREATE_TEST_FUNC(test_searchInsert)
         );
     }
 }
