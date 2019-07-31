@@ -654,6 +654,31 @@ namespace lc1{
 		dbg(wws::parser<short>(s1));
 		dbg(wws::parser<int>(s5,16));
 	}
+
+	void test_seilza_to()
+	{
+		class MyClass
+		{
+		public:
+			int a;
+			float b;
+			std::string c;
+			long d;
+		};
+
+		MyClass mc{ 100,20.78f,"wws",988888 };
+		std::string res = wws::seilza_to_line(mc, &MyClass::a, &MyClass::b, &MyClass::c, &MyClass::d);
+		dbg(res);
+		
+		MyClass mc2;
+
+		wws::seilza_form_line(res, mc2, &MyClass::a, &MyClass::b, &MyClass::c, &MyClass::d);
+
+		dbg(mc2.a);
+		dbg(mc2.b);
+		dbg(mc2.c);
+		dbg(mc2.d);
+	}
 	
     auto init()
     {
@@ -670,7 +695,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_big_endina),
 			CREATE_TEST_FUNC(test_reverse_byte),
 			CREATE_TEST_FUNC(test_searchInsert),
-			CREATE_TEST_FUNC(test_parser)
+			CREATE_TEST_FUNC(test_parser),
+			CREATE_TEST_FUNC(test_seilza_to)
         );
     }
 }
