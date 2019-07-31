@@ -645,12 +645,14 @@ namespace lc1{
 		std::string s2 = "-902";
 		std::string s3 = "1.89";
 		std::string s4 = "4294967295";
+		std::string s5 = "ff";
 
 		dbg(wws::parser<int>(s1));
 		dbg(wws::parser<int>(s2));
 		dbg(wws::parser<float>(s3));
 		dbg(wws::parser<unsigned int>(s4));
 		dbg(wws::parser<short>(s1));
+		dbg(wws::parser<int>(s5,16));
 	}
 	
     auto init()

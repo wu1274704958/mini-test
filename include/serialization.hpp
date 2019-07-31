@@ -4,8 +4,8 @@
 
 namespace wws {
 
-	template<typename T,size_t _Base = 10,typename = std::enable_if_t< std::is_integral_v<T> || std::is_floating_point_v<T>>>
-	T parser(std::string& str)
+	template<typename T,typename = std::enable_if_t< std::is_integral_v<T> || std::is_floating_point_v<T>>>
+	T parser(std::string& str, size_t _Base = 10)
 	{
 		if constexpr (std::is_same_v<int, T> || std::is_same_v<short,T> || std::is_same_v<char,T> )
 		{
