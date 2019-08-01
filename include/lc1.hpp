@@ -678,6 +678,52 @@ namespace lc1{
 		dbg(mc2.b);
 		dbg(mc2.c);
 		dbg(mc2.d);
+
+		dbg(wws::is_std_list<int>::val);
+		dbg(wws::is_std_list<std::vector<int>>::val);
+
+		const std::string arr = "[90,321,56,32]";
+		std::vector<int> vs;
+		wws::parser_stl(arr,vs);
+
+		std::string arr_res = wws::to_string(vs);
+		dbg(arr_res);
+
+
+		class MyClass2
+		{
+		public:
+			int a;
+			float b;
+			std::string c;
+			std::vector<int> e;
+			std::list<std::string> f;
+			long d;
+		};
+
+		MyClass2 mc3;
+
+		mc3.a = 90;
+		mc3.b = 1.987f;
+		mc3.c = "asdajsid";
+		mc3.e = { 23,321,321412,1903 };
+		mc3.f = { "go","ahead","win" };
+		mc3.d = 31231213;
+
+		std::string res2 = wws::seilza_to_line(mc3, &MyClass2::a, &MyClass2::b, &MyClass2::c, &MyClass2::d, &MyClass2::e, &MyClass2::f);
+	
+		std::cout << res2;
+
+		MyClass2 mc4;
+
+		wws::seilza_form_line(res2,mc4, &MyClass2::a, &MyClass2::b, &MyClass2::c, &MyClass2::d, &MyClass2::e, &MyClass2::f);
+
+		 dbg(mc4.a);
+		 dbg(mc4.b);
+		 dbg(mc4.c);
+		 dbg(mc4.d);
+		 dbg(mc4.e);
+		 dbg(mc4.f);
 	}
 	
     auto init()

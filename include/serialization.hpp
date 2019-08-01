@@ -45,15 +45,91 @@ namespace wws {
 		}
 	}
 
+
+	template<typename T,template <typename T1, typename Alloc = std::allocator<T1>> class C>
+	void parser_stl(const std::string& str,C<T>& res)
+	{
+		int b = 0;
+		for (int i = 0; i < str.size(); ++i)
+		{
+			if (str[i] == '[') b += 1;
+			if (str[i] == ',' || str[i] == ']')
+			{
+				std::string temp = str.substr(b, i - b);
+				if constexpr (std::is_same_v<std::string, std::remove_cv_t<T>>)
+				{
+					res.push_back(std::move(temp));
+				}
+				else {
+					res.push_back(parser<T>(temp));
+				}
+				b = i + 1;
+			}
+		}
+	}
+
+	template<typename T>
+	struct is_std_list {
+		static constexpr bool val = false;
+	};
+
+	template<typename T,template <typename T1, typename Alloc = std::allocator<T1>> class C>
+	struct is_std_list<C<T>>
+	{
+		static constexpr bool val = true;
+	};
+
+
+	template<typename T, typename = std::enable_if_t<std::is_same_v<std::string, decltype(std::to_string(std::declval<T>()))>>>
+	std::string to_string(T t)
+	{
+		return std::to_string(t);
+	}
+
+	template<typename T,template <typename T1,typename Alloc = std::allocator<T1>> class C>
+	std::string to_string(C<T>& c)
+	{
+		std::string res;
+		res += "[";
+		size_t i = 0;
+		for (auto& n : c)
+		{
+			if (i == (c.size() - 1))
+			{
+				if constexpr (std::is_same_v<std::string, std::remove_cv_t<T>>)
+				{
+					res += n;
+				}
+				else {
+					res += to_string(n);
+				}
+			}
+			else
+			{
+				if constexpr(std::is_same_v<std::string, std::remove_cv_t<T>>)
+				{ 
+					res += n;
+				}
+				else {
+					res += to_string(n);
+				}
+				res += ',';
+			}
+			++i;
+		}
+		res += "]";
+		return res;
+	}
+
 	template<typename CLS,typename F , typename ...Chs>
 	void seilza_to_line_sub(std::string& res,CLS& cls,F CLS::* first, Chs CLS::* ... chs)
 	{
-		if constexpr (std::is_same_v<std::string, F>)
+		if constexpr (std::is_same_v<std::string, std::remove_cv_t<F>>)
 		{
 			res += cls.*first;
 		}
 		else {
-			res += std::to_string(cls.*first);
+			res += to_string(cls.*first);
 		}
 		
 		if constexpr (sizeof...(chs) > 0)
@@ -82,7 +158,12 @@ namespace wws {
 		{
 			cls.*first = std::move(ceils[index]); 
 		}
-		else {
+		else if constexpr (is_std_list<F>::val) {
+			F c;
+			parser_stl(ceils[index],c);
+			cls.*first = std::move(c);
+		}
+		else{
 			cls.*first = parser<F>(ceils[index]);
 		}
 		if constexpr (sizeof...(chs) > 0)
