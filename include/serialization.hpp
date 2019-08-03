@@ -56,6 +56,7 @@ namespace wws {
 			if (str[i] == ',' || str[i] == ']')
 			{
 				std::string temp = str.substr(b, i - b);
+				if (temp.empty()) continue;
 				if constexpr (std::is_same_v<std::string, std::remove_cv_t<T>>)
 				{
 					res.push_back(std::move(temp));
