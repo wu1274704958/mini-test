@@ -15,6 +15,7 @@
 #include <comm.hpp>
 #include <gray.hpp>
 #include <serialization.hpp>
+#include <json.hpp>
 
 namespace lc1{
 
@@ -725,6 +726,20 @@ namespace lc1{
 		 dbg(mc4.e);
 		 dbg(mc4.f);
 	}
+
+	void test_json()
+	{
+		std::string s = "{\n"
+			"a:   89 ,\n"
+			"b:  80 ,\n"
+			"c:        \"2222\"\n"
+			"}";
+		wws::Json j;
+		wws::Json j2(s);
+
+		std::string s2 = "{a:89,b:80,c:\"2222\",d:{a:89,b:80,c:\"2222\"}}";
+		wws::Json j3(s2);
+	}
 	
     auto init()
     {
@@ -742,7 +757,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_reverse_byte),
 			CREATE_TEST_FUNC(test_searchInsert),
 			CREATE_TEST_FUNC(test_parser),
-			CREATE_TEST_FUNC(test_seilza_to)
+			CREATE_TEST_FUNC(test_seilza_to),
+			CREATE_TEST_FUNC(test_json)
         );
     }
 }
