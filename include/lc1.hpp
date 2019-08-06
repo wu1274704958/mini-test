@@ -737,7 +737,7 @@ namespace lc1{
 		wws::Json j;
 		wws::Json j2(s);*/
 
-		std::string s2 = "{a:89,b:80,c:\"2222\",d:{a:89,b:80,c:\"2222\",nc : 90.0, bg  :  {go: 90.90,jj\n  :\n  \"oooo\" } }}";
+		std::string s2 = "{a:89,b:80,c:\"2222\",d:{a:89,b:80,c:\"2222\",nc : 90.0, bg  :  {go: 90.90,jj\n  :\n  \"oooo\" } }, arr : [1, 2,32,90,8989]  }";
 		wws::Json j3(s2);
 	}
 	

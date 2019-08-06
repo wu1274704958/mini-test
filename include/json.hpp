@@ -33,8 +33,28 @@ namespace wws {
 						insert_ch(ts, key, i);
 						++i;
 						stage = 0;
+						continue;
 					}else
 						++deep;
+				}
+
+				if (stage == 1 && curr.per == '[')
+				{
+					std::string temp;
+					while (true)
+					{
+						if (ts[i].per == '[' || ts[i].per == ',')
+							temp += ts[i].per;
+						if (!ts[i].body.empty())
+							temp += ts[i].body;
+						if (ts[i].back == ']' || ts[i].back == ',')
+							temp += ts[i].back;
+						if (ts[i].back == ']')
+							break;
+						++i;
+					}
+					data.insert(std::pair(std::move(key), std::move(temp)));
+					continue;
 				}
 
 				if (stage == 1 && !curr.body.empty())
@@ -49,7 +69,8 @@ namespace wws {
 						++i;
 					}
 					else {
-						data.insert(std::pair(std::move(key), std::move(curr.body)));
+						std::string temp = curr.body;
+						data.insert(std::pair(std::move(key), std::move(temp)));
 					}
 					stage = 0;
 					continue;
