@@ -729,15 +729,15 @@ namespace lc1{
 
 	void test_json()
 	{
-		std::string s = "{\n"
+		/*std::string s = "{\n"
 			"a:   89 ,\n"
 			"b:  80 ,\n"
 			"c:        \"2222\"\n"
 			"}";
 		wws::Json j;
-		wws::Json j2(s);
+		wws::Json j2(s);*/
 
-		std::string s2 = "{a:89,b:80,c:\"2222\",d:{a:89,b:80,c:\"2222\"}}";
+		std::string s2 = "{a:89,b:80,c:\"2222\",d:{a:89,b:80,c:\"2222\",nc : 90.0, bg  :  {go: 90.90,jj\n  :\n  \"oooo\" } }}";
 		wws::Json j3(s2);
 	}
 	
