@@ -10,6 +10,11 @@ namespace wws {
 		BadJsonErr() : exception("Bad Json string!!!") {}
 	};
 
+	struct BadKeyErr : public std::exception
+	{
+		BadKeyErr() : exception("Bad key !!!") {}
+	};
+
 	class Json {
 		std::unordered_map<std::string,std::string> data;
 		std::unordered_map<std::string,Json> chs;
@@ -116,6 +121,76 @@ namespace wws {
 			}
 			chs.insert(std::pair(std::move(key), Json(temp)));
 		}
+public:
+		template<typename T>
+		T get(std::string& key)
+		{
+			if (data.find(key) == data.end())
+			{
+				throw BadKeyErr();
+			}
+			if constexpr (std::is_same_v<T, std::string>)
+			{
+				return data[key];
+			}
+			else {
+				return wws::parser<T>(data[key]);
+			}
+		}
+
+		template<typename T>
+		T get(std::string&& key)
+		{
+			return get<T>(key);
+		}
+
+		std::string& get_str(std::string& key) 
+		{
+			if (data.find(key) == data.end())
+			{
+				throw BadKeyErr();
+			}
+			return data[key];
+		}
+
+		std::string& get_str(std::string&& key)
+		{
+			return get_str(key);
+		}
+
+		Json& get_obj(std::string& key)
+		{
+			if (chs.find(key) == chs.end())
+			{
+				throw BadKeyErr();
+			}
+			return chs[key];
+		}
+
+		Json& get_obj(std::string&& key)
+		{
+			return get_obj(key);
+		}
+
+		template<typename T>
+		std::vector<T> get_arr(std::string& key)
+		{
+			if (data.find(key) == data.end())
+			{
+				throw BadKeyErr();
+			}
+			std::vector<T> res;
+			wws::parser_stl(data[key], res);
+			return res;
+		}
+
+		template<typename T>
+		std::vector<T> get_arr(std::string&& key)
+		{
+			return get_arr<T>(key);
+		}
+		
+
 	public:
 		Json() {}
 		Json(std::string& str) {

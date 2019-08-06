@@ -737,8 +737,17 @@ namespace lc1{
 		wws::Json j;
 		wws::Json j2(s);*/
 
-		std::string s2 = "{a:89,b:80,c:\"2222\",d:{a:89,b:80,c:\"2222\",nc : 90.0, bg  :  {go: 90.90,jj\n  :\n  \"oooo\" } }, arr : [1, 2,32,90,8989]  }";
+		std::string s2 = "{a : 89 , b : 80 , c : \"2222\" , d : {a:89,b:80,c:\"2222\",nc : 90.0, bg  :  {go: 90.90,jj\n  :\n  \"oooo\" } }, arr : [ 1 , 2 , 32 , 90 , 8989 ]  }";
 		wws::Json j3(s2);
+
+		dbg(j3.get<int>("a"));
+		dbg(j3.get<std::string>("c"));
+		std::string temp = "c";
+		dbg(j3.get_str(temp));
+		dbg(j3.get_obj("d").get<float>("nc"));
+		dbg(j3.get_obj("d").get_obj("bg").get<float>("go"));
+
+		dbg(j3.get_arr<int>("arr"));
 	}
 	
     auto init()
