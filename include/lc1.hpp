@@ -748,6 +748,14 @@ namespace lc1{
 		dbg(j3.get_obj("d").get_obj("bg").get<float>("go"));
 
 		dbg(j3.get_arr<int>("arr"));
+
+		std::vector<std::string> v1 = { "123123","wws","wt","love","you" };
+		
+		std::string res = wws::to_string(v1, true);
+		dbg(res);
+		std::vector<std::string> res_v;
+		wws::parser_stl(res, res_v);
+		dbg(res_v);
 	}
 	
     auto init()

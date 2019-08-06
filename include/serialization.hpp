@@ -55,7 +55,15 @@ namespace wws {
 			if (str[i] == '[') b += 1;
 			if (str[i] == ',' || str[i] == ']')
 			{
-				std::string temp = str.substr(b, i - b);
+				std::string temp;
+				if (std::is_same_v<std::string, std::remove_cv_t<T>> && (str[b] == '"' || str[b] == '\'') )
+				{
+					temp = str.substr(b + 1, (i - (b + 1)) - 1);
+				}
+				else {
+					temp = str.substr(b, i - b);
+				}
+				
 				if (temp.empty()) continue;
 				if constexpr (std::is_same_v<std::string, std::remove_cv_t<T>>)
 				{
@@ -88,32 +96,24 @@ namespace wws {
 	}
 
 	template<typename T,template <typename T1,typename Alloc = std::allocator<T1>> class C>
-	std::string to_string(C<T>& c)
+	std::string to_string(C<T>& c,bool has_qm = false)
 	{
 		std::string res;
 		res += "[";
 		size_t i = 0;
 		for (auto& n : c)
 		{
-			if (i == (c.size() - 1))
+			if constexpr (std::is_same_v<std::string, std::remove_cv_t<T>>)
 			{
-				if constexpr (std::is_same_v<std::string, std::remove_cv_t<T>>)
-				{
-					res += n;
-				}
-				else {
-					res += to_string(n);
-				}
+				if (has_qm) res += '"';
+				res += n;
+				if (has_qm) res += '"';
 			}
-			else
+			else {
+				res += to_string(n);
+			}
+			if (i != (c.size() - 1))
 			{
-				if constexpr(std::is_same_v<std::string, std::remove_cv_t<T>>)
-				{ 
-					res += n;
-				}
-				else {
-					res += to_string(n);
-				}
 				res += ',';
 			}
 			++i;
