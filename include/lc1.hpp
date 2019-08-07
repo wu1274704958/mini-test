@@ -729,13 +729,13 @@ namespace lc1{
 
 	void test_json()
 	{
-		/*std::string s = "{\n"
-			"a:   89 ,\n"
-			"b:  80 ,\n"
-			"c:        \"2222\"\n"
+		std::string s = "{\n"
+			"gh:   89 ,\n"
+			"ju:  80 ,\n"
+			"lo:        \"2222\"\n"
 			"}";
 		wws::Json j;
-		wws::Json j2(s);*/
+		wws::Json j2(s);
 
 		std::string s2 = "{a : 89 , b : 80 , c : \"2222\" , d : {a:89,b:80,c:\"2222\",nc : 90.0, bg  :  {go: 90.90,jj\n  :\n  \"oooo\" } }, arr : [ 1 , 2 , 32 , 90 , 8989 ]  }";
 		wws::Json j3(s2);
@@ -756,6 +756,28 @@ namespace lc1{
 		std::vector<std::string> res_v;
 		wws::parser_stl(res, res_v);
 		dbg(res_v);
+
+		std::string res2 = wws::to_string(v1);
+		dbg(res2);
+		std::vector<std::string> res_v2;
+		wws::parser_stl(res2, res_v2);
+		dbg(res_v2);
+		
+		j3.put("add", 78);
+		j3.put("adds", "wws");
+		std::vector<int> v2 = { 1009,23,2312,231231,4213 };
+		j3.put("arr2", v1);
+		j3.put("arr3", v2);
+
+		j3.put("j2", std::move(j2));
+
+		auto j3_str = dbg(j3.to_string());
+
+		wws::Json j4(j3_str);
+
+		auto j4_str = dbg(j4.to_string());
+
+		dbg(j3_str == j4_str);
 	}
 	
     auto init()

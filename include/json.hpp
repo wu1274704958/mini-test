@@ -36,7 +36,6 @@ namespace wws {
 						if (stage != 1 || key.empty())
 							throw BadJsonErr();
 						insert_ch(ts, key, i);
-						++i;
 						stage = 0;
 						continue;
 					}else
@@ -59,6 +58,7 @@ namespace wws {
 						++i;
 					}
 					data.insert(std::pair(std::move(key), std::move(temp)));
+					stage = 0;
 					continue;
 				}
 
@@ -74,7 +74,17 @@ namespace wws {
 						++i;
 					}
 					else {
-						std::string temp = curr.body;
+						std::string temp;
+						if ((curr.per == '"' && curr.back == '"') || (curr.per == '\'' && curr.back == '\''))
+						{
+							temp += curr.per;
+							temp += curr.body;
+							temp += curr.back;
+						}
+						else
+						{
+							temp += curr.body;
+						}
 						data.insert(std::pair(std::move(key), std::move(temp)));
 					}
 					stage = 0;
@@ -131,11 +141,25 @@ public:
 			}
 			if constexpr (std::is_same_v<T, std::string>)
 			{
-				return data[key];
+				std::string res = data[key];
+				remove_qm(res);
+				return res;
 			}
 			else {
 				return wws::parser<T>(data[key]);
 			}
+		}
+
+		void remove_qm(std::string& str)
+		{
+			str.erase(0, 1);
+			str.pop_back();
+		}
+
+		void insert_qm(std::string& str)
+		{
+			str.insert(0, 1, '"');
+			str += '"';
 		}
 
 		template<typename T>
@@ -188,6 +212,74 @@ public:
 		std::vector<T> get_arr(std::string&& key)
 		{
 			return get_arr<T>(key);
+		}
+
+		template<typename T>
+		Json& put(std::string&& key,T&& t)
+		{
+			if constexpr ( std::is_same_v<std::string, std::remove_reference_t<T>> )
+			{
+				insert_qm(t);
+				data[key] = t;
+			}
+			else {
+				data[key] = wws::to_string(std::forward<T>(t));
+			}
+			return *this;
+		}
+
+		Json& put(std::string&& key, const char* t)
+		{
+			std::string res;
+			res += '"';
+			res += t;
+			res += '"';
+			data[key] = res;
+			return *this;
+		}
+
+		template<typename T>
+		Json& put(std::string&& key, std::vector<T>& v)
+		{
+			if constexpr (std::is_same_v<T, std::string>)
+			{
+				data[key] = wws::to_string(v, true);
+			}
+			else {
+				data[key] = wws::to_string(v);
+			}
+			return *this;
+		}
+
+		Json& put(std::string&& key, Json&& j)
+		{
+			chs[key] = std::move(j);
+			return *this;
+		}
+
+		std::string to_string()
+		{
+			std::string res;
+			res += '{';
+			for (auto it = data.begin(); it != data.end(); ++it)
+			{
+				res += it->first;
+				res += ':';
+				res += it->second;
+				res += ',';
+			}
+		
+			for (auto it = chs.begin(); it != chs.end(); ++it)
+			{
+				res += it->first;
+				res += ':';
+				res += it->second.to_string();
+				res += ',';
+			}
+
+			res.pop_back();
+			res += '}';
+			return res;
 		}
 		
 
