@@ -106,6 +106,7 @@ namespace wws {
 					while (ts[b].body.empty()) { --b; }
 					key = ts[b].body;
 					stage = 1;
+					if (!ts[i].body.empty()) --i;
 				}
 			}
 		}
@@ -283,7 +284,9 @@ public:
 			res += '{';
 			for (auto it = data.begin(); it != data.end(); ++it)
 			{
+				res += '"';
 				res += it->first;
+				res += '"';
 				res += ':';
 				res += it->second;
 				res += ',';
@@ -291,7 +294,9 @@ public:
 		
 			for (auto it = chs.begin(); it != chs.end(); ++it)
 			{
+				res += '"';
 				res += it->first;
+				res += '"';
 				res += ':';
 				res += it->second.to_string();
 				res += ',';
