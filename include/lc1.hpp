@@ -780,6 +780,9 @@ namespace lc1{
 		dbg(j4.has_key("adds"));
 		dbg(j4.has_key("j2"));
 		dbg(j4.has_key("j3"));
+
+		auto new_j2 = j4.detach_obj("j2");
+
 	}
 	
     auto init()

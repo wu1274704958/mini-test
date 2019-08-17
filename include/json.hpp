@@ -217,6 +217,22 @@ public:
 			return get_obj(key);
 		}
 
+		Json detach_obj(std::string& key)
+		{
+			if (chs.find(key) == chs.end())
+			{
+				throw BadKeyErr();
+			}
+			Json res = std::move(chs[key]);
+			assert( chs.erase(key) > 0);
+			return res;
+		}
+
+		Json detach_obj(std::string&& key)
+		{
+			return detach_obj(key);
+		}
+
 		template<typename T>
 		std::vector<T> get_arr(std::string& key)
 		{
