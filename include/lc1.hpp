@@ -776,6 +776,10 @@ namespace lc1{
 		wws::Json j4(j3_str);
 
 		auto j4_str = dbg(j4.to_string());
+
+		dbg(j4.has_key("adds"));
+		dbg(j4.has_key("j2"));
+		dbg(j4.has_key("j3"));
 	}
 	
     auto init()

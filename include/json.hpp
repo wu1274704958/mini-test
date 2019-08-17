@@ -47,6 +47,8 @@ namespace wws {
 					std::string temp;
 					while (true)
 					{
+						if (i >= ts.size())
+							throw BadJsonErr();
 						if (ts[i].per == '[' || ts[i].per == ',' || ts[i].per == '"' || ts[i].per == '\'')
 							temp += ts[i].per;
 						if (!ts[i].body.empty())
@@ -108,11 +110,13 @@ namespace wws {
 			}
 		}
 
-		void insert_ch(std::vector<token::Token>& ts,std::string& key,int& i)
+		void insert_ch(std::vector<token::Token>& ts,std::string& key,int& i) noexcept(false)
 		{
 			std::string temp;
 			int deep = 0;
 			while (true) {
+				if (i >= ts.size())
+					throw BadJsonErr();
 				if (ts[i].per != token::Token::None)
 					temp += ts[i].per;
 				if (!ts[i].body.empty())
@@ -180,6 +184,22 @@ public:
 		std::string& get_str(std::string&& key)
 		{
 			return get_str(key);
+		}
+
+		bool has_key(std::string& key)
+		{
+			if (chs.find(key) != chs.end())
+			{
+				return true;
+			}else if(data.find(key) != data.end()){
+				return true;
+			}
+			return false;
+		}
+
+		bool has_key(std::string&& key)
+		{
+			return has_key(key);
 		}
 
 		Json& get_obj(std::string& key)
