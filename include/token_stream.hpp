@@ -201,9 +201,7 @@ namespace token {
 							t.per = c;
 							if (c == ' ')
 							{
-								while (iter.has_next() && (c = iter.next()) == ' ') {}
-								if(iter.has_next())
-									not_take = true;
+								not_take = skip(c);
 							}
 							++stage;
 							break;
@@ -211,9 +209,7 @@ namespace token {
 							t.back = c;
 							if (c == ' ')
 							{
-								while (iter.has_next() && (c = iter.next()) == ' ') {}
-								if (iter.has_next())
-									not_take = true;
+								not_take = skip(c);
 							}
 							++stage;
 							break;
@@ -228,9 +224,7 @@ namespace token {
 						{
 						case 0:
 							t.per = c;
-							while (iter.has_next() && (c = iter.next()) == ' ') {}
-							if (iter.has_next())
-								not_take = true;
+							not_take = skip(c);
 							++stage;
 							break;
 						case 1:
@@ -284,6 +278,22 @@ namespace token {
 				throw e;
 			}
 		}
+	private:
+		
+		bool skip(char &curr,char tar = ' ')
+		{
+			bool has_one_not_tar = false;
+			while (iter.has_next()) 
+			{
+				if ((curr = iter.next()) != tar)
+				{
+					has_one_not_tar = true;
+					break;
+				}
+			}
+			return has_one_not_tar;
+		}
+	public:
 		/*
 		* o is 如果文件已存在是否重写
 		**/

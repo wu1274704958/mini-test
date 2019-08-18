@@ -783,6 +783,22 @@ namespace lc1{
 
 		auto new_j2 = j4.detach_obj("j2");
 
+		std::string s5 = "{\"a\":-89.90,\"b\": -90}";
+
+		wws::Json j5(s5);
+
+		dbg(j5.get<float>("a"));
+		dbg(j5.get<int>("b"));
+
+		try {
+			std::string s6 = "{\"a\": 90,"": }";
+			wws::Json j6(s6);
+		}
+		catch (wws::BadJsonErr e)
+		{
+			dbg(e.what());
+		}
+
 	}
 	
     auto init()

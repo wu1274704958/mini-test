@@ -42,6 +42,9 @@ namespace wws {
 						++deep;
 				}
 
+				if (curr.back == '}')
+					--deep;
+
 				if (stage == 1 && curr.per == '[')
 				{
 					std::string temp;
@@ -69,6 +72,10 @@ namespace wws {
 					if (curr.back == '.')
 					{
 						std::string temp;
+
+						if (curr.per == '-' || ts[i - 1].back == '-')
+							temp += '-';
+
 						temp += curr.body;
 						temp += curr.back;
 						temp += ts[i + 1].body;
@@ -85,6 +92,8 @@ namespace wws {
 						}
 						else
 						{
+							if (curr.per == '-' || ts[i - 1].back == '-')
+								temp += '-';
 							temp += curr.body;
 						}
 						data.insert(std::pair(std::move(key), std::move(temp)));
@@ -96,19 +105,35 @@ namespace wws {
 				if (curr.back == ':')
 				{
 					int b = i;
-					while (ts[b].body.empty()) { --b; }
+					while (ts[b].body.empty()) 
+					{
+						--b; 
+						if(b < 0)
+							throw BadJsonErr();
+					}
+					if (ts[b].per != '"' || ts[b].back != '"')
+						throw BadJsonErr();
 					key = ts[b].body;
 					stage = 1;
 				}
 				else if (curr.per == ':')
 				{
 					int b = i - 1;
-					while (ts[b].body.empty()) { --b; }
+					while (ts[b].body.empty()) 
+					{
+						--b; 
+						if (b < 0)
+							throw BadJsonErr();
+					}
+					if (ts[b].per != '"' || ts[b].back != '"')
+						throw BadJsonErr();
 					key = ts[b].body;
 					stage = 1;
 					if (!ts[i].body.empty()) --i;
 				}
 			}
+			if (!key.empty() || deep > 0)
+				throw BadJsonErr();
 		}
 
 		void insert_ch(std::vector<token::Token>& ts,std::string& key,int& i) noexcept(false)
