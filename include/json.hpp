@@ -78,9 +78,9 @@ namespace wws {
 
 						temp += curr.body;
 						temp += curr.back;
+						if (i + 1 >= ts.size()) throw BadJsonErr();
 						temp += ts[i + 1].body;
 						data.insert(std::pair(std::move(key), std::move(temp)));
-						++i;
 					}
 					else {
 						std::string temp;
