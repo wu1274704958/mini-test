@@ -359,4 +359,26 @@ public:
 		Json& operator=(const Json&) = delete;
 		Json& operator=(Json&&) = default;
 	};
+
+	template<typename CLS, typename Fir,typename ... FS>
+	void toJson_sub(Json& json,CLS& cls, std::vector<const char *> &keys,int index,Fir  CLS::* first,FS CLS::* ...fs)
+	{
+		json.put(keys[index], cls.*first);
+		if constexpr (sizeof...(FS) > 0)
+		{
+			toJson_sub(json, cls, keys, index + 1, fs ...);
+		}
+	}
+
+	template<typename CLS,typename ... FS>
+	Json toJson(CLS& cls,std::vector<const char *> keys,FS CLS::* ...fs)
+	{
+		static_assert(sizeof...(FS) > 0);
+		assert(keys.size() >= sizeof...(FS));
+		Json res;
+		
+		toJson_sub(res, cls, keys, 0, fs ...);
+
+		return res;
+	}
 }
