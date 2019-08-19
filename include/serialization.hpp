@@ -98,7 +98,7 @@ namespace wws {
 		static constexpr bool val = true;
 	};
 
-	std::string to_string(bool b)
+	inline std::string to_string(bool b)
 	{
 		return b ? "true" : "false";
 	}
