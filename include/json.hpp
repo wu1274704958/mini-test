@@ -277,15 +277,15 @@ public:
 		}
 
 		template<typename T>
-		Json& put(std::string&& key,T&& t)
+		Json& put(std::string&& key,T t)
 		{
 			if constexpr ( std::is_same_v<std::string, std::remove_reference_t<T>> )
 			{
 				insert_qm(t);
-				data[key] = t;
+				data[key] = std::move(t);
 			}
 			else {
-				data[key] = wws::to_string(std::forward<T>(t));
+				data[key] = wws::to_string(t);
 			}
 			return *this;
 		}
