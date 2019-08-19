@@ -783,12 +783,19 @@ namespace lc1{
 
 		auto new_j2 = j4.detach_obj("j2");
 
-		std::string s5 = "{\"a\":-89.90,\"b\": -90}";
+		std::string s5 = "{\"a\":-89.90,\"b\": -90,   \"c\": true }";
 
 		wws::Json j5(s5);
 
 		dbg(j5.get<float>("a"));
 		dbg(j5.get<int>("b"));
+		dbg(j5.get<bool>("c"));
+
+		std::string j5_str = dbg(j5.to_string());
+
+		wws::Json new_j5(j5_str);
+
+		dbg(new_j5.get<bool>("c"));
 
 		try {
 			std::string s6 = "{\"a\": 90,"": }";

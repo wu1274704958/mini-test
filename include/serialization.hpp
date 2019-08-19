@@ -43,6 +43,15 @@ namespace wws {
 			if constexpr (std::is_same_v<unsigned long long, T> )
 		{
 			return std::stoull(str);
+		}else
+			if constexpr (std::is_same_v<bool, T>)
+		{
+			if (str == "true")
+				return true;
+			else if (str == "false")
+				return false;
+			else
+				throw std::exception("Parser boolean failed!");
 		}
 	}
 
@@ -89,6 +98,10 @@ namespace wws {
 		static constexpr bool val = true;
 	};
 
+	std::string to_string(bool b)
+	{
+		return b ? "true" : "false";
+	}
 
 	template<typename T, typename = std::enable_if_t<std::is_same_v<std::string, decltype(std::to_string(std::declval<T>()))>>>
 	std::string to_string(T t)
