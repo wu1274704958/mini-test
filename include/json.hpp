@@ -67,7 +67,7 @@ namespace wws {
 					continue;
 				}
 
-				if (stage == 1 && !curr.body.empty())
+				if (stage == 1 && (( curr.per == '"' && curr.back == '"' ) || !curr.body.empty() ))
 				{
 					if (curr.back == '.')
 					{
@@ -84,7 +84,7 @@ namespace wws {
 					}
 					else {
 						std::string temp;
-						if ((curr.per == '"' && curr.back == '"') || (curr.per == '\'' && curr.back == '\''))
+						if (curr.per == '"' && curr.back == '"')
 						{
 							temp += curr.per;
 							temp += curr.body;
@@ -380,5 +380,31 @@ public:
 		toJson_sub(res, cls, keys, 0, fs ...);
 
 		return res;
+	}
+
+	template<typename CLS, typename Fir, typename ... FS>
+	void formJson_sub(CLS& cls, Json& json, std::vector<const char *> &keys, int index, Fir  CLS::* first, FS CLS::* ...fs)
+	{
+		if constexpr(is_std_list<Fir>::val)
+		{
+			cls.*first = json.get_arr<is_std_list<Fir>::type>(keys[index]);
+		}
+		else if constexpr( std::is_integral_v<Fir> || std::is_floating_point_v<Fir> || std::is_same_v<Fir,std::string> ){
+			cls.*first = json.get<Fir>(keys[index]);
+		}
+		if constexpr (sizeof...(FS) > 0)
+		{
+			formJson_sub( cls,json, keys, index + 1, fs ...);
+		}
+	}
+
+	template<typename CLS, typename ... FS>
+	void formJson(CLS& cls,Json& json, std::vector<const char *> keys, FS CLS::* ...fs)
+	{
+		static_assert(sizeof...(FS) > 0);
+		assert(keys.size() >= sizeof...(FS));
+
+		formJson_sub( cls, json, keys, 0, fs ...);
+
 	}
 }

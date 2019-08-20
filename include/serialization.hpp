@@ -95,6 +95,7 @@ namespace wws {
 	template<typename T,template <typename T1, typename Alloc = std::allocator<T1>> class C>
 	struct is_std_list<C<T>>
 	{
+		using type = T;
 		static constexpr bool val = true;
 	};
 
