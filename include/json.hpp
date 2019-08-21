@@ -52,11 +52,11 @@ namespace wws {
 					{
 						if (i >= ts.size())
 							throw BadJsonErr();
-						if (ts[i].per == '[' || ts[i].per == ',' || ts[i].per == '"' || ts[i].per == '\'')
+						if (ts[i].per == '[' || ts[i].per == ',' || ts[i].per == '"' || ts[i].per == '-')
 							temp += ts[i].per;
 						if (!ts[i].body.empty())
 							temp += ts[i].body;
-						if (ts[i].back == ']' || ts[i].back == ',' || ts[i].per == '"' || ts[i].per == '\'')
+						if (ts[i].back == ']' || ts[i].back == ',' || ts[i].per == '"' || ts[i].per == '-')
 							temp += ts[i].back;
 						if (ts[i].back == ']')
 							break;
