@@ -46,9 +46,9 @@ namespace wws {
 		}else
 			if constexpr (std::is_same_v<bool, T>)
 		{
-			if (str == "true")
+			if (str == "true" || str == "1")
 				return true;
-			else if (str == "false")
+			else if (str == "false" || str == "0")
 				return false;
 			else
 				throw std::exception("Parser boolean failed!");
