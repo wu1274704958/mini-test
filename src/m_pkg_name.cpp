@@ -21,10 +21,10 @@ int main(int argc, char **argv)
 		std::ifstream is(f.generic_string(), std::ios::binary);
 		TokenStream<std::ifstream> ts(std::move(is));
 		ts.analyse();
-		for (auto& t : ts.tokens)
+		/*for (auto& t : ts.tokens)
 		{
 			std::cout << t << std::endl;
-		}
+		}*/
 		modify_pkg_name(ts.tokens);
 		auto out = f.generic_string();
 		dbg(out);
@@ -67,16 +67,25 @@ void modify_pkg_name(std::vector<Token>& ts)
 			}
 		}
 
+		if (in_activity && t.back == '>')
+			return;
+
 		if (catched && t.body == "activity" && t.per == '<')
 		{
 			in_activity = true;
 		}
 		
-		if (in_activity && t.body == "android:name" && t.back == '=')
+		if (in_activity && t.body == "name" && t.back == '=')
 		{
 			ts[i + 1].body.insert(0, pkg_name);
 			dbg(ts[i + 1].body);
-			return;
+			//return;
+		}
+
+		if (in_activity && t.body == "theme" && t.back == '=')
+		{
+			ts[i + 1].body = "@android:style/Theme.NoTitleBar.Fullscreen";
+			dbg(ts[i + 1].body);
 		}
 	}
 }
