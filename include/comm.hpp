@@ -66,4 +66,34 @@ namespace wws {
 		}
 		return t;
 	}
+
+	template<typename T>
+	struct arr_len;
+
+	template<typename T, size_t N>
+	struct arr_len<T[N]>
+	{
+		const static size_t val = N;
+	};
+
+	template<typename T, size_t N>
+	struct arr_len<T(&)[N]>
+	{
+		const static size_t val = N;
+	};
+
+	template<typename T>
+	size_t arr_len_v = arr_len<T>::val;
+
+	template<typename Ret, typename T>
+	constexpr Ret arrLen(T&& t)
+	{
+		return static_cast<Ret>(arr_len_v<T>);
+	}
+
+	template<typename T>
+	constexpr size_t arrLen(T&& t)
+	{
+		return arr_len_v<T>;
+	}
 }
