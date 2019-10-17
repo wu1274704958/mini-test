@@ -38,11 +38,11 @@ namespace wws {
 							std::is_same_v<unsigned char, T> || 
 							std::is_same_v<unsigned long,T>)
 		{
-			return static_cast<T>( std::stoul(str));
+			return static_cast<T>( std::stoul(str,nullptr,_Base));
 		}else
 			if constexpr (std::is_same_v<unsigned long long, T> )
 		{
-			return std::stoull(str);
+			return std::stoull(str,nullptr,_Base);
 		}else
 			if constexpr (std::is_same_v<bool, T>)
 		{
