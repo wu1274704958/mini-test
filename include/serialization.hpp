@@ -51,7 +51,7 @@ namespace wws {
 			else if (str == "false" || str == "0")
 				return false;
 			else
-				throw std::exception("Parser boolean failed!");
+				throw std::runtime_error("Parser boolean failed!");
 		}
 	}
 

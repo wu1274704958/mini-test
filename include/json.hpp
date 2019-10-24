@@ -5,14 +5,14 @@
 #include <exception>
 
 namespace wws {
-	struct BadJsonErr : public std::exception
+	struct BadJsonErr : public std::runtime_error
 	{
-		BadJsonErr() : exception("Bad Json string!!!") {}
+		BadJsonErr() : runtime_error("Bad Json string!!!") {}
 	};
 
-	struct BadKeyErr : public std::exception
+	struct BadKeyErr : public std::runtime_error
 	{
-		BadKeyErr() : exception("Bad key !!!") {}
+		BadKeyErr() : runtime_error("Bad key !!!") {}
 	};
 
 	class Json {

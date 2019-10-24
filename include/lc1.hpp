@@ -16,6 +16,7 @@
 #include <gray.hpp>
 #include <serialization.hpp>
 #include <json.hpp>
+#include <list>
 
 namespace lc1{
 
