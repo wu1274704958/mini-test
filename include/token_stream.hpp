@@ -4,7 +4,14 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <version>
+
+#ifdef __cpp_lib_filesystem
 #include <filesystem>
+#endif 
+
+
+
 
 namespace token {
 
@@ -300,6 +307,8 @@ namespace token {
 		**/
 		bool save(std::string& path,bool o = false)
 		{
+#ifdef  __cpp_lib_filesystem
+
 			namespace fs = std::filesystem;
 			fs::path p(path);
 			if (fs::exists(p))
@@ -317,6 +326,9 @@ namespace token {
 				std::ofstream os(p.generic_string(), std::ios::binary);
 				return save_(os);
 			}
+#else
+			std::cout << "Not support filesystem!" << std::endl;
+#endif //  __cpp_lib_filesystem
 		}
 
 	private:
