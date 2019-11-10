@@ -1,11 +1,11 @@
 #pragma once
 
-
+#include <print_stl.hpp>
 #include <dbg.hpp>
 #include <TestFunc.hpp>
 #include <vector>
 #include <typeinfo>
-#include <print_stl.hpp>
+
 
 namespace emcpp_chapter_1 {
 
