@@ -2,7 +2,7 @@
 #include <iostream>
 
 template<typename V,template <typename T1,typename Alloc = std::allocator<T1>> class T>
-std::ostream& operator<<(std::ostream& out,T<V>& v) 
+std::ostream& operator<<(std::ostream& out,const T<V>& v) 
 {     
 	out << "[ ";
 	size_t i = 0;
