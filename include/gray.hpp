@@ -40,7 +40,7 @@ T fromGray(T g)
 }
 
 template<typename T,typename = std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>> >
-void printBin(T b)
+void printBin(T b,bool enter = true)
 {
 	size_t len = sizeof(T) * 8 - 1;
 	T K = static_cast<T>(1) << len;
@@ -55,7 +55,8 @@ void printBin(T b)
 		if( i % 4 == 0 )
 			printf(" ");
 	}
-	printf("\n");
+	if(enter)
+		printf("\n");
 }
 
 template <typename T>
