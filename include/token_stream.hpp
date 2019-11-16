@@ -50,6 +50,7 @@ namespace token {
 			per = t.per;
 			back = t.back;
 			body = std::move(t.body);
+			return *this;
 		}
 		void none_per()
 		{
