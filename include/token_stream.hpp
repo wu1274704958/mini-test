@@ -104,10 +104,11 @@ namespace token {
 		CharIter<T> iter;
 		char c;
 		bool not_take = false;
-
+		bool not_del_space = false;
 		TokenStream(T t) : iter(std::move(t)) {}
-		void analyse()
+		void analyse(bool not_del_space = false)
 		{
+			this->not_del_space = not_del_space;
 			while(true)
 			{
 				try {
@@ -291,6 +292,8 @@ namespace token {
 		
 		bool skip(char &curr,char tar = ' ')
 		{
+			if (not_del_space)
+				return false;
 			bool has_one_not_tar = false;
 			while (iter.has_next()) 
 			{
