@@ -321,22 +321,21 @@ namespace token {
 				{
 					//fs::remove(p);
 					std::ofstream os(p.generic_string(), std::ios::binary);
-					return save_(os);
+					return save(os);
 				}
 				else
 					return false;
 			}
 			else {
 				std::ofstream os(p.generic_string(), std::ios::binary);
-				return save_(os);
+				return save(os);
 			}
 #else
 			std::cout << "Not support filesystem!" << std::endl;
 #endif //  __cpp_lib_filesystem
 		}
 
-	private:
-		bool save_(std::ofstream& os)
+		bool save(std::ofstream& os)
 		{
 #ifdef WIN32
 			const char *enter = "\r\n";
