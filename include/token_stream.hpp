@@ -105,6 +105,7 @@ namespace token {
 		char c;
 		bool not_take = false;
 		bool not_del_space = false;
+		
 		TokenStream(T t) : iter(std::move(t)) {}
 		void analyse(bool not_del_space = false)
 		{
@@ -163,6 +164,9 @@ namespace token {
 						not_take = false;
 					if (c == '\r' ||
 						c == -1) continue;
+
+					if (checker) c = checker(c);
+
 					if (c == '"' ||
 						c == '\'')
 					{
@@ -374,6 +378,13 @@ namespace token {
 			os.flush();
 			return true;
 		}
+
+		void set_checker(std::function<char(char)> f)
+		{
+			checker = f;
+		}
+	private:
+		std::function<char(char)> checker;
 	};
 
 	template<>
