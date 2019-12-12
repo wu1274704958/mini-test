@@ -163,7 +163,7 @@ namespace token {
 					else
 						not_take = false;
 					if (c == '\r' ||
-						c == -1) continue;
+						c == -1 || c == 255) continue;
 
 					if (checker) c = checker(c);
 
