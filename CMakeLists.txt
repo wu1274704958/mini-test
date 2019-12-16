@@ -34,6 +34,7 @@ add_executable(m_pkg_name src/cq_tools/m_pkg_name.cpp)
 add_executable(re_set_ime_opt src/cq_tools/re_set_ime_opt.cpp)
 add_executable(set_shortEdges src/cq_tools/set_shortEdges.cpp)
 add_executable(get_pkg_name src/cq_tools/get_pkg_name.cpp) 
+add_executable(set_qk_splash src/cq_tools/set_qk_splash.cpp)
 
 #add_subdirectory(test)
 #enable_testing()

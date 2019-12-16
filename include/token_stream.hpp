@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <version>
+#include <functional>
 
 #ifdef __cpp_lib_filesystem
 #include <filesystem>
