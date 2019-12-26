@@ -66,7 +66,7 @@ void up_ver(std::vector<Token>& ts,const char* vn)
 		using namespace std::chrono;
 		auto now = system_clock::now();
 		auto tt = system_clock::to_time_t(now);
-		ob << "android:versionCode=\"" << std::put_time(std::localtime(&tt),"%Y%m%d%H%M%S") << '"'
+		ob << "android:versionCode=\"" << std::put_time(std::localtime(&tt),"%y%m%d%H%M") << '"'
 		<< " android:versionName=\"" << vn << '"';
 
 		Token t(ob.str(),' ','>');
