@@ -4,7 +4,15 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#ifdef _MSC_VER
+#if _MSC_VER > 1923
 #include <version>
+#endif
+#else
+#include <version>
+#endif
+
+
 #include <functional>
 
 #ifdef __cpp_lib_filesystem
@@ -312,7 +320,7 @@ namespace token {
 		}
 	public:
 		/*
-		* o is 如果文件已存在是否重写
+		* o is if exist override
 		**/
 		bool save(std::string& path,bool o = false)
 		{
