@@ -69,18 +69,18 @@ namespace token {
 		{
 			back = None;
 		}
-		bool per_is_none()
+		bool per_is_none() const 
 		{
 			return per == None;
 		}
-		bool back_is_none()
+		bool back_is_none() const 
 		{
 			return back == None;
 		}
-		friend std::ostream& operator<<(std::ostream& out, Token &t);
+		friend std::ostream& operator<<(std::ostream& out, const Token &t);
 	};
 
-	inline std::ostream& operator<<(std::ostream& out, Token &t)
+	inline std::ostream& operator<<(std::ostream& out, const Token &t)
 	{
 		if (!t.per_is_none())
 		{
