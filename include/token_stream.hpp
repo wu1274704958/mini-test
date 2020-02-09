@@ -347,8 +347,8 @@ namespace token {
 			std::cout << "Not support filesystem!" << std::endl;
 #endif //  __cpp_lib_filesystem
 		}
-
-		bool save(std::ofstream& os)
+		template<typename Stream>
+		bool save(Stream& os)
 		{
 #ifdef WIN32
 			const char *enter = "\r\n";
