@@ -18,7 +18,7 @@ namespace wws {
 	class Json {
 		std::unordered_map<std::string,std::string> data;
 		std::unordered_map<std::string,Json> chs;
-		void parser(std::string& str)
+		void parser(const std::string& str)
 		{
 			token::TokenStream<std::string> st(str);
 			st.analyse();
@@ -276,10 +276,13 @@ public:
 			return get_arr<T>(key);
 		}
 
-		template<typename T>
-		Json& put(std::string&& key,T t)
+		template<typename K,typename T,typename = std::enable_if_t<
+			std::is_same_v<std::remove_cv_t<std::remove_reference_t<K>>,std::string> || 
+			std::is_same_v<std::decay_t<K>,const char*>
+			>>
+		Json& put(K&& key,T t)
 		{
-			if constexpr ( std::is_same_v<std::string, std::remove_reference_t<T>> )
+			if constexpr ( std::is_same_v<std::string, std::remove_cv_t<std::remove_reference_t<T>>> )
 			{
 				insert_qm(t);
 				data[key] = std::move(t);
@@ -289,8 +292,11 @@ public:
 			}
 			return *this;
 		}
-
-		Json& put(std::string&& key, const char* t)
+		template<typename K,typename = std::enable_if_t<
+			std::is_same_v<std::remove_cv_t<std::remove_reference_t<K>>,std::string> || 
+			std::is_same_v<std::decay_t<K>,const char*>
+			>>
+		Json& put(K&& key, const char* t)
 		{
 			std::string res;
 			res += '"';
@@ -300,10 +306,13 @@ public:
 			return *this;
 		}
 
-		template<typename T>
-		Json& put(std::string&& key, std::vector<T>& v)
+		template<typename K,typename T,typename = std::enable_if_t<
+			std::is_same_v<std::remove_cv_t<std::remove_reference_t<K>>,std::string> || 
+			std::is_same_v<std::decay_t<K>,const char*>
+			>>
+		Json& put(K&& key, std::vector<T>& v)
 		{
-			if constexpr (std::is_same_v<T, std::string>)
+			if constexpr (std::is_same_v<std::remove_cv_t<T>, std::string>)
 			{
 				data[key] = wws::to_string(v, true);
 			}
@@ -312,8 +321,11 @@ public:
 			}
 			return *this;
 		}
-
-		Json& put(std::string&& key, Json&& j)
+		template<typename K,typename = std::enable_if_t<
+			std::is_same_v<std::remove_cv_t<std::remove_reference_t<K>>,std::string> || 
+			std::is_same_v<std::decay_t<K>,const char*>
+			>>
+		Json& put(K&& key, Json&& j)
 		{
 			chs[key] = std::move(j);
 			return *this;
@@ -351,7 +363,10 @@ public:
 
 	public:
 		Json() {}
-		Json(std::string& str) {
+		Json(const std::string& str) {
+			parser(str);
+		}
+		Json(std::string&& str) {
 			parser(str);
 		}
 		Json(const Json&) = delete;
