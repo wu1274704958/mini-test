@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <optional>
+#include <stack>
 
 namespace wws{
 
@@ -54,6 +55,59 @@ bool write_to_file(Path&& path,Str&& str,Args&& ...args)
     }
     else
         return false;
+}
+
+template<typename Path,typename = std::enable_if_t<std::is_same_v<std::remove_cv_t<std::remove_reference_t<Path>>,std::string>>>
+inline std::string get_parent(Path&& path)
+{
+    if(path.empty()) return path;
+    for(int i = path.size() - 1;i >= 0; --i)
+    {
+        if(path[i] == '/')
+        {
+            return path.substr(0,i);
+        }
+    }
+    return path;
+}
+
+template<typename Path,typename = std::enable_if_t<std::is_same_v<std::remove_cv_t<std::remove_reference_t<Path>>,std::string>>>
+inline std::string to_absolute(Path&& path)
+{
+    if(path.empty()) return path;
+    int b = 0;
+    std::stack<std::string> sta;
+    for(int i = 0;i < path.size();++i)
+    {
+        if(path[i] == '/' && b < i)
+        {
+            auto str = path.substr(b,i - b);
+            if(str == ".")
+            {}else 
+            if(str == "..")
+            {
+                if(sta.empty())
+                    throw std::runtime_error("Bad path for func to_absolute!!");
+                sta.pop();
+            }else{
+                str += '/';
+                sta.push(std::move(str));
+            }
+            b = i + 1;++i;
+        }
+    }
+    if(b < path.size() - 1)
+    {
+        auto str = path.substr(b,path.size() - b);
+        sta.push(std::move(str));
+    }
+    std::string res;
+    while (!sta.empty())
+    {
+        res.insert(0,sta.top().c_str());
+        sta.pop();
+    }
+    return res;
 }
 
 }
