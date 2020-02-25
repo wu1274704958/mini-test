@@ -78,6 +78,21 @@ namespace token {
 			return back == None;
 		}
 		friend std::ostream& operator<<(std::ostream& out, const Token &t);
+		std::string to_string() const
+		{
+			std::string res;
+			if(!per_is_none())
+				res += per;
+			if(!body.empty())
+				res += body;
+			if(!back_is_none())
+				res += back;
+			return res;
+		}
+		bool empty() const
+		{
+			return per_is_none() && body.empty() && back_is_none();
+		}
 	};
 
 	inline std::ostream& operator<<(std::ostream& out, const Token &t)
