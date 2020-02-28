@@ -110,4 +110,18 @@ inline std::string to_absolute(Path&& path)
     return res;
 }
 
+template<typename Path,typename = std::enable_if_t<std::is_same_v<std::remove_cv_t<std::remove_reference_t<Path>>,std::string>>>
+inline std::string get_suffix(Path&& path)
+{
+    if(path.empty()) return path;
+    for(int i = path.size() - 1;i >= 0;--i)
+    {
+        if(path[i] == '.')
+        {
+            return path.substr(i + 1,path.size() - i - 1);
+        }
+    }
+    return "";
+}
+
 }
