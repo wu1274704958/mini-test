@@ -61,7 +61,7 @@ template<typename Path,typename = std::enable_if_t<std::is_same_v<std::remove_cv
 inline std::string get_parent(Path&& path)
 {
     if(path.empty()) return path;
-    for(int i = path.size() - 1;i >= 0; --i)
+    for(size_t i = path.size() - 1;i >= 0; --i)
     {
         if(path[i] == '/')
         {
