@@ -808,6 +808,59 @@ namespace lc1{
 		}
 
 	}
+
+	bool isValidSudoku(std::vector<std::vector<char>>& board) {
+        char rows[9][9] = {0};
+		char cols[9][9] = {0};
+		char boxs[9][9] = {0};
+		for(int y = 0;y < 9;++y)
+		{
+			for (int x = 0; x < 9;++x)
+			{
+				char c = board[y][x];
+				int v = (int)c - 48 - 1;
+				if(c != '.')	
+				{
+					rows[x][v] += 1;
+					cols[y][v] += 1;
+					int box_idx = ((x / 3) % 3) + (y / 3) * 3;
+					boxs[ box_idx ][v] += 1;
+					if(rows[x][v] > 1 || cols[y][v] > 1 || boxs[ box_idx ][v] > 1)
+						return false;
+				}
+			}
+		}
+		return true;
+    }
+
+	void test_isValidSudoku() 
+	{
+    	auto v = std::vector({
+  			std::vector({'5','3','.','.','7','.','.','.','.'}),
+  			std::vector({'6','.','.','1','9','5','.','.','.'}),
+  			std::vector({'.','9','8','.','.','.','.','6','.'}),
+  			std::vector({'8','.','.','.','6','.','.','.','3'}),
+  			std::vector({'4','.','.','8','.','3','.','.','1'}),
+  			std::vector({'7','.','.','.','2','.','.','.','6'}),
+  			std::vector({'.','6','.','.','.','.','2','8','.'}),
+  			std::vector({'.','.','.','4','1','9','.','.','5'}),
+  			std::vector({'.','.','.','.','8','.','.','7','9'})
+		});
+		auto v2 = std::vector({
+  			std::vector({'8','3','.','.','7','.','.','.','.'}),
+			std::vector({'6','.','.','1','9','5','.','.','.'}),
+			std::vector({'.','9','8','.','.','.','.','6','.'}),
+			std::vector({'8','.','.','.','6','.','.','.','3'}),
+			std::vector({'4','.','.','8','.','3','.','.','1'}),
+			std::vector({'7','.','.','.','2','.','.','.','6'}),
+			std::vector({'.','6','.','.','.','.','2','8','.'}),
+			std::vector({'.','.','.','4','1','9','.','.','5'}),
+			std::vector({'.','.','.','.','8','.','.','7','9'})
+		});
+
+		dbg(isValidSudoku(v));
+		dbg(isValidSudoku(v2));
+	}
 	
     auto init()
     {
@@ -826,7 +879,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_searchInsert),
 			CREATE_TEST_FUNC(test_parser),
 			CREATE_TEST_FUNC(test_seilza_to),
-			CREATE_TEST_FUNC(test_json)
+			CREATE_TEST_FUNC(test_json),
+			CREATE_TEST_FUNC(test_isValidSudoku)
         );
     }
 }
