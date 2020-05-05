@@ -861,6 +861,71 @@ namespace lc1{
 		dbg(isValidSudoku(v));
 		dbg(isValidSudoku(v2));
 	}
+
+	namespace SolveSudoku{
+
+	bool is_valid(std::vector<std::vector<char>>& board,int row,int col,char c)
+	{
+		for(int i = 0;i < 9;++i)
+		{
+			if(board[row][i] == c)
+				return false;
+			if(board[i][col] == c)
+				return false;
+			if(board[row / 3 * 3 + i / 3][(col / 3) * 3 + (i % 3)] == c)
+				return false;
+		}
+		return true;
+	}
+
+	bool back_trace(std::vector<std::vector<char>>& board,int row,int col)
+	{
+		if(col == 9)
+		{
+			row += 1;col = 0;
+			if(row == 9)
+				return true;
+		}
+		if(board[row][col] != '.')
+			return back_trace(board,row,col + 1);
+		
+		for(char c = '1';c <= '9';++c)
+		{
+			if(!is_valid(board,row,col,c))
+				continue;
+			board[row][col] = c;
+			if(back_trace(board,row,col + 1))
+				return true;
+			board[row][col] = '.';
+		}
+		return false;
+	}
+
+	void solveSudoku(std::vector<std::vector<char>>& board) {
+        back_trace(board,0,0);
+	}
+
+	void test_solveSudoku() 
+	{
+    	auto v = std::vector({
+  			std::vector({'5','3','.','.','7','.','.','.','.'}),
+  			std::vector({'6','.','.','1','9','5','.','.','.'}),
+  			std::vector({'.','9','8','.','.','.','.','6','.'}),
+  			std::vector({'8','.','.','.','6','.','.','.','3'}),
+  			std::vector({'4','.','.','8','.','3','.','.','1'}),
+  			std::vector({'7','.','.','.','2','.','.','.','6'}),
+  			std::vector({'.','6','.','.','.','.','2','8','.'}),
+  			std::vector({'.','.','.','4','1','9','.','.','5'}),
+  			std::vector({'.','.','.','.','8','.','.','7','9'})
+		});
+		
+
+		solveSudoku(v);
+
+		dbg(v);
+	}
+
+	}
 	
     auto init()
     {
@@ -880,7 +945,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_parser),
 			CREATE_TEST_FUNC(test_seilza_to),
 			CREATE_TEST_FUNC(test_json),
-			CREATE_TEST_FUNC(test_isValidSudoku)
+			CREATE_TEST_FUNC(test_isValidSudoku),
+			CREATE_TEST_FUNC(SolveSudoku::test_solveSudoku)
         );
     }
 }
