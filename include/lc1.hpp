@@ -17,6 +17,7 @@
 #include <serialization.hpp>
 #include <json.hpp>
 #include <list>
+#include <bitset>
 
 namespace lc1{
 
@@ -926,6 +927,114 @@ namespace lc1{
 	}
 
 	}
+
+	namespace SolveSudoku2{
+		struct SolveSudoku{
+
+			SolveSudoku() : 
+				rows(9,std::bitset<9>()),
+				cols(9,std::bitset<9>()),
+				boxs(9,std::bitset<9>())
+			{
+
+			}
+
+			void solve(std::vector<std::vector<char>>& board)
+			{
+				int count = 0;
+				for(int y = 0;y < 9;++y)
+				{
+					for(int x = 0;x < 9;++x)
+					{
+						count += (board[y][x] == '.');
+						if(board[y][x] == '.') continue;
+						int n = board[y][x] - '1';
+						fill(x,y,n,true);
+					}
+				}
+				dfs(board,count);
+			}
+
+			int to_box_idx(int x,int y)
+			{
+				return ((x / 3) % 3) + (y / 3) * 3; 
+			}
+
+			void fill(int x,int y,int n,bool v)
+			{
+				rows[y][n] = v;
+				cols[x][n] = v;
+				boxs[to_box_idx(x,y)][n] = v;
+			}
+
+			std::bitset<9> get_possible(int x,int y)
+			{
+				return ~(rows[y] | cols[x] | boxs[to_box_idx(x,y)]);
+			}
+
+			std::pair<int,int> get_next(std::vector<std::vector<char>>& board)
+			{
+				int min = 10;
+				std::pair<int,int> res(0,0);
+				for(int y = 0;y < 9;++y)
+				{
+					for(int x = 0;x < 9;++x)
+					{
+						if(board[y][x] != '.') continue;
+						auto p = get_possible(x,y);
+						if(p.count() >= min ) continue;
+						res.first = x;
+						res.second = y;
+						min = p.count();
+					}
+				}
+				return res;
+			}
+
+			bool dfs(std::vector<std::vector<char>>& board,int count)
+			{
+				if(count == 0)
+					return true;
+				auto next = get_next(board);
+				auto bits = get_possible(next.first,next.second);
+
+				for(int i = 0;i < bits.size();++i)
+				{
+					if(bits[i] == 0) continue;
+					fill(next.first,next.second,i,true);
+					board[next.second][next.first] = '1' + i;
+					if(dfs(board,count - 1))
+						return true;
+					fill(next.first,next.second,i,false);
+					board[next.second][next.first] = '.';
+				}
+				return false;
+			}
+
+			std::vector<std::bitset<9>> rows;
+			std::vector<std::bitset<9>> cols;
+			std::vector<std::bitset<9>> boxs;
+		};
+
+		void test_SolveSudoku()
+		{
+			auto v = std::vector({
+  				std::vector({'5','3','.','.','7','.','.','.','.'}),
+  				std::vector({'6','.','.','1','9','5','.','.','.'}),
+  				std::vector({'.','9','8','.','.','.','.','6','.'}),
+  				std::vector({'8','.','.','.','6','.','.','.','3'}),
+  				std::vector({'4','.','.','8','.','3','.','.','1'}),
+  				std::vector({'7','.','.','.','2','.','.','.','6'}),
+  				std::vector({'.','6','.','.','.','.','2','8','.'}),
+  				std::vector({'.','.','.','4','1','9','.','.','5'}),
+  				std::vector({'.','.','.','.','8','.','.','7','9'})
+			});
+
+			SolveSudoku ss;
+			ss.solve(v);
+			dbg(v);
+		}
+	}
 	
     auto init()
     {
@@ -946,7 +1055,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_seilza_to),
 			CREATE_TEST_FUNC(test_json),
 			CREATE_TEST_FUNC(test_isValidSudoku),
-			CREATE_TEST_FUNC(SolveSudoku::test_solveSudoku)
+			CREATE_TEST_FUNC(SolveSudoku::test_solveSudoku),
+			CREATE_TEST_FUNC(SolveSudoku2::test_SolveSudoku)
         );
     }
 }
