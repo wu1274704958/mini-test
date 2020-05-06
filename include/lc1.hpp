@@ -1035,6 +1035,50 @@ namespace lc1{
 			dbg(v);
 		}
 	}
+	namespace CountAndSay{
+		struct CountAndSay{
+		std::string countAndSay(int n) {
+			if(n == 1) return "1";
+			if(n == 2) return "11";
+			if(auto it = map.find(n);it != map.end())
+				return it->second;
+			
+			std::string per = countAndSay(n - 1);
+			std::string res;
+			char count = '1';
+			char c = per[0];
+			for(int i = 1;i < per.size();++i)
+			{
+				char cc = per[i];
+				if(c == cc)
+				{
+					++count;
+				}else{
+					res += count;
+					res += c;
+					c = cc;
+					count = '1';
+				}
+			}
+			res += count;
+			res += c;
+			map.insert(std::make_pair(n,res));
+			return res;
+    	}
+			std::unordered_map<int,std::string> map;
+		};
+		void test_countAndSay()
+		{
+			CountAndSay c;
+			dbg(c.countAndSay(1));
+			dbg(c.countAndSay(2));
+			dbg(c.countAndSay(3));
+			dbg(c.countAndSay(4));
+			dbg(c.countAndSay(5));
+			dbg(c.countAndSay(10));
+			dbg(c.countAndSay(29));
+		}
+	}
 	
     auto init()
     {
@@ -1056,7 +1100,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_json),
 			CREATE_TEST_FUNC(test_isValidSudoku),
 			CREATE_TEST_FUNC(SolveSudoku::test_solveSudoku),
-			CREATE_TEST_FUNC(SolveSudoku2::test_SolveSudoku)
+			CREATE_TEST_FUNC(SolveSudoku2::test_SolveSudoku),
+			CREATE_TEST_FUNC(CountAndSay::test_countAndSay)
         );
     }
 }
