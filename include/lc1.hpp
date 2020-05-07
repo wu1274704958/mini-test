@@ -1100,6 +1100,7 @@ namespace lc1{
 					res.pop_back();
 				}
 			}
+			return false;
 		}
 
 		std::vector<std::vector<int>> combinationSum(std::vector<int> candidates, int target) {
@@ -1117,6 +1118,52 @@ namespace lc1{
 		{
 			dbg(combinationSum({2,3,6,7},7));
 			dbg(combinationSum({2,3,5},8));
+		}
+	}
+
+	namespace CombinationSum2{
+
+		bool dfs(std::vector<std::vector<int>> &rr,std::vector<int>& res,std::vector<int>& candidates,int target,int b = 0)
+		{
+			for(int i = b;i < candidates.size();++i)
+			{
+				int v = target - candidates[i];
+				if(i > b && candidates[i - 1] == candidates[i])
+				 	continue;
+				if(v > 0)
+				{
+					res.push_back(candidates[i]); 
+					dfs(rr,res,candidates,v,i + 1);
+					res.pop_back();
+				}else
+				if(v < 0)
+				{
+					return false;
+				}else{
+					std::vector<int> n_res = res;
+					n_res.push_back(candidates[i]);
+					rr.push_back(n_res);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		std::vector<std::vector<int>> combinationSum(std::vector<int> candidates, int target) {
+			
+			std::sort(candidates.begin(),candidates.end());
+			std::vector<std::vector<int>> rr;
+			std::vector<int> res;
+			dfs(rr,res,candidates,target);
+			return rr; 
+    	}
+
+		
+
+		void test_combinationSum()
+		{
+			dbg(combinationSum({10,1,2,7,6,1,5},8));
+			dbg(combinationSum({2,5,2,1,2},5));
 		}
 	}
 	
@@ -1142,7 +1189,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(SolveSudoku::test_solveSudoku),
 			CREATE_TEST_FUNC(SolveSudoku2::test_SolveSudoku),
 			CREATE_TEST_FUNC(CountAndSay::test_countAndSay),
-			CREATE_TEST_FUNC(CombinationSum::test_combinationSum)
+			CREATE_TEST_FUNC(CombinationSum::test_combinationSum),
+			CREATE_TEST_FUNC(CombinationSum2::test_combinationSum)
         );
     }
 }
