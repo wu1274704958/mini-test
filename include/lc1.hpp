@@ -1079,6 +1079,46 @@ namespace lc1{
 			dbg(c.countAndSay(29));
 		}
 	}
+	namespace CombinationSum{
+
+		bool dfs(std::vector<std::vector<int>> &rr,std::vector<int>& res,std::vector<int>& candidates,int target,int b = 0)
+		{
+			for(int i = b;i < candidates.size();++i)
+			{
+				int v = target - candidates[i];
+				if(v == 0)
+				{
+					std::vector<int> n_res = res;
+					n_res.push_back(candidates[i]);
+					rr.push_back(n_res);
+					return true;
+				}else if(v < 0){
+					return false;
+				}else{
+					res.push_back(candidates[i]); 
+					dfs(rr,res,candidates,v,i);
+					res.pop_back();
+				}
+			}
+		}
+
+		std::vector<std::vector<int>> combinationSum(std::vector<int> candidates, int target) {
+			
+			std::sort(candidates.begin(),candidates.end());
+			std::vector<std::vector<int>> rr;
+			std::vector<int> res;
+			dfs(rr,res,candidates,target);
+			return rr; 
+    	}
+
+		
+
+		void test_combinationSum()
+		{
+			dbg(combinationSum({2,3,6,7},7));
+			dbg(combinationSum({2,3,5},8));
+		}
+	}
 	
     auto init()
     {
@@ -1101,7 +1141,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_isValidSudoku),
 			CREATE_TEST_FUNC(SolveSudoku::test_solveSudoku),
 			CREATE_TEST_FUNC(SolveSudoku2::test_SolveSudoku),
-			CREATE_TEST_FUNC(CountAndSay::test_countAndSay)
+			CREATE_TEST_FUNC(CountAndSay::test_countAndSay),
+			CREATE_TEST_FUNC(CombinationSum::test_combinationSum)
         );
     }
 }
