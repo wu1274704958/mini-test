@@ -1166,6 +1166,41 @@ namespace lc1{
 			dbg(combinationSum({2,5,2,1,2},5));
 		}
 	}
+
+	namespace FirstMissingPositive{
+
+		int firstMissingPositive(std::vector<int> nums) {
+			int i;
+			for(i = 0;i < nums.size();++i)
+			{
+				while (nums[i] != i + 1)
+				{
+					if(nums[i] <= 0 || nums[i] > nums.size() || nums[i] == nums[nums[i] - 1] )
+						break;
+
+					int idx = nums[i] - 1;
+					int temp = nums[idx];
+					nums[idx] = nums[i];
+					nums[i] = temp;
+				}
+			}
+			for(i = 0;i < nums.size();++i)
+			{
+				if(nums[i] != i + 1)
+					return i + 1;
+			}
+			return nums.size() + 1;
+    	}
+
+		void test_firstMissingPositive()
+		{
+			dbg(firstMissingPositive({1,2,0}));
+			dbg(firstMissingPositive({3,4,-1,1}));
+			dbg(firstMissingPositive({7,8,9,11,12}));
+			dbg(firstMissingPositive({7,8,9,11,12,90,45,1,4,8}));
+		}
+
+	}
 	
     auto init()
     {
@@ -1190,7 +1225,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(SolveSudoku2::test_SolveSudoku),
 			CREATE_TEST_FUNC(CountAndSay::test_countAndSay),
 			CREATE_TEST_FUNC(CombinationSum::test_combinationSum),
-			CREATE_TEST_FUNC(CombinationSum2::test_combinationSum)
+			CREATE_TEST_FUNC(CombinationSum2::test_combinationSum),
+			CREATE_TEST_FUNC(FirstMissingPositive::test_firstMissingPositive)
         );
     }
 }
