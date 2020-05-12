@@ -18,6 +18,7 @@
 #include <json.hpp>
 #include <list>
 #include <bitset>
+#include <stack>
 
 namespace lc1{
 
@@ -1201,6 +1202,36 @@ namespace lc1{
 		}
 
 	}
+
+	namespace Trap{
+
+		int trap(std::vector<int> height) {
+			std::stack<int> st;
+			int mc = 0,curr = 0;
+			while (curr < height.size())
+			{
+				while(!st.empty() && height[st.top()] < height[curr])
+				{
+					int foot = st.top();
+					st.pop();
+					if(st.empty()) break;
+					int l = st.top();
+					int r = curr;
+					int h = std::min(height[l],height[r]) - height[foot];
+					mc += h * (r - l - 1);
+				}
+				st.push(curr++);
+			}
+			
+			return mc;
+    	}
+
+		void test_trap()
+		{
+			dbg(trap({0,1,0,2,1,0,1,3,2,1,2,1}));
+			dbg(trap({2,3,2,0,0,9,6,7,4,3,0,3,4,5,6,0,2}));
+		}
+	}
 	
     auto init()
     {
@@ -1226,7 +1257,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(CountAndSay::test_countAndSay),
 			CREATE_TEST_FUNC(CombinationSum::test_combinationSum),
 			CREATE_TEST_FUNC(CombinationSum2::test_combinationSum),
-			CREATE_TEST_FUNC(FirstMissingPositive::test_firstMissingPositive)
+			CREATE_TEST_FUNC(FirstMissingPositive::test_firstMissingPositive),
+			CREATE_TEST_FUNC(Trap::test_trap)
         );
     }
 }
