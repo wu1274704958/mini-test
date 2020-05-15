@@ -1232,6 +1232,57 @@ namespace lc1{
 			dbg(trap({2,3,2,0,0,9,6,7,4,3,0,3,4,5,6,0,2}));
 		}
 	}
+	namespace Multiply{
+		std::string add(std::string& num1, std::string& num2) {
+			int len = std::min(num1.size(),num2.size());
+			std::string res;
+			int rest = 0;
+			for(int i = num1.size() - 1,j = num2.size() - 1;i >= 0 || j >= 0;--i,--j)
+			{
+				int a = i >= 0 ? num1[i] - (int)'0' : 0;
+				int b = j >= 0 ? num2[j] - (int)'0' : 0;
+				int v = a + b + rest;
+				if(v > 9)
+				{
+					rest = v / 10;
+					v = v % 10;
+				}else
+				{
+					rest = 0;
+				}
+				res.insert(0,1,(char)(v + '0'));
+			}
+			
+			if(rest > 0) res.insert(0,1,(char)(rest + '0'));
+			return res;
+    	}
+
+		std::string multiply(std::string num1, std::string num2) {
+			std::string *p1 = nullptr;
+			std::string *p2 = nullptr;
+
+			int len = 0;
+			if(num1.size() > num2.size())
+			{
+				p1 = &num1;
+				p2 = &num2;
+			}else{
+				p1 = &num2;
+				p2 = &num1;
+			}
+
+			for()
+			{
+				
+			}
+		}
+
+		void test()
+		{
+			
+		}
+	}
+	
 	
     auto init()
     {
@@ -1258,7 +1309,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(CombinationSum::test_combinationSum),
 			CREATE_TEST_FUNC(CombinationSum2::test_combinationSum),
 			CREATE_TEST_FUNC(FirstMissingPositive::test_firstMissingPositive),
-			CREATE_TEST_FUNC(Trap::test_trap)
+			CREATE_TEST_FUNC(Trap::test_trap),
+			CREATE_TEST_FUNC(Multiply::test)
         );
     }
 }
