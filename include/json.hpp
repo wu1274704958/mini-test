@@ -354,8 +354,8 @@ public:
 				res += it->second.to_string();
 				res += ',';
 			}
-
-			res.pop_back();
+			if(res.back() == ',')
+				res.pop_back();
 			res += '}';
 			return res;
 		}
