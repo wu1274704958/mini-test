@@ -17,6 +17,8 @@
 #include <serialization.hpp>
 #include <json.hpp>
 #include <list>
+#include <bitset>
+#include <stack>
 
 namespace lc1{
 
@@ -808,6 +810,479 @@ namespace lc1{
 		}
 
 	}
+
+	bool isValidSudoku(std::vector<std::vector<char>>& board) {
+        char rows[9][9] = {0};
+		char cols[9][9] = {0};
+		char boxs[9][9] = {0};
+		for(int y = 0;y < 9;++y)
+		{
+			for (int x = 0; x < 9;++x)
+			{
+				char c = board[y][x];
+				int v = (int)c - 48 - 1;
+				if(c != '.')	
+				{
+					rows[x][v] += 1;
+					cols[y][v] += 1;
+					int box_idx = ((x / 3) % 3) + (y / 3) * 3;
+					boxs[ box_idx ][v] += 1;
+					if(rows[x][v] > 1 || cols[y][v] > 1 || boxs[ box_idx ][v] > 1)
+						return false;
+				}
+			}
+		}
+		return true;
+    }
+
+	void test_isValidSudoku() 
+	{
+    	auto v = std::vector({
+  			std::vector({'5','3','.','.','7','.','.','.','.'}),
+  			std::vector({'6','.','.','1','9','5','.','.','.'}),
+  			std::vector({'.','9','8','.','.','.','.','6','.'}),
+  			std::vector({'8','.','.','.','6','.','.','.','3'}),
+  			std::vector({'4','.','.','8','.','3','.','.','1'}),
+  			std::vector({'7','.','.','.','2','.','.','.','6'}),
+  			std::vector({'.','6','.','.','.','.','2','8','.'}),
+  			std::vector({'.','.','.','4','1','9','.','.','5'}),
+  			std::vector({'.','.','.','.','8','.','.','7','9'})
+		});
+		auto v2 = std::vector({
+  			std::vector({'8','3','.','.','7','.','.','.','.'}),
+			std::vector({'6','.','.','1','9','5','.','.','.'}),
+			std::vector({'.','9','8','.','.','.','.','6','.'}),
+			std::vector({'8','.','.','.','6','.','.','.','3'}),
+			std::vector({'4','.','.','8','.','3','.','.','1'}),
+			std::vector({'7','.','.','.','2','.','.','.','6'}),
+			std::vector({'.','6','.','.','.','.','2','8','.'}),
+			std::vector({'.','.','.','4','1','9','.','.','5'}),
+			std::vector({'.','.','.','.','8','.','.','7','9'})
+		});
+
+		dbg(isValidSudoku(v));
+		dbg(isValidSudoku(v2));
+	}
+
+	namespace SolveSudoku{
+
+	bool is_valid(std::vector<std::vector<char>>& board,int row,int col,char c)
+	{
+		for(int i = 0;i < 9;++i)
+		{
+			if(board[row][i] == c)
+				return false;
+			if(board[i][col] == c)
+				return false;
+			if(board[row / 3 * 3 + i / 3][(col / 3) * 3 + (i % 3)] == c)
+				return false;
+		}
+		return true;
+	}
+
+	bool back_trace(std::vector<std::vector<char>>& board,int row,int col)
+	{
+		if(col == 9)
+		{
+			row += 1;col = 0;
+			if(row == 9)
+				return true;
+		}
+		if(board[row][col] != '.')
+			return back_trace(board,row,col + 1);
+		
+		for(char c = '1';c <= '9';++c)
+		{
+			if(!is_valid(board,row,col,c))
+				continue;
+			board[row][col] = c;
+			if(back_trace(board,row,col + 1))
+				return true;
+			board[row][col] = '.';
+		}
+		return false;
+	}
+
+	void solveSudoku(std::vector<std::vector<char>>& board) {
+        back_trace(board,0,0);
+	}
+
+	void test_solveSudoku() 
+	{
+    	auto v = std::vector({
+  			std::vector({'5','3','.','.','7','.','.','.','.'}),
+  			std::vector({'6','.','.','1','9','5','.','.','.'}),
+  			std::vector({'.','9','8','.','.','.','.','6','.'}),
+  			std::vector({'8','.','.','.','6','.','.','.','3'}),
+  			std::vector({'4','.','.','8','.','3','.','.','1'}),
+  			std::vector({'7','.','.','.','2','.','.','.','6'}),
+  			std::vector({'.','6','.','.','.','.','2','8','.'}),
+  			std::vector({'.','.','.','4','1','9','.','.','5'}),
+  			std::vector({'.','.','.','.','8','.','.','7','9'})
+		});
+		
+
+		solveSudoku(v);
+
+		dbg(v);
+	}
+
+	}
+
+	namespace SolveSudoku2{
+		struct SolveSudoku{
+
+			SolveSudoku() : 
+				rows(9,std::bitset<9>()),
+				cols(9,std::bitset<9>()),
+				boxs(9,std::bitset<9>())
+			{
+
+			}
+
+			void solve(std::vector<std::vector<char>>& board)
+			{
+				int count = 0;
+				for(int y = 0;y < 9;++y)
+				{
+					for(int x = 0;x < 9;++x)
+					{
+						count += (board[y][x] == '.');
+						if(board[y][x] == '.') continue;
+						int n = board[y][x] - '1';
+						fill(x,y,n,true);
+					}
+				}
+				dfs(board,count);
+			}
+
+			int to_box_idx(int x,int y)
+			{
+				return ((x / 3) % 3) + (y / 3) * 3; 
+			}
+
+			void fill(int x,int y,int n,bool v)
+			{
+				rows[y][n] = v;
+				cols[x][n] = v;
+				boxs[to_box_idx(x,y)][n] = v;
+			}
+
+			std::bitset<9> get_possible(int x,int y)
+			{
+				return ~(rows[y] | cols[x] | boxs[to_box_idx(x,y)]);
+			}
+
+			std::pair<int,int> get_next(std::vector<std::vector<char>>& board)
+			{
+				int min = 10;
+				std::pair<int,int> res(0,0);
+				for(int y = 0;y < 9;++y)
+				{
+					for(int x = 0;x < 9;++x)
+					{
+						if(board[y][x] != '.') continue;
+						auto p = get_possible(x,y);
+						if(p.count() >= min ) continue;
+						res.first = x;
+						res.second = y;
+						min = p.count();
+					}
+				}
+				return res;
+			}
+
+			bool dfs(std::vector<std::vector<char>>& board,int count)
+			{
+				if(count == 0)
+					return true;
+				auto next = get_next(board);
+				auto bits = get_possible(next.first,next.second);
+
+				for(int i = 0;i < bits.size();++i)
+				{
+					if(bits[i] == 0) continue;
+					fill(next.first,next.second,i,true);
+					board[next.second][next.first] = '1' + i;
+					if(dfs(board,count - 1))
+						return true;
+					fill(next.first,next.second,i,false);
+					board[next.second][next.first] = '.';
+				}
+				return false;
+			}
+
+			std::vector<std::bitset<9>> rows;
+			std::vector<std::bitset<9>> cols;
+			std::vector<std::bitset<9>> boxs;
+		};
+
+		void test_SolveSudoku()
+		{
+			auto v = std::vector({
+  				std::vector({'5','3','.','.','7','.','.','.','.'}),
+  				std::vector({'6','.','.','1','9','5','.','.','.'}),
+  				std::vector({'.','9','8','.','.','.','.','6','.'}),
+  				std::vector({'8','.','.','.','6','.','.','.','3'}),
+  				std::vector({'4','.','.','8','.','3','.','.','1'}),
+  				std::vector({'7','.','.','.','2','.','.','.','6'}),
+  				std::vector({'.','6','.','.','.','.','2','8','.'}),
+  				std::vector({'.','.','.','4','1','9','.','.','5'}),
+  				std::vector({'.','.','.','.','8','.','.','7','9'})
+			});
+
+			SolveSudoku ss;
+			ss.solve(v);
+			dbg(v);
+		}
+	}
+	namespace CountAndSay{
+		struct CountAndSay{
+		std::string countAndSay(int n) {
+			if(n == 1) return "1";
+			if(n == 2) return "11";
+			if(auto it = map.find(n);it != map.end())
+				return it->second;
+			
+			std::string per = countAndSay(n - 1);
+			std::string res;
+			char count = '1';
+			char c = per[0];
+			for(int i = 1;i < per.size();++i)
+			{
+				char cc = per[i];
+				if(c == cc)
+				{
+					++count;
+				}else{
+					res += count;
+					res += c;
+					c = cc;
+					count = '1';
+				}
+			}
+			res += count;
+			res += c;
+			map.insert(std::make_pair(n,res));
+			return res;
+    	}
+			std::unordered_map<int,std::string> map;
+		};
+		void test_countAndSay()
+		{
+			CountAndSay c;
+			dbg(c.countAndSay(1));
+			dbg(c.countAndSay(2));
+			dbg(c.countAndSay(3));
+			dbg(c.countAndSay(4));
+			dbg(c.countAndSay(5));
+			dbg(c.countAndSay(10));
+			dbg(c.countAndSay(29));
+		}
+	}
+	namespace CombinationSum{
+
+		bool dfs(std::vector<std::vector<int>> &rr,std::vector<int>& res,std::vector<int>& candidates,int target,int b = 0)
+		{
+			for(int i = b;i < candidates.size();++i)
+			{
+				int v = target - candidates[i];
+				if(v == 0)
+				{
+					std::vector<int> n_res = res;
+					n_res.push_back(candidates[i]);
+					rr.push_back(n_res);
+					return true;
+				}else if(v < 0){
+					return false;
+				}else{
+					res.push_back(candidates[i]); 
+					dfs(rr,res,candidates,v,i);
+					res.pop_back();
+				}
+			}
+			return false;
+		}
+
+		std::vector<std::vector<int>> combinationSum(std::vector<int> candidates, int target) {
+			
+			std::sort(candidates.begin(),candidates.end());
+			std::vector<std::vector<int>> rr;
+			std::vector<int> res;
+			dfs(rr,res,candidates,target);
+			return rr; 
+    	}
+
+		
+
+		void test_combinationSum()
+		{
+			dbg(combinationSum({2,3,6,7},7));
+			dbg(combinationSum({2,3,5},8));
+		}
+	}
+
+	namespace CombinationSum2{
+
+		bool dfs(std::vector<std::vector<int>> &rr,std::vector<int>& res,std::vector<int>& candidates,int target,int b = 0)
+		{
+			for(int i = b;i < candidates.size();++i)
+			{
+				int v = target - candidates[i];
+				if(i > b && candidates[i - 1] == candidates[i])
+				 	continue;
+				if(v > 0)
+				{
+					res.push_back(candidates[i]); 
+					dfs(rr,res,candidates,v,i + 1);
+					res.pop_back();
+				}else
+				if(v < 0)
+				{
+					return false;
+				}else{
+					std::vector<int> n_res = res;
+					n_res.push_back(candidates[i]);
+					rr.push_back(n_res);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		std::vector<std::vector<int>> combinationSum(std::vector<int> candidates, int target) {
+			
+			std::sort(candidates.begin(),candidates.end());
+			std::vector<std::vector<int>> rr;
+			std::vector<int> res;
+			dfs(rr,res,candidates,target);
+			return rr; 
+    	}
+
+		
+
+		void test_combinationSum()
+		{
+			dbg(combinationSum({10,1,2,7,6,1,5},8));
+			dbg(combinationSum({2,5,2,1,2},5));
+		}
+	}
+
+	namespace FirstMissingPositive{
+
+		int firstMissingPositive(std::vector<int> nums) {
+			int i;
+			for(i = 0;i < nums.size();++i)
+			{
+				while (nums[i] != i + 1)
+				{
+					if(nums[i] <= 0 || nums[i] > nums.size() || nums[i] == nums[nums[i] - 1] )
+						break;
+
+					int idx = nums[i] - 1;
+					int temp = nums[idx];
+					nums[idx] = nums[i];
+					nums[i] = temp;
+				}
+			}
+			for(i = 0;i < nums.size();++i)
+			{
+				if(nums[i] != i + 1)
+					return i + 1;
+			}
+			return nums.size() + 1;
+    	}
+
+		void test_firstMissingPositive()
+		{
+			dbg(firstMissingPositive({1,2,0}));
+			dbg(firstMissingPositive({3,4,-1,1}));
+			dbg(firstMissingPositive({7,8,9,11,12}));
+			dbg(firstMissingPositive({7,8,9,11,12,90,45,1,4,8}));
+		}
+
+	}
+
+	namespace Trap{
+
+		int trap(std::vector<int> height) {
+			std::stack<int> st;
+			int mc = 0,curr = 0;
+			while (curr < height.size())
+			{
+				while(!st.empty() && height[st.top()] < height[curr])
+				{
+					int foot = st.top();
+					st.pop();
+					if(st.empty()) break;
+					int l = st.top();
+					int r = curr;
+					int h = std::min(height[l],height[r]) - height[foot];
+					mc += h * (r - l - 1);
+				}
+				st.push(curr++);
+			}
+			
+			return mc;
+    	}
+
+		void test_trap()
+		{
+			dbg(trap({0,1,0,2,1,0,1,3,2,1,2,1}));
+			dbg(trap({2,3,2,0,0,9,6,7,4,3,0,3,4,5,6,0,2}));
+		}
+	}
+	namespace Multiply{
+		std::string add(std::string& num1, std::string& num2) {
+			int len = std::min(num1.size(),num2.size());
+			std::string res;
+			int rest = 0;
+			for(int i = num1.size() - 1,j = num2.size() - 1;i >= 0 || j >= 0;--i,--j)
+			{
+				int a = i >= 0 ? num1[i] - (int)'0' : 0;
+				int b = j >= 0 ? num2[j] - (int)'0' : 0;
+				int v = a + b + rest;
+				if(v > 9)
+				{
+					rest = v / 10;
+					v = v % 10;
+				}else
+				{
+					rest = 0;
+				}
+				res.insert(0,1,(char)(v + '0'));
+			}
+			
+			if(rest > 0) res.insert(0,1,(char)(rest + '0'));
+			return res;
+    	}
+
+		std::string multiply(std::string num1, std::string num2) {
+			std::string *p1 = nullptr;
+			std::string *p2 = nullptr;
+
+			int len = 0;
+			if(num1.size() > num2.size())
+			{
+				p1 = &num1;
+				p2 = &num2;
+			}else{
+				p1 = &num2;
+				p2 = &num1;
+			}
+
+			for()
+			{
+				
+			}
+		}
+
+		void test()
+		{
+			
+		}
+	}
+	
 	
     auto init()
     {
@@ -826,7 +1301,16 @@ namespace lc1{
 			CREATE_TEST_FUNC(test_searchInsert),
 			CREATE_TEST_FUNC(test_parser),
 			CREATE_TEST_FUNC(test_seilza_to),
-			CREATE_TEST_FUNC(test_json)
+			CREATE_TEST_FUNC(test_json),
+			CREATE_TEST_FUNC(test_isValidSudoku),
+			CREATE_TEST_FUNC(SolveSudoku::test_solveSudoku),
+			CREATE_TEST_FUNC(SolveSudoku2::test_SolveSudoku),
+			CREATE_TEST_FUNC(CountAndSay::test_countAndSay),
+			CREATE_TEST_FUNC(CombinationSum::test_combinationSum),
+			CREATE_TEST_FUNC(CombinationSum2::test_combinationSum),
+			CREATE_TEST_FUNC(FirstMissingPositive::test_firstMissingPositive),
+			CREATE_TEST_FUNC(Trap::test_trap),
+			CREATE_TEST_FUNC(Multiply::test)
         );
     }
 }
