@@ -1234,7 +1234,10 @@ namespace lc1{
 	}
 	namespace Multiply{
 		std::string add(std::string& num1, std::string& num2) {
-			int len = std::min(num1.size(),num2.size());
+			if(num1.empty())
+				return num2;
+			if(num2.empty())
+				return num1;
 			std::string res;
 			int rest = 0;
 			for(int i = num1.size() - 1,j = num2.size() - 1;i >= 0 || j >= 0;--i,--j)
@@ -1257,6 +1260,29 @@ namespace lc1{
 			return res;
     	}
 
+		std::string multiply_one(std::string& num1, char k) {
+			std::string res;
+			int rest = 0;
+			k -= '0';
+			if(k == 0)
+				return res;
+			for(int i = num1.size() - 1;i >= 0;--i)
+			{
+				int v = (num1[i] - '0') * k + rest;
+				if(v > 9)
+				{
+					rest = v / 10;
+					v = v % 10;
+				}else
+				{
+					rest = 0;
+				}
+				res.insert(0,1,(char)(v + '0'));
+			}
+			if(rest > 0) res.insert(0,1,(char)(rest + '0'));
+			return res;
+		}
+
 		std::string multiply(std::string num1, std::string num2) {
 			std::string *p1 = nullptr;
 			std::string *p2 = nullptr;
@@ -1270,16 +1296,24 @@ namespace lc1{
 				p1 = &num2;
 				p2 = &num1;
 			}
-
-			for()
+			std::string res("0");
+			for(int i = 0;i < p2->size();++i)
 			{
-				
+				auto s2 = multiply_one(*p1,(*p2)[i]);
+				for(int m = 0; m < p2->size() - i - 1;++m)
+				{
+					s2.push_back('0');
+				}
+				res = add(res,s2);
 			}
+			return res;
 		}
 
 		void test()
 		{
-			
+			dbg(multiply("123","456"));
+			dbg(multiply("2","3"));
+			dbg(multiply("123","0"));
 		}
 	}
 	
