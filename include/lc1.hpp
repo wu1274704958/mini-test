@@ -1316,6 +1316,43 @@ namespace lc1{
 			dbg(multiply("123","0"));
 		}
 	}
+
+	namespace Multiply2{
+		std::string multiply(std::string num1, std::string num2) {
+			if(num1 == "0" || num2 == "0")
+				return std::string("0");
+			int rl = num1.size() + num2.size();
+			std::vector<char> res(rl,(char)0);
+			
+			for(int i = num1.size() - 1;i >= 0;--i)
+			{
+				int a = (int)(num1[i] - '0');
+				for(int j = num2.size() - 1;j >= 0;--j)
+				{
+					int b = (int)(num2[j] - '0');
+					int v = res[i + j + 1] + a * b;
+					res[i + j + 1] = v % 10;
+					res[i + j] += v / 10;
+				}
+			}
+			std::string re;
+			for(int i = 0;i < rl;++i)
+			{
+				if(i == 0 && res[i] == 0)
+					continue;
+				re += (res[i] + '0');
+			}
+
+			return re;
+		}
+
+		void test()
+		{
+			dbg(multiply("123","456"));
+			dbg(multiply("2","3"));
+			dbg(multiply("123","0"));
+		}
+	}
 	
 	
     auto init()
@@ -1344,7 +1381,8 @@ namespace lc1{
 			CREATE_TEST_FUNC(CombinationSum2::test_combinationSum),
 			CREATE_TEST_FUNC(FirstMissingPositive::test_firstMissingPositive),
 			CREATE_TEST_FUNC(Trap::test_trap),
-			CREATE_TEST_FUNC(Multiply::test)
+			CREATE_TEST_FUNC(Multiply::test),
+			CREATE_TEST_FUNC(Multiply2::test)
         );
     }
 }
