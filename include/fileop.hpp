@@ -4,6 +4,7 @@
 #include <fstream>
 #include <optional>
 #include <stack>
+#include <comm.hpp>
 
 namespace wws{
 
@@ -55,6 +56,76 @@ bool write_to_file(Path&& path,Str&& str,Args&& ...args)
     }
     else
         return false;
+}
+
+template<size_t S,typename Path, typename ...Args>
+bool write_to_file_bin(Path&& path,const unsigned char* data,uint64_t len, Args&& ...args)
+{
+    std::ofstream ofs;
+    if constexpr (std::is_same_v<std::remove_reference_t<std::remove_cv_t<Path>>, std::string>)
+    {
+        ofs = std::ofstream(path.c_str(), std::forward<Args>(args)...);
+    }
+    else if constexpr (std::is_same_v<std::remove_reference_t<std::remove_cv_t<Path>>, std::filesystem::path>)
+    {
+        std::string temp = path.generic_string();
+        ofs = std::ofstream(temp.c_str(), std::forward<Args>(args)...);
+    }
+    if (ofs.good())
+    {
+        ofs.write(reinterpret_cast<const char*>(data), len);
+        return true;
+    }
+    else
+        return false;
+}
+
+template<size_t MAX, typename Path, typename ...Args>
+std::tuple<std::unique_ptr<char[]>, std::uint64_t> read_from_file_bin(Path&& path, Args&& ...args)
+{
+    std::ifstream ifs;
+    if constexpr (std::is_same_v<std::remove_reference_t<std::remove_cv_t<Path>>, std::string>)
+    {
+        ifs = std::ifstream(path.c_str(), std::forward<Args>(args)...);
+    }
+    else if constexpr (std::is_same_v<std::remove_reference_t<std::remove_cv_t<Path>>, std::filesystem::path>)
+    {
+        std::string temp = path.generic_string();
+        ifs = std::ifstream(temp.c_str(), std::forward<Args>(args)...);
+    }
+    if (ifs.good())
+    {
+        size_t max_size = MAX;
+        size_t size = 0;
+        char* data = reinterpret_cast<char*>( std::malloc(MAX));
+        if(!data)  throw std::runtime_error("alloc failed!");
+        while (!ifs.eof())
+        {
+            char buf[MAX] = { 0 };
+            ifs.read(buf, wws::arrLen(buf));
+            size_t t_s = ifs.gcount();
+            if (t_s <= 0)
+                break;
+            if (size + t_s > max_size)
+            {
+                auto n_data = reinterpret_cast<char*>(std::realloc(data, max_size + MAX));
+                if (n_data)
+                {
+                    data = n_data;
+                    max_size += MAX;
+                }
+                else {
+                    free(data);
+                    throw std::runtime_error("realloc failed!");
+                }
+            }
+            std::memcpy(data + size, buf, t_s);
+            size += t_s;
+        }
+        return std::make_tuple(std::unique_ptr<char[]>(data), size);
+    }
+    else
+        return std::make_tuple(nullptr, 0);
 }
 
 template<typename Path,typename = std::enable_if_t<std::is_same_v<std::remove_cv_t<std::remove_reference_t<Path>>,std::string>>>

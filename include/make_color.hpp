@@ -91,6 +91,33 @@ namespace wws {
 			std::make_index_sequence< sizeof(S::get()) - 1>{});
 	}
 
+	template<size_t I, char ... CS>
+	bool equal_sub(std::string& s, wws::string<CS...> cs)
+	{
+		if (s[I] != wws::string<CS...>::template get<I>())
+			return false;
+		if constexpr (I + 1 < cs.len())
+		{
+			return equal_sub<I + 1, CS...>(s, cs);
+		}
+		return true;
+	}
+
+	template<char ... CS>
+	bool equal(std::string s, wws::string<CS...> cs)
+	{
+		if (s.size() != cs.len())
+			return false;
+		if constexpr (cs.len() == 0)
+		{
+			return true;
+		}
+		else {
+			return equal_sub<0, CS...>(s, cs);
+		}
+		return false;
+	}
+
 #define has_color_(feild)									\
 template <class T>											\
 using has_##feild##_t = decltype(std::declval<T>().feild);	\
