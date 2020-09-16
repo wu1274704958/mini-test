@@ -195,4 +195,12 @@ inline std::string get_suffix(Path&& path)
     return "";
 }
 
+inline bool is_absolute(const std::string& path)
+{
+    if(path.empty()) return false;
+    if(path[0] == '/') return true;
+    if(path[1] == ':' && path[2] == '\\') return true;
+    return false;
+}
+
 }
