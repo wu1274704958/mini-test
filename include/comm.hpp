@@ -214,7 +214,7 @@ namespace wws {
 	struct VarCache<T, std::tuple<>>
 	{
 	public:
-		using IN = std::tuple<>;
+		using INType = std::tuple<>;
 		VarCache() {}
 		VarCache(std::function<T()> f) {
 			constructor = f;
@@ -240,9 +240,9 @@ namespace wws {
 	struct VarCache
 	{
 	public:
-		using IN = std::tuple<Args&...>;
+		using INType = std::tuple<Args&...>;
 		VarCache() {}
-		VarCache(std::function<T(IN&)> f, Args&...args) : constructor(f), in(std::forward<Args&>(args)...) {
+		VarCache(std::function<T(INType&)> f, Args&...args) : constructor(f), in(std::forward<Args&>(args)...) {
 		}
 		operator std::shared_ptr<T>()
 		{
@@ -257,9 +257,9 @@ namespace wws {
 			ptr.reset();
 		}
 	private:
-		std::function<T(IN&)> constructor;
+		std::function<T(INType&)> constructor;
 		std::shared_ptr<T> ptr;
-		std::optional<IN> in;
+		std::optional<INType> in;
 	};
 
 	template<typename T, T...Ts>

@@ -131,50 +131,50 @@ namespace token {
 		bool not_del_space = false;
 		
 		TokenStream(T t) : iter(std::move(t)) {}
-		void analyse(bool not_del_space = false)
+		void analyse(bool _not_del_space = false)
 		{
-			this->not_del_space = not_del_space;
+			this->not_del_space = _not_del_space;
 			while(true)
 			{
 				try {
 					tokens.push_back(std::move(get_next_token()));
 				}
-				catch (NoNextErr e)
+				catch (NoNextErr)
 				{
 					break;
 				}
 			}
 		}
-		bool is_token(char c)
+		bool is_token(char _c)
 		{
 			return
-				c == '\'' ||
-				c == '"' ||
-				c == ' ' ||
-				c == '.' ||
-				c == ',' ||
-				c == '\t'||
-				c == '=' ||
-				c == '+' ||
-				c == '-' ||
-				c == '*' ||
-				c == '/' ||
-				c == '!' ||
-				c == ':' ||
-				c == '|' ||
-				c == '&' ||
-				c == '#' ||
+				_c == '\'' ||
+				_c == '"' ||
+				_c == ' ' ||
+				_c == '.' ||
+				_c == ',' ||
+				_c == '\t'||
+				_c == '=' ||
+				_c == '+' ||
+				_c == '-' ||
+				_c == '*' ||
+				_c == '/' ||
+				_c == '!' ||
+				_c == ':' ||
+				_c == '|' ||
+				_c == '&' ||
+				_c == '#' ||
 				
-				c == '(' ||
-				c == '{' ||
-				c == '<' ||
-				c == '[' ||
-				c == ')' ||
-				c == '}' ||
-				c == '>' ||
-				c == ']' ||
-				c == ';' ||
-				c == '\n';
+				_c == '(' ||
+				_c == '{' ||
+				_c == '<' ||
+				_c == '[' ||
+				_c == ')' ||
+				_c == '}' ||
+				_c == '>' ||
+				_c == ']' ||
+				_c == ';' ||
+				_c == '\n';
 		}
 		Token get_next_token() noexcept(false)
 		{
